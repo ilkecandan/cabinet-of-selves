@@ -36,28 +36,61 @@ function addPart() {
     const partName = document.getElementById('partName').value.trim();
 
     if (!partName) {
-        alert('Please enter a name for the part.');
+        showNotification('⚠️ Please enter a name for the part.', 'error');
         return;
     }
 
     const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
     if (parts.some(part => part.name === partName)) {
-        alert('A part with this name already exists.');
+        showNotification('⚠️ A part with this name already exists.', 'error');
         return;
     }
 
-    parts.push({ name: partName, img: 'images/girl.jpg' });
+    parts.push({ name: partName, img: 'images/girl.jpg' }); // Default image
     localStorage.setItem('innerParts', JSON.stringify(parts));
 
-    alert('Part added successfully!');
+    showNotification('✅ Part added successfully!', 'success');
     hideAddPartModal();
-    window.location.href = 'parts.html';
+
+    // Refresh parts.html (this is optional if you want it to auto-update the parts page)
+    setTimeout(() => {
+        window.location.href = 'parts.html';
+    }, 1000); // Short delay to show the notification before navigating
 }
 
 function loadParts() {
-    // This can be used for initial parts loading if needed elsewhere
+    // Example logic for populating parts (optional, in case you want it here)
+    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+    const container = document.querySelector('.parts-table');
+
+    if (container) {
+        container.innerHTML = '';
+        parts.forEach(part => {
+            const card = document.createElement('div');
+            card.className = 'part-card';
+            card.innerHTML = `
+                <img src="${part.img}" class="part-image" alt="${part.name}">
+                <span class="part-name">${part.name}</span>
+                <button onclick="location.href='part-details.html?part=${encodeURIComponent(part.name)}'">View</button>
+            `;
+            container.appendChild(card);
+        });
+    }
 }
 
+// 🔔 Floating Notification System
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.innerText = message;
+    notification.className = `notification ${type}`;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// 🈯️ Language Switching (With Placeholders)
 function switchLanguage(lang) {
     const translations = {
         en: { addPartHeading: "Add a New Part", partNameLabel: "Part Name:", confirmAddPart: "Add", cancelButton: "Cancel" },
@@ -66,8 +99,8 @@ function switchLanguage(lang) {
     };
 
     localStorage.setItem('language', lang);
-
     const t = translations[lang];
+
     document.getElementById('addPartHeading').innerText = t.addPartHeading;
     document.getElementById('partNameLabel').innerText = t.partNameLabel;
     document.getElementById('confirmAddPart').innerText = t.confirmAddPart;
