@@ -20,7 +20,7 @@
     </select>
 </div>
 
-<!-- Welcome Animation with GIF - Shown only on first visit -->
+<!-- Welcome Animation (First Visit) -->
 <div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
     <h2 id="welcomeTitle">Welcome to Your Cabinet of Selves</h2>
     <p id="welcomeSubtitle">All parts of you are welcomed here.</p>
@@ -67,7 +67,7 @@
 </div>
 
 <!-- Add New Part Modal -->
-<div id="partModal" class="modal">
+<div id="partModal" class="modal" style="display: none;">
     <h3 id="addPartHeading">Add a New Part</h3>
     <label for="partName" id="partNameLabel">Part Name:</label>
     <input type="text" id="partName" placeholder="Enter part name">
@@ -77,6 +77,17 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
+    if (!localStorage.getItem('hasVisitedBefore')) {
+        document.getElementById('welcomeAnimation').style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById('welcomeAnimation').style.display = 'none';
+            localStorage.setItem('hasVisitedBefore', 'true');
+        }, 5000);
+    }
+
+    document.getElementById('addNewPartButton').addEventListener('click', showAddPartModal);
+    document.getElementById('confirmAddPart').addEventListener('click', addPart);
+
     const lang = localStorage.getItem('language') || 'en';
     document.getElementById('language').value = lang;
     switchLanguage(lang);
@@ -143,23 +154,28 @@ function switchLanguage(lang) {
     localStorage.setItem('language', lang);
     const t = translations[lang];
 
-    document.title = t.title;
-    document.getElementById('title').innerText = t.title;
-    document.getElementById('welcomeTitle').innerText = t.welcomeTitle;
-    document.getElementById('welcomeSubtitle').innerText = t.welcomeSubtitle;
-    document.getElementById('welcomeText').innerText = t.welcomeText;
-    document.getElementById('partsHeading').innerText = t.partsHeading;
-    document.getElementById('seeAllPartsButton').innerText = t.seeAllPartsButton;
-    document.getElementById('addNewPartButton').innerText = t.addNewPartButton;
-    document.getElementById('checkInHeading').innerText = t.checkInHeading;
-    document.getElementById('startCheckInButton').innerText = t.startCheckInButton;
-    document.getElementById('viewCheckInHistoryButton').innerText = t.viewCheckInHistoryButton;
-    document.getElementById('resourcesHeading').innerText = t.resourcesHeading;
-    document.getElementById('youAreEnoughText').innerText = t.youAreEnoughText;
-    document.getElementById('addPartHeading').innerText = t.addPartHeading;
-    document.getElementById('partNameLabel').innerText = t.partNameLabel;
-    document.getElementById('confirmAddPart').innerText = t.confirmAddPart;
-    document.getElementById('cancelButton').innerText = t.cancelButton;
+    for (const key in t) {
+        if (document.getElementById(key)) {
+            document.getElementById(key).innerText = t[key];
+        }
+        if (key === 'partNameLabel') {
+            document.getElementById('partName').placeholder = t.partNameLabel;
+        }
+    }
+}
+
+function showAddPartModal() {
+    document.getElementById('partModal').style.display = 'block';
+}
+
+function hideAddPartModal() {
+    document.getElementById('partModal').style.display = 'none';
+}
+
+function addPart() {
+    const partName = document.getElementById('partName').value.trim();
+    alert(`✅ Added part: ${partName}`);
+    hideAddPartModal();
 }
 </script>
 </body>
