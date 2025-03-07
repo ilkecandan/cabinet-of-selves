@@ -2,222 +2,171 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Check-In - Cabinet of Selves</title>
+    <title>Check-In History - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
+            font-family: Arial, sans-serif;
+            background-color: #f9f5f0;
             margin: 0;
-            padding: 0;
-            color: #4a4a4a;
-            animation: fadeIn 1s ease-out;
+            padding: 20px;
         }
 
         header {
             text-align: center;
             margin: 20px 0;
-            font-size: 2rem;
-            color: #4a4a4a;
+            font-size: 1.8rem;
+            color: #5a3e36;
         }
 
-        main {
+        .history-container {
+            max-width: 800px;
+            margin: 0 auto;
             background: white;
-            width: 90%;
-            max-width: 750px;
-            margin: 20px auto;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            margin: 0 0 5px;
+            color: #5a3e36;
+        }
+
+        p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .back-btn {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #8C5E58;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #73463e;
+        }
+
+        /* Calendar Styles */
+        .calendar {
+            margin: 20px auto;
+            width: 100%;
+            max-width: 300px;
             text-align: center;
         }
 
-        .welcome-message {
-            font-style: italic;
-            margin-bottom: 15px;
-            color: #52b788;
-            font-weight: bold;
-        }
-
-        .form-group {
-            text-align: left;
-            margin: 10px 0;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-            color: #4a90a2;
-        }
-
-        input, select, textarea {
-            width: calc(100% - 10px);
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-top: 3px;
-            font-size: 1rem;
-        }
-
-        textarea {
-            height: 60px;
-        }
-
-        .parts-checkboxes {
-            background: #f0f9ff;
+        .calendar input[type="date"] {
+            width: 100%;
             padding: 10px;
-            border-radius: 8px;
+            font-size: 1rem;
             border: 1px solid #ccc;
-            text-align: left;
-            max-height: 150px;
-            overflow-y: auto;
-            margin-top: 5px;
+            border-radius: 5px;
         }
 
-        .parts-checkboxes label {
-            display: block;
-            margin: 5px 0;
-        }
-
-        .button-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        button {
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
+        .no-checkins {
+            text-align: center;
             font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover {
-            background-color: #52b788;
-            transform: translateY(-3px);
-        }
-
-        .back-to-cabinet {
-            background-color: #74c69d;
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .back-to-cabinet:hover {
-            background-color: #52b788;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            margin: 20px 0;
+            color: #8c5e58;
         }
     </style>
 </head>
 <body>
 
+<a href="index.html" class="back-btn">⬅️ Back to Cabinet</a>
+
 <header>
-    <h1>🌈 Daily Check-In</h1>
-    <p>Reflect on your day and connect with your inner world.</p>
+    <h1>📖 Check-In History</h1>
+    <p>See all your past check-ins.</p>
 </header>
 
-<main>
-    <p class="welcome-message">💚 All parts of you are welcome here.</p>
+<div class="calendar">
+    <label for="checkinDate">📅 Filter by Date:</label>
+    <input type="date" id="checkinDate" onchange="filterCheckIns()">
+</div>
 
-    <div class="form-group">
-        <label for="checkin-date">📅 Date:</label>
-        <input type="date" id="checkin-date">
-    </div>
-
-    <div class="form-group">
-        <label for="mood">🌦️ Today's Mood:</label>
-        <select id="mood">
-            <option>Calm</option>
-            <option>Reflective</option>
-            <option>Anxious</option>
-            <option>Joyful</option>
-            <option>Sad</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>💚 Active Parts (select from your parts):</label>
-        <div class="parts-checkboxes" id="partsCheckboxList"></div>
-    </div>
-
-    <div class="form-group">
-        <label for="significantEvents">✨ Significant Events:</label>
-        <textarea id="significantEvents" placeholder="Any key events, insights, or experiences"></textarea>
-    </div>
-
-    <div class="form-group">
-        <label for="additionalThoughts">📝 Additional Thoughts:</label>
-        <textarea id="additionalThoughts" placeholder="Anything else you want to capture?"></textarea>
-    </div>
-
-    <div class="button-row">
-        <button onclick="saveCheckIn()">💾 Save Check-In</button>
-        <button onclick="window.location.href='checkin-history.html'">📖 View Check-In History</button>
-        <a href="index.html" class="back-to-cabinet">🔙 Back to Cabinet</a>
-    </div>
+<main class="history-container">
+    <ul id="checkinHistoryList"></ul>
+    <p id="noCheckinsMessage" class="no-checkins" style="display: none;">No check-ins found for this date.</p>
 </main>
 
+<a href="index.html" class="back-btn">⬅️ Back to Cabinet</a>
+
 <script>
+    let allCheckIns = [];
+
     document.addEventListener('DOMContentLoaded', () => {
-        loadPartsIntoCheckboxes();
+        loadCheckInHistory();
     });
 
-    function loadPartsIntoCheckboxes() {
-        const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-        const container = document.getElementById('partsCheckboxList');
-        container.innerHTML = '';
+    function loadCheckInHistory() {
+        allCheckIns = JSON.parse(localStorage.getItem('checkins')) || [];
+        displayCheckIns(allCheckIns);
+    }
 
-        if (parts.length === 0) {
-            container.innerHTML = '<p style="color: #ff6347;">No parts available - add parts first!</p>';
-        } else {
-            parts.forEach(part => {
-                const label = document.createElement('label');
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.value = part.name;
-                label.appendChild(checkbox);
-                label.appendChild(document.createTextNode(` ${part.name}`));
-                container.appendChild(label);
-            });
+    function displayCheckIns(checkins) {
+        const list = document.getElementById('checkinHistoryList');
+        const noCheckinsMessage = document.getElementById('noCheckinsMessage');
+        list.innerHTML = '';
+
+        if (checkins.length === 0) {
+            noCheckinsMessage.style.display = 'block';
+            return;
         }
+
+        noCheckinsMessage.style.display = 'none';
+
+        checkins.reverse().forEach(checkin => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <h3>📅 ${checkin.date}</h3>
+                <p><strong>Mood:</strong> ${checkin.mood}</p>
+                <p><strong>Active Parts:</strong> ${checkin.activeParts.join(', ') || 'None'}</p>
+                <p><strong>Events:</strong> ${checkin.events}</p>
+                <p><strong>Thoughts:</strong> ${checkin.thoughts}</p>
+            `;
+            list.appendChild(li);
+        });
     }
 
-    function getSelectedParts() {
-        return Array.from(document.querySelectorAll('#partsCheckboxList input:checked')).map(cb => cb.value);
-    }
+    function filterCheckIns() {
+        const selectedDate = document.getElementById('checkinDate').value;
+        if (!selectedDate) {
+            displayCheckIns(allCheckIns); // Show all if no date selected
+            return;
+        }
 
-    function saveCheckIn() {
-        const checkin = {
-            date: document.getElementById('checkin-date').value,
-            mood: document.getElementById('mood').value,
-            activeParts: getSelectedParts(),
-            significantEvents: document.getElementById('significantEvents').value,
-            additionalThoughts: document.getElementById('additionalThoughts').value
-        };
+        const filtered = allCheckIns.filter(checkin => checkin.date === selectedDate);
+        displayCheckIns(filtered);
 
-        const checkins = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
-        checkins.push(checkin);
-        localStorage.setItem('dailyCheckIns', JSON.stringify(checkins));
-
-        alert('✅ Check-in saved successfully!');
-        window.location.href = 'index.html';
+        const noCheckinsMessage = document.getElementById('noCheckinsMessage');
+        noCheckinsMessage.style.display = filtered.length ? 'none' : 'block';
     }
 </script>
 
