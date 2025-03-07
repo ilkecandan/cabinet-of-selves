@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Parts - Cabinet of Selves</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
+    <style>
+        body {
+            font-family: 'Quicksand', Arial, sans-serif;
+            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
+            margin: 0;
+            padding: 0;
+            color: #4a4a4a;
+            text-align: center;
+        }
+
+        header {
+            margin: 20px 0;
+        }
+
+        main {
+            background: white;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .table-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 12px solid #74c69d;
+            border-radius: 50%;
+            margin: 30px auto;
+            background-color: #fefefe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .part-seat {
+            position: absolute;
+            width: 100px;
+            height: 120px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .part-seat img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #74c69d;
+        }
+
+        .part-seat span {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #0077b6;
+            margin-top: 5px;
+        }
+
+        .part-seat button {
+            background-color: #74c69d;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin: 3px 0;
+            cursor: pointer;
+        }
+
+        .part-seat button.remove {
+            background-color: #ff6b6b;
+        }
+
+        .back-to-cabinet {
+            margin-top: 20px;
+            padding: 12px 18px;
+            background-color: #74c69d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .back-to-cabinet:hover {
+            background-color: #52b788;
+        }
+
+        dotlottie-wc {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .table-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .part-seat {
+                width: 80px;
+                height: 100px;
+            }
+
+            .part-seat img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .part-seat span {
+                font-size: 0.75rem;
+            }
+
+            .part-seat button {
+                font-size: 0.7rem;
+            }
+
+            dotlottie-wc {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Your Parts</h1>
+    <p>Your inner parts collection. Click to explore each part.</p>
+</header>
+
+<main>
+    <div class="table-container" id="partsTable">
+        <!-- Parts will be injected here dynamically -->
+    </div>
+
+    <a href="index.html" class="back-to-cabinet">Back to Cabinet</a>
+
+    <dotlottie-wc src="https://lottie.host/dd3bc15b-e3cc-41ee-86b8-47e37863f8d6/s8l3FcuPpS.lottie" autoplay loop></dotlottie-wc>
+</main>
+
+<script>
+    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+    const table = document.getElementById('partsTable');
+
+    if (parts.length === 0) {
+        table.innerHTML = '<p>No parts added yet. Please add parts from the Cabinet.</p>';
+    } else {
+        const radius = 160;
+        const centerX = 200;
+        const centerY = 200;
+        const angleStep = (2 * Math.PI) / parts.length;
+
+        parts.forEach((part, index) => {
+            const angle = index * angleStep;
+            const x = centerX + radius * Math.cos(angle) - 50;
+            const y = centerY + radius * Math.sin(angle) - 50;
+
+            const partDiv = document.createElement('div');
+            partDiv.className = 'part-seat';
+            partDiv.style.left = `${x}px`;
+            partDiv.style.top = `${y}px`;
+
+            const img = document.createElement('img');
+            img.src = part.img && part.img !== '' ? part.img : 'images/girl.jpg'; // Use girl.jpg if no image
+
+            const name = document.createElement('span');
+            name.innerText = part.name || 'Unnamed';
+
+            const editButton = document.createElement('button');
+            editButton.innerText = 'View / Edit';
+            editButton.onclick = () => {
+                localStorage.setItem('currentPart', JSON.stringify(part));
+                window.location.href = 'part-details.html';
+            };
+
+            const removeButton = document.createElement('button');
+            removeButton.innerText = 'Remove';
+            removeButton.className = 'remove';
+            removeButton.onclick = () => removePart(index);
+
+            partDiv.appendChild(img);
+            partDiv.appendChild(name);
+            partDiv.appendChild(editButton);
+            partDiv.appendChild(removeButton);
+
+            table.appendChild(partDiv);
+        });
+    }
+
+    function removePart(index) {
+        if (confirm('Are you sure you want to remove this part?')) {
+            const updatedParts = JSON.parse(localStorage.getItem('innerParts')) || [];
+            updatedParts.splice(index, 1);
+            localStorage.setItem('innerParts', JSON.stringify(updatedParts));
+            alert('Part removed successfully!');
+            location.reload();
+        }
+    }
+</script>
+
+</body>
+</html>
