@@ -38,9 +38,6 @@
             border-radius: 50%;
             margin: 30px auto;
             background-color: #fefefe;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .part-seat {
@@ -60,25 +57,23 @@
 
         .part-seat span {
             display: block;
-            font-size: 0.9rem;
             font-weight: bold;
-            color: #0077b6;
             margin-top: 5px;
+            color: #0077b6;
         }
 
         .part-seat button {
-            background-color: #74c69d;
-            color: white;
-            border: none;
+            margin: 3px;
             padding: 5px;
-            border-radius: 5px;
             font-size: 0.8rem;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            margin: 3px 0;
         }
 
-        .part-seat button.remove {
+        .remove {
             background-color: #ff6b6b;
+            color: white;
         }
 
         .language-selector {
@@ -88,20 +83,19 @@
 
         .language-selector select {
             padding: 6px 12px;
-            border: 1px solid #74c69d;
             border-radius: 8px;
             background-color: #74c69d;
             color: white;
         }
 
         #addPartButton {
-            margin: 15px;
             padding: 10px 15px;
             background-color: #74c69d;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            margin: 15px;
         }
 
         #partModal {
@@ -117,8 +111,8 @@
         }
 
         #partModal input {
-            width: 90%;
             padding: 10px;
+            width: 90%;
             margin: 10px 0;
         }
     </style>
@@ -156,9 +150,39 @@
 
 <script>
 const translations = {
-    en: { header: "Your Parts", description: "Your parts are sitting here, all of them welcomed.", back: "Back to Cabinet", noParts: "No parts added yet.", viewEdit: "View / Edit", remove: "Remove", addPartButton: "➕ Add New Part", modalTitle: "Add New Part", partNamePlaceholder: "Part Name" },
-    tr: { header: "Parçalarınız", description: "Tüm parçalarınız burada, hepsi hoş karşılanır.", back: "Kabine Geri Dön", noParts: "Henüz parça eklenmedi.", viewEdit: "Görüntüle / Düzenle", remove: "Kaldır", addPartButton: "➕ Yeni Parça Ekle", modalTitle: "Yeni Parça Ekle", partNamePlaceholder: "Parça Adı" },
-    de: { header: "Deine Teile", description: "Alle deine Teile sind hier willkommen.", back: "Zurück zum Schrank", noParts: "Noch keine Teile hinzugefügt.", viewEdit: "Ansehen / Bearbeiten", remove: "Entfernen", addPartButton: "➕ Neuen Teil hinzufügen", modalTitle: "Neuen Teil hinzufügen", partNamePlaceholder: "Teilname" }
+    en: {
+        header: "Your Parts",
+        description: "Your parts are sitting here, all of them welcomed.",
+        back: "Back to Cabinet",
+        noParts: "No parts added yet.",
+        viewEdit: "View / Edit",
+        remove: "Remove",
+        addPartButton: "➕ Add New Part",
+        modalTitle: "Add New Part",
+        partNamePlaceholder: "Part Name"
+    },
+    tr: {
+        header: "Parçalarınız",
+        description: "Tüm parçalarınız burada, hepsi hoş karşılanır.",
+        back: "Kabine Geri Dön",
+        noParts: "Henüz parça eklenmedi.",
+        viewEdit: "Görüntüle / Düzenle",
+        remove: "Kaldır",
+        addPartButton: "➕ Yeni Parça Ekle",
+        modalTitle: "Yeni Parça Ekle",
+        partNamePlaceholder: "Parça Adı"
+    },
+    de: {
+        header: "Deine Teile",
+        description: "Alle deine Teile sind hier willkommen.",
+        back: "Zurück zum Schrank",
+        noParts: "Noch keine Teile hinzugefügt.",
+        viewEdit: "Ansehen / Bearbeiten",
+        remove: "Entfernen",
+        addPartButton: "➕ Neuen Teil hinzufügen",
+        modalTitle: "Neuen Teil hinzufügen",
+        partNamePlaceholder: "Teilname"
+    }
 };
 
 let currentLanguage = localStorage.getItem('language') || 'en';
@@ -196,7 +220,7 @@ function addPart() {
 }
 
 function loadParts() {
-    const parts = JSON.parse(localStorage.getItem('innerParts') || []);
+    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
     const table = document.getElementById('partsTable');
     table.innerHTML = parts.length === 0 ? `<p>${translations[currentLanguage].noParts}</p>` : '';
 
@@ -205,15 +229,30 @@ function loadParts() {
         const angle = (2 * Math.PI * i) / parts.length;
         const x = centerX + radius * Math.cos(angle) - 50;
         const y = centerY + radius * Math.sin(angle) - 50;
+
         const div = document.createElement('div');
         div.className = 'part-seat';
         div.style.left = `${x}px`; div.style.top = `${y}px`;
-        div.innerHTML = `<img src="${part.img}"><span>${part.name}</span>`;
+        div.innerHTML = `<img src="${part.img}"><span>${part.name}</span>
+            <button onclick="viewPart('${part.name}')">${translations[currentLanguage].viewEdit}</button>
+            <button class="remove" onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>`;
         table.appendChild(div);
     });
 }
 
+function viewPart(name) {
+    alert(`Viewing ${name}`); // Replace with navigation logic if needed
+}
+
+function removePart(name) {
+    let parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+    parts = parts.filter(p => p.name !== name);
+    localStorage.setItem('innerParts', JSON.stringify(parts));
+    loadParts();
+}
+
 document.addEventListener('DOMContentLoaded', () => switchLanguage(currentLanguage) || loadParts());
 </script>
+
 </body>
 </html>
