@@ -20,7 +20,7 @@
 </div>
 
 <!-- Welcome Animation with GIF - Shown only on first visit -->
-<div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+<div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
     <h2 id="welcomeTitle">Welcome to Your Cabinet of Selves</h2>
     <p>All parts of you are welcomed here.</p>
     <img src="images/hi.gif" alt="Welcome GIF" style="max-width: 200px; height: auto; margin-top: 15px;">
@@ -76,19 +76,20 @@
 
 <script>
     const translations = {
-        en: { /* Same as your existing English translations */ },
-        tr: { /* Same as your existing Turkish translations */ },
-        de: { /* Same as your existing German translations */ }
+        en: {
+            partNamePlaceholder: "Enter part name"
+        },
+        tr: {
+            partNamePlaceholder: "Parça adını girin"
+        },
+        de: {
+            partNamePlaceholder: "Teilname eingeben"
+        }
     };
 
     function switchLanguage(lang) {
         localStorage.setItem('language', lang);
-        const t = translations[lang];
-        for (const key in t) {
-            const el = document.getElementById(key);
-            if (el) el.innerText = t[key];
-        }
-        document.getElementById('partName').placeholder = t.partNamePlaceholder;
+        document.getElementById('partName').placeholder = translations[lang].partNamePlaceholder;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -96,6 +97,7 @@
         document.getElementById('language').value = lang;
         switchLanguage(lang);
 
+        // Show GIF only on first visit
         const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
 
         if (!hasVisitedBefore) {
@@ -104,10 +106,11 @@
 
             setTimeout(() => {
                 welcomeAnimation.style.display = 'none';
-                localStorage.setItem('hasVisitedBefore', 'true');
+                localStorage.setItem('hasVisitedBefore', 'true');  // Set after hiding
             }, 5000);  // Show for 5 seconds
         }
 
+        // Show install banner on iPhones if not dismissed
         if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !localStorage.getItem('installPromptDismissed')) {
             document.getElementById('installBanner').style.display = 'block';
         }
@@ -129,7 +132,7 @@
         }
 
         const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-        parts.push({ name: partName, img: 'images/girl.jpg' });  // Use girl.jpg as default image
+        parts.push({ name: partName, img: 'images/girl.jpg' });  // Default image as girl.jpg
 
         localStorage.setItem('innerParts', JSON.stringify(parts));
         alert('Part added successfully!');
