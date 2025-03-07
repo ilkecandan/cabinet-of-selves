@@ -1,13 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
-
     <meta charset="UTF-8">
     <title>Journal History - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .history-container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+            margin-bottom: 10px;
+        }
+        .back-to-cabinet {
+            display: block;
+            width: 90%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #8C5E58;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .back-to-cabinet:hover {
+            background-color: #73463e;
+        }
+    </style>
 </head>
 <body>
+
+<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
 
 <header>
     <h1>📖 Journal History</h1>
@@ -16,8 +57,9 @@
 
 <main class="history-container">
     <ul id="journalHistoryList"></ul>
-    <button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
 </main>
+
+<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
 
 <script>
     document.addEventListener('DOMContentLoaded', loadJournalHistory);
@@ -48,30 +90,6 @@
         });
     }
 </script>
-
-<style>
-    .history-container {
-        max-width: 800px;
-        margin: 30px auto;
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    li {
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        background: #f9f9f9;
-        margin-bottom: 10px;
-    }
-</style>
-<button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
-
 
 </body>
 </html>
