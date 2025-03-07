@@ -1,181 +1,58 @@
-/* General Page Styles - Soft Relaxing Theme */
-/* =============================== */
-.back-to-cabinet {
-    display: block;
-    width: 90%;
-    max-width: 300px;
-    margin: 20px auto; /* centers horizontally */
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: white;
-    background-color: #8C5E58;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
-
-.back-to-cabinet:hover {
-    background-color: #73463e;
-}
-
+/* General Body and Page Styles */
 body {
     font-family: 'Quicksand', Arial, sans-serif;
-    background-color: #f9f7f3;  /* Soft cream background */
+    background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
     margin: 0;
     padding: 0;
+    color: #4a4a4a;
     animation: fadeIn 1s ease-out;
-    color: #5a3e36;
-}
-
-header {
     text-align: center;
-    margin: 20px 0;
-    font-size: 1.8rem;
-    color: #5a3e36;
+    overflow-x: hidden;
 }
 
-/* =============================== */
-/* Layout Adjustments */
-/* =============================== */
+/* Header Styles */
+header h1 {
+    margin: 20px 0 5px;
+    font-size: 2.5rem;
+    color: #0077b6;
+}
 
+header p {
+    font-size: 1rem;
+    margin: 0;
+    color: #555;
+}
+
+/* Main Container */
 main {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-    gap: 20px;
-}
-
-.column {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    width: 30%;
-    border: 1px solid #e6e2df;
-}
-
-/* =============================== */
-/* Parts Section - Your Parts List (Homepage) */
-/* =============================== */
-
-#partsContainer {
-    margin-top: 10px;
-}
-
-.part-item {
-    display: flex;
-    align-items: center;
-    background-color: #f7f5f3;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-    gap: 12px;
-    opacity: 0;
-    transform: translateX(-20px);
-    animation: slideIn 0.5s forwards;
-}
-
-.part-profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #f0f0f0;
-}
-
-.part-name-button {
-    flex-grow: 1;
-    background: none;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    text-align: left;
-    color: #5a3e36;
-    font-weight: bold;
-}
-
-/* =============================== */
-/* Buttons - Unified across all pages with Hover Animation */
-/* =============================== */
-
-button {
-    padding: 10px 15px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-button:hover {
-    transform: translateY(-3px);
-}
-
-.primary-btn {
-    background-color: #a58d7f;
-    color: white;
-}
-
-.primary-btn:hover {
-    background-color: #8c7569;
-}
-
-.secondary-btn {
-    background-color: #e6e2df;
-    color: #5a3e36;
-}
-
-.secondary-btn:hover {
-    background-color: #d4cec9;
-}
-
-/* =============================== */
-/* Remove Button */
-.remove-part-button {
-    background-color: #ff6961;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.remove-part-button:hover {
-    background-color: #e55b54;
-}
-
-/* =============================== */
-/* Modal (Add Part) - Homepage */
-/* =============================== */
-
-#partModal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    background: white;
     width: 90%;
-    max-width: 400px;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* =============================== */
-/* Links */
-/* =============================== */
+/* Sections */
+section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
+/* Section Headings */
+h2 {
+    font-size: 1.3rem;
+    color: #4a90a2;
+    margin-bottom: 10px;
+}
+
+/* Links */
 a {
-    color: #8c5e58;
+    color: #0077b6;
     text-decoration: none;
     font-weight: bold;
 }
@@ -184,163 +61,236 @@ a:hover {
     text-decoration: underline;
 }
 
-/* =============================== */
-/* Mobile-Friendly Enhancements */
-/* =============================== */
-
-@media (max-width: 768px) {
-    body {
-        font-size: 16px;
-        padding: 0 10px;
-    }
-
-    header {
-        font-size: 1.4rem;
-        margin: 15px 0;
-    }
-
-    main {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-        padding: 10px;
-    }
-
-    .column {
-        width: 100%;
-        padding: 15px;
-    }
-
-    button, select, input, textarea {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    h1, h2 {
-        font-size: 1.5rem;
-    }
-
-    h3 {
-        font-size: 1.2rem;
-    }
-}
-
-/* =============================== */
-/* Part Details Page (part-details.html) */
-/* =============================== */
-
-.part-details-box {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    max-width: 600px;
-    margin: 30px auto;
-    border: 1px solid #e6e2df;
-    width: 100%;
-}
-
-/* Inputs */
-.part-details-box input[type="text"],
-.part-details-box textarea {
-    width: 100%;
-    padding: 8px;
+/* Form Elements */
+input, select, textarea {
+    width: calc(100% - 10px);
+    padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
 }
 
-.part-image-small {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 10px;
-    border: 2px solid #ddd;
+select[multiple] {
+    height: 120px;
 }
 
-/* =============================== */
-/* Daily Check-In Page */
-/* =============================== */
-
-.checkin-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    max-width: 600px;
-    margin: 30px auto;
-    border: 1px solid #e6e2df;
-    width: 100%;
+/* Buttons */
+button {
+    padding: 12px 15px;
+    background-color: #74c69d;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 5px;
+    font-size: 1rem;
 }
 
-.checkin-container label {
+button:hover {
+    background-color: #52b788;
+    transform: translateY(-3px);
+}
+
+/* Remove Button Special Style */
+.remove-btn {
+    background-color: #ff6b6b;
+}
+
+.remove-btn:hover {
+    background-color: #e63946;
+}
+
+/* Back to Cabinet Button */
+.back-to-cabinet {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 18px;
+    background-color: #74c69d;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
     font-weight: bold;
 }
 
-/* =============================== */
-/* Check-In History Page */
-/* =============================== */
-
-.history-container {
-    padding: 20px;
-    background: white;
-    max-width: 600px;
-    margin: 30px auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border: 1px solid #e6e2df;
-    width: 100%;
+.back-to-cabinet:hover {
+    background-color: #52b788;
 }
 
-/* =============================== */
-/* Animations */
-/* =============================== */
+/* Parts Table (for parts.html) */
+.parts-table {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+}
 
+.part-card {
+    background: #e0f7fa;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 140px;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.part-card:hover {
+    transform: translateY(-5px);
+}
+
+.part-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
+.part-name {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* Modal (for Add New Part) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.modal h3 {
+    margin-top: 0;
+    color: #4a90a2;
+}
+
+/* Welcome Animation Overlay */
+#welcomeAnimation {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.8s ease-out;
+}
+
+#welcomeAnimation h2 {
+    margin-bottom: 15px;
+    color: #0077b6;
+}
+
+/* Language Selector */
+.language-selector {
+    text-align: right;
+    padding: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 200;
+}
+
+.language-selector select {
+    padding: 8px 12px;
+    background-color: #74c69d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    appearance: none;
+    outline: none;
+}
+
+.language-selector select:hover {
+    background-color: #52b788;
+}
+
+/* Install Banner for iPhone */
+.install-banner {
+    display: none;
+    background-color: #74c69d;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.install-banner button {
+    background-color: #52b788;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .parts-table {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .part-card {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .language-selector {
+        position: static;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .language-selector select {
+        width: 90%;
+        max-width: 300px;
+    }
+}
+
+/* Fade-In Animation */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* ================================= */
-/* Mobile-Friendly Fixes (Global) */
-/* ================================= */
-
-@media (max-width: 768px) {
-    .checkin-container,
-    .part-details-box,
-    .history-container,
-    .journal-prompts-container {
-        width: 100%;
-        padding: 15px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .button-row {
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .part-image-small {
-        width: 80px;
-        height: 80px;
-    }
 }
