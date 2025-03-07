@@ -241,13 +241,12 @@ function loadParts() {
 }
 
 function viewPart(name) {
-    alert(`Viewing ${name}`); // Replace with navigation logic if needed
+    window.location.href = `part-details.html?part=${encodeURIComponent(name)}`;
 }
 
 function removePart(name) {
-    let parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-    parts = parts.filter(p => p.name !== name);
-    localStorage.setItem('innerParts', JSON.stringify(parts));
+    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+    localStorage.setItem('innerParts', JSON.stringify(parts.filter(p => p.name !== name)));
     loadParts();
 }
 
