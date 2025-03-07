@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabinet of Selves</title>
+    <title id="title">Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
     <script defer src="app.js"></script>
@@ -75,5 +75,92 @@
     <button id="cancelButton" onclick="hideAddPartModal()">Cancel</button>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const lang = localStorage.getItem('language') || 'en';
+    document.getElementById('language').value = lang;
+    switchLanguage(lang);
+});
+
+const translations = {
+    en: {
+        title: "Cabinet of Selves",
+        welcomeTitle: "Welcome to Your Cabinet of Selves",
+        welcomeSubtitle: "All parts of you are welcomed here.",
+        welcomeText: "Welcome to your inner world. Which parts want to speak today?",
+        partsHeading: "Your Parts",
+        seeAllPartsButton: "See All Parts",
+        addNewPartButton: "Add New Part",
+        checkInHeading: "Daily Check-In",
+        startCheckInButton: "Start Daily Check-In",
+        viewCheckInHistoryButton: "View Check-In History",
+        resourcesHeading: "Resources & Tips",
+        youAreEnoughText: "You are enough, even on the quiet days.",
+        addPartHeading: "Add a New Part",
+        partNameLabel: "Part Name:",
+        confirmAddPart: "Add",
+        cancelButton: "Cancel"
+    },
+    tr: {
+        title: "İç Benlikler Dolabı",
+        welcomeTitle: "İç Benlikler Dolabınıza Hoş Geldiniz",
+        welcomeSubtitle: "Tüm parçalarınız burada hoş karşılanır.",
+        welcomeText: "İç dünyanıza hoş geldiniz. Bugün hangi parçalar konuşmak istiyor?",
+        partsHeading: "Parçalarınız",
+        seeAllPartsButton: "Tüm Parçaları Gör",
+        addNewPartButton: "Yeni Parça Ekle",
+        checkInHeading: "Günlük Kontrol",
+        startCheckInButton: "Günlük Kontrole Başla",
+        viewCheckInHistoryButton: "Kontrol Geçmişini Görüntüle",
+        resourcesHeading: "Kaynaklar & İpuçları",
+        youAreEnoughText: "Sessiz günlerde bile yeterlisiniz.",
+        addPartHeading: "Yeni Parça Ekle",
+        partNameLabel: "Parça Adı:",
+        confirmAddPart: "Ekle",
+        cancelButton: "İptal"
+    },
+    de: {
+        title: "Schrank der Selbst",
+        welcomeTitle: "Willkommen in deinem Schrank der Selbst",
+        welcomeSubtitle: "Alle Teile von dir sind hier willkommen.",
+        welcomeText: "Willkommen in deiner inneren Welt. Welche Teile möchten heute sprechen?",
+        partsHeading: "Deine Teile",
+        seeAllPartsButton: "Alle Teile ansehen",
+        addNewPartButton: "Neuen Teil hinzufügen",
+        checkInHeading: "Täglicher Check-In",
+        startCheckInButton: "Täglichen Check-In starten",
+        viewCheckInHistoryButton: "Check-In Verlauf anzeigen",
+        resourcesHeading: "Ressourcen & Tipps",
+        youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
+        addPartHeading: "Neuen Teil hinzufügen",
+        partNameLabel: "Teilname:",
+        confirmAddPart: "Hinzufügen",
+        cancelButton: "Abbrechen"
+    }
+};
+
+function switchLanguage(lang) {
+    localStorage.setItem('language', lang);
+    const t = translations[lang];
+
+    document.title = t.title;
+    document.getElementById('title').innerText = t.title;
+    document.getElementById('welcomeTitle').innerText = t.welcomeTitle;
+    document.getElementById('welcomeSubtitle').innerText = t.welcomeSubtitle;
+    document.getElementById('welcomeText').innerText = t.welcomeText;
+    document.getElementById('partsHeading').innerText = t.partsHeading;
+    document.getElementById('seeAllPartsButton').innerText = t.seeAllPartsButton;
+    document.getElementById('addNewPartButton').innerText = t.addNewPartButton;
+    document.getElementById('checkInHeading').innerText = t.checkInHeading;
+    document.getElementById('startCheckInButton').innerText = t.startCheckInButton;
+    document.getElementById('viewCheckInHistoryButton').innerText = t.viewCheckInHistoryButton;
+    document.getElementById('resourcesHeading').innerText = t.resourcesHeading;
+    document.getElementById('youAreEnoughText').innerText = t.youAreEnoughText;
+    document.getElementById('addPartHeading').innerText = t.addPartHeading;
+    document.getElementById('partNameLabel').innerText = t.partNameLabel;
+    document.getElementById('confirmAddPart').innerText = t.confirmAddPart;
+    document.getElementById('cancelButton').innerText = t.cancelButton;
+}
+</script>
 </body>
 </html>
