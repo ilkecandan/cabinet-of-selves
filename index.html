@@ -75,16 +75,11 @@
 </div>
 
 <script>
+    // Language Support
     const translations = {
-        en: {
-            partNamePlaceholder: "Enter part name"
-        },
-        tr: {
-            partNamePlaceholder: "Parça adını girin"
-        },
-        de: {
-            partNamePlaceholder: "Teilname eingeben"
-        }
+        en: { partNamePlaceholder: "Enter part name" },
+        tr: { partNamePlaceholder: "Parça adını girin" },
+        de: { partNamePlaceholder: "Teilname eingeben" }
     };
 
     function switchLanguage(lang) {
@@ -92,29 +87,33 @@
         document.getElementById('partName').placeholder = translations[lang].partNamePlaceholder;
     }
 
+    // Main Logic
     document.addEventListener('DOMContentLoaded', () => {
         const lang = localStorage.getItem('language') || 'en';
         document.getElementById('language').value = lang;
         switchLanguage(lang);
 
-        // Show GIF only on first visit
         const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
 
         if (!hasVisitedBefore) {
-            const welcomeAnimation = document.getElementById('welcomeAnimation');
-            welcomeAnimation.style.display = 'flex';
-
-            setTimeout(() => {
-                welcomeAnimation.style.display = 'none';
-                localStorage.setItem('hasVisitedBefore', 'true');  // Set after hiding
-            }, 5000);  // Show for 5 seconds
+            showWelcomeAnimation();
         }
 
-        // Show install banner on iPhones if not dismissed
+        // iPhone install banner
         if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !localStorage.getItem('installPromptDismissed')) {
             document.getElementById('installBanner').style.display = 'block';
         }
     });
+
+    function showWelcomeAnimation() {
+        const welcomeAnimation = document.getElementById('welcomeAnimation');
+        welcomeAnimation.style.display = 'flex';
+
+        setTimeout(() => {
+            welcomeAnimation.style.display = 'none';
+            localStorage.setItem('hasVisitedBefore', 'true');
+        }, 5000); // 5 seconds
+    }
 
     function showAddPartModal() {
         document.getElementById('partModal').style.display = 'block';
@@ -132,7 +131,7 @@
         }
 
         const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-        parts.push({ name: partName, img: 'images/girl.jpg' });  // Default image as girl.jpg
+        parts.push({ name: partName, img: 'images/girl.jpg' });
 
         localStorage.setItem('innerParts', JSON.stringify(parts));
         alert('Part added successfully!');
