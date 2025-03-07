@@ -1,26 +1,20 @@
 const params = new URLSearchParams(window.location.search);
 const partName = params.get('part');
 
-// Set page title to reflect the part name
 document.getElementById('partTitle').innerText = `Meet ${partName}`;
 
 // Load the part details from localStorage
 let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
 
-// Pre-fill fields and load image if available
-if (part.image) {
-    document.getElementById('partImagePreview').src = part.image;
-} else {
-    document.getElementById('partImagePreview').src = 'images/girl.jpg'; // Default image
-}
-
+// Pre-fill all fields and set image preview (default if none saved)
 document.getElementById('partSince').value = part.knownSince || '';
 document.getElementById('partWants').value = part.wants || '';
 document.getElementById('partWorksWith').value = part.worksWith || '';
 document.getElementById('partClashesWith').value = part.clashesWith || '';
 document.getElementById('partRole').value = part.role || '';
+document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
 
-// Handle image upload and preview
+// Handle image upload with preview and immediate save
 document.getElementById('partImageInput').addEventListener('change', (event) => {
     const file = event.target.files[0];
 
@@ -28,14 +22,18 @@ document.getElementById('partImageInput').addEventListener('change', (event) => 
         const reader = new FileReader();
         reader.onload = () => {
             document.getElementById('partImagePreview').src = reader.result;
-            part.image = reader.result; // Save to part object immediately
+
+            // Save image immediately into the part object and localStorage
+            part.image = reader.result;
+            localStorage.setItem(`part-${partName}`, JSON.stringify(part));
+
             alert('Image uploaded successfully!');
         };
         reader.readAsDataURL(file);
     }
 });
 
-// Save part details back to localStorage when user clicks save
+// Save part details (text inputs) to localStorage when the user clicks save
 function savePartDetails() {
     const updatedPart = {
         knownSince: document.getElementById('partSince').value,
@@ -43,7 +41,7 @@ function savePartDetails() {
         worksWith: document.getElementById('partWorksWith').value,
         clashesWith: document.getElementById('partClashesWith').value,
         role: document.getElementById('partRole').value,
-        image: part.image || document.getElementById('partImagePreview').src // Make sure to save the latest image
+        image: part.image || document.getElementById('partImagePreview').src // Ensure image is preserved
     };
 
     localStorage.setItem(`part-${partName}`, JSON.stringify(updatedPart));
