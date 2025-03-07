@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-    <a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
-
 <head>
     <meta charset="UTF-8">
     <title>Daily Check-In - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <script src="app.js" defer></script>
     <style>
-        /* Simple style to show confirmation message */
         #checkinSavedMessage {
             display: none;
             background-color: #d4edda;
@@ -19,9 +16,48 @@
             margin: 15px 0;
             text-align: center;
         }
+
+        /* Styling for Active Parts Selection (Tag-like UI) */
+        .active-parts-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            min-height: 40px;
+            align-items: center;
+        }
+
+        .part-tag {
+            background-color: #8c5e58;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .part-tag button {
+            background: none;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        select#activePartsSelect {
+            width: 100%;
+            margin-top: 5px;
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
+
+<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
 
 <header>
     <h1>🌈 Daily Check-In</h1>
@@ -47,9 +83,11 @@
         </select>
     </label>
 
-    <label><span>💚 Active Parts (select from your parts):</span>
-        <select id="activePartsSelect" multiple></select>
-    </label>
+    <label><span>💚 Active Parts (select from your parts):</span></label>
+    <div class="active-parts-container" id="activePartsContainer">
+        <span style="color: #999;">(Select parts below)</span>
+    </div>
+    <select id="activePartsSelect"></select>
 
     <label><span>✨ Significant Events:</span>
         <textarea id="significantEvents" placeholder="Any key events, insights, or triggers today?"></textarea>
@@ -68,13 +106,18 @@
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', populatePartsDropdown);
+    const selectedParts = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        populatePartsDropdown();
+        setupPartSelection();
+    });
 
     function populatePartsDropdown() {
         const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
         const select = document.getElementById('activePartsSelect');
+        select.innerHTML = '<option value="">-- Select a part --</option>';
 
-        select.innerHTML = '';  // Clear existing
         parts.forEach(part => {
             const option = document.createElement('option');
             option.value = part.name;
@@ -83,11 +126,48 @@
         });
     }
 
+    function setupPartSelection() {
+        const select = document.getElementById('activePartsSelect');
+        select.addEventListener('change', () => {
+            const selectedPart = select.value;
+
+            if (selectedPart && !selectedParts.includes(selectedPart)) {
+                selectedParts.push(selectedPart);
+                updateSelectedPartsUI();
+                select.value = '';  // Reset dropdown
+            }
+        });
+    }
+
+    function updateSelectedPartsUI() {
+        const container = document.getElementById('activePartsContainer');
+        container.innerHTML = '';
+
+        if (selectedParts.length === 0) {
+            container.innerHTML = '<span style="color: #999;">(Select parts below)</span>';
+        } else {
+            selectedParts.forEach(part => {
+                const tag = document.createElement('div');
+                tag.className = 'part-tag';
+                tag.innerHTML = `${part} <button onclick="removePart('${part}')">x</button>`;
+                container.appendChild(tag);
+            });
+        }
+    }
+
+    function removePart(part) {
+        const index = selectedParts.indexOf(part);
+        if (index !== -1) {
+            selectedParts.splice(index, 1);
+            updateSelectedPartsUI();
+        }
+    }
+
     function saveCheckIn() {
         const checkin = {
             date: document.getElementById('checkinDate').value,
             mood: document.getElementById('moodSelect').value,
-            activeParts: Array.from(document.getElementById('activePartsSelect').selectedOptions).map(option => option.value),
+            activeParts: [...selectedParts],  // Save selected parts
             events: document.getElementById('significantEvents').value,
             thoughts: document.getElementById('additionalThoughts').value
         };
@@ -96,23 +176,19 @@
         checkins.push(checkin);
         localStorage.setItem('checkins', JSON.stringify(checkins));
 
-        // Show confirmation message
         const message = document.getElementById('checkinSavedMessage');
         message.style.display = 'block';
+        setTimeout(() => message.style.display = 'none', 3000);
 
-        // Hide message after 3 seconds
-        setTimeout(() => {
-            message.style.display = 'none';
-        }, 3000);
+        // Clear parts after saving (optional)
+        selectedParts.length = 0;
+        updateSelectedPartsUI();
     }
 
     function viewCheckInHistory() {
         window.location.href = 'checkin-history.html';
     }
-    <a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
-
 </script>
-<a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
 
 </body>
 </html>
