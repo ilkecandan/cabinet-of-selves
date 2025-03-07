@@ -48,6 +48,49 @@
 </main>
 
 <script>
+    const params = new URLSearchParams(window.location.search);
+    const partName = params.get('part');
+
+    // Load saved part data (including image)
+    let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
+
+    document.getElementById('partTitle').innerText = `Meet ${partName}`;
+
+    // Pre-fill all fields and set image preview (use saved image or default)
+    document.getElementById('partSince').value = part.knownSince || '';
+    document.getElementById('partWants').value = part.wants || '';
+    document.getElementById('partWorksWith').value = part.worksWith || '';
+    document.getElementById('partClashesWith').value = part.clashesWith || '';
+    document.getElementById('partRole').value = part.role || '';
+    document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
+
+    // Handle image upload and immediate save
+    document.getElementById('partImageInput').addEventListener('change', (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                document.getElementById('partImagePreview').src = reader.result;
+                part.image = reader.result;
+                localStorage.setItem(`part-${partName}`, JSON.stringify(part));
+                alert('✅ Your image has been uploaded and saved!');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function savePartDetails() {
+        part.knownSince = document.getElementById('partSince').value;
+        part.wants = document.getElementById('partWants').value;
+        part.worksWith = document.getElementById('partWorksWith').value;
+        part.clashesWith = document.getElementById('partClashesWith').value;
+        part.role = document.getElementById('partRole').value;
+
+        localStorage.setItem(`part-${partName}`, JSON.stringify(part));
+        alert('✅ Details saved successfully!');
+    }
+
     const translations = {
         en: {
             pageTitle: "Meet Your Part",
