@@ -58,26 +58,83 @@ function savePart(isImageOnly = false) {
 }
 
 // Floating notification system
-function showNotification(message, type) {
+function showNotification(message, type = 'success') {
+    // Remove existing notifications to prevent stacking
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+
     const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
     notification.innerText = message;
+
     notification.style.position = 'fixed';
     notification.style.bottom = '20px';
     notification.style.right = '20px';
     notification.style.padding = '12px 18px';
     notification.style.borderRadius = '8px';
-    notification.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
     notification.style.color = 'white';
-    notification.style.zIndex = '1000';
     notification.style.fontWeight = 'bold';
+    notification.style.zIndex = '1000';
     notification.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+    notification.style.fontFamily = 'Quicksand, Arial, sans-serif';
+
+    if (type === 'success') {
+        notification.style.backgroundColor = '#4caf50';
+    } else {
+        notification.style.backgroundColor = '#f44336';
+    }
+
     document.body.appendChild(notification);
 
-    setTimeout(() => notification.remove(), 3000);
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
-// Language Handling (keep as you had it)
-const translations = { /* your existing language objects here */ };
+// Language Handling System
+const translations = {
+    en: {
+        pageTitle: `Meet ${partName}`,
+        pageDescription: "This is a gentle place to explore and understand this part of you.",
+        labelKnownSince: "🌱 How long have you known this part?",
+        labelWants: "💬 What does this part want for you?",
+        labelWorksWith: "🌟 Which parts does this part work well with?",
+        labelClashesWith: "⚔️ Which parts does this part clash with?",
+        labelRole: "🎭 What role does this part play?",
+        saveButton: "💾 Save Part Details",
+        backCabinetButton: "⬅️ Back to Cabinet",
+        backPartsButton: "📂 Back to All Parts",
+        knownSincePlaceholder: "A long time, since childhood, etc."
+    },
+    tr: {
+        pageTitle: `${partName} ile Tanış`,
+        pageDescription: "Bu, bu parçanızı keşfetmek ve anlamak için nazik bir alandır.",
+        labelKnownSince: "🌱 Bu parçayı ne zamandır tanıyorsunuz?",
+        labelWants: "💬 Bu parça sizden ne istiyor?",
+        labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışıyor?",
+        labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışıyor?",
+        labelRole: "🎭 Bu parça hangi rolü oynuyor?",
+        saveButton: "💾 Parça Detaylarını Kaydet",
+        backCabinetButton: "⬅️ Kabine Geri Dön",
+        backPartsButton: "📂 Tüm Parçalar'a Geri Dön",
+        knownSincePlaceholder: "Uzun zamandır, çocukluktan beri, vb."
+    },
+    de: {
+        pageTitle: `Lerne ${partName} kennen`,
+        pageDescription: "Dies ist ein sanfter Ort, um diesen Teil von dir zu erkunden und zu verstehen.",
+        labelKnownSince: "🌱 Wie lange kennst du diesen Teil?",
+        labelWants: "💬 Was will dieser Teil von dir?",
+        labelWorksWith: "🌟 Mit welchen Teilen arbeitet dieser Teil gut zusammen?",
+        labelClashesWith: "⚔️ Mit welchen Teilen gerät dieser Teil in Konflikt?",
+        labelRole: "🎭 Welche Rolle spielt dieser Teil?",
+        saveButton: "💾 Teil speichern",
+        backCabinetButton: "⬅️ Zurück zum Kabinett",
+        backPartsButton: "📂 Zurück zu allen Teilen",
+        knownSincePlaceholder: "Seit langer Zeit, seit der Kindheit, etc."
+    }
+};
 
 function switchLanguage(lang) {
     localStorage.setItem('language', lang);
@@ -97,6 +154,7 @@ function switchLanguage(lang) {
     document.getElementById('partSince').placeholder = t.knownSincePlaceholder;
 }
 
+// Initialize language on page load
 document.addEventListener('DOMContentLoaded', () => {
     const lang = localStorage.getItem('language') || 'en';
     document.getElementById('language').value = lang;
