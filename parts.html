@@ -176,8 +176,12 @@
             partDiv.style.left = `${x}px`;
             partDiv.style.top = `${y}px`;
 
+            // Load the saved image from part-details (if available)
+            const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
+            const partImage = savedPart.image || part.img || 'images/girl.jpg';
+
             const img = document.createElement('img');
-            img.src = part.img && part.img !== '' ? part.img : 'images/girl.jpg'; // Use girl.jpg if no image
+            img.src = partImage;
 
             const name = document.createElement('span');
             name.innerText = part.name || 'Unnamed';
@@ -186,7 +190,7 @@
             editButton.innerText = 'View / Edit';
             editButton.onclick = () => {
                 localStorage.setItem('currentPart', JSON.stringify(part));
-                window.location.href = 'part-details.html';
+                window.location.href = `part-details.html?part=${encodeURIComponent(part.name)}`;
             };
 
             const removeButton = document.createElement('button');
@@ -206,7 +210,12 @@
     function removePart(index) {
         if (confirm('Are you sure you want to remove this part?')) {
             const updatedParts = JSON.parse(localStorage.getItem('innerParts')) || [];
+            const removedPart = updatedParts[index];
             updatedParts.splice(index, 1);
+
+            // Remove the saved part data (including image) when removing part
+            localStorage.removeItem(`part-${removedPart.name}`);
+
             localStorage.setItem('innerParts', JSON.stringify(updatedParts));
             alert('Part removed successfully!');
             location.reload();
