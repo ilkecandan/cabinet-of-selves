@@ -5,6 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Parts - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Quicksand', Arial, sans-serif;
+            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
+            margin: 0;
+            padding: 20px;
+            color: #4a4a4a;
+            text-align: center;
+        }
+
+        header {
+            margin: 20px 0;
+        }
+
+        main {
+            background: white;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .table-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 20px auto;
+            border: 12px solid #74c69d;
+            border-radius: 50%;
+            background-color: #fefefe;
+        }
+
+        .part-seat {
+            position: absolute;
+            width: 100px;
+            height: 120px;
+            text-align: center;
+        }
+
+        .part-seat img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #74c69d;
+        }
+
+        .part-seat span {
+            display: block;
+            margin-top: 5px;
+            font-weight: bold;
+            color: #0077b6;
+        }
+
+        .part-seat button {
+            background-color: #74c69d;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin: 3px;
+        }
+
+        .part-seat button.remove {
+            background-color: #ff6b6b;
+        }
+
+        .language-selector {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .language-selector select {
+            padding: 6px 12px;
+            border-radius: 8px;
+            background-color: #74c69d;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .language-selector select:hover {
+            background-color: #52b788;
+        }
+
+        .back-to-cabinet {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #74c69d;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
@@ -29,9 +129,30 @@
 
 <script>
 const translations = {
-    en: { header: "Your Parts", description: "Your parts are sitting here, all of them welcomed.", back: "Back to Cabinet", viewEdit: "View / Edit", remove: "Remove" },
-    tr: { header: "Parçalarınız", description: "Tüm parçalarınız burada, hepsi hoş karşılanır.", back: "Kabine Geri Dön", viewEdit: "Görüntüle / Düzenle", remove: "Kaldır" },
-    de: { header: "Deine Teile", description: "Alle deine Teile sind hier willkommen.", back: "Zurück zum Schrank", viewEdit: "Ansehen / Bearbeiten", remove: "Entfernen" }
+    en: { 
+        header: "Your Parts", 
+        description: "Your parts are sitting here, all of them welcomed.", 
+        back: "Back to Cabinet", 
+        viewEdit: "View / Edit", 
+        remove: "Remove", 
+        noParts: "No parts added yet. Please add parts." 
+    },
+    tr: { 
+        header: "Parçalarınız", 
+        description: "Tüm parçalarınız burada, hepsi hoş karşılanır.", 
+        back: "Kabine Geri Dön", 
+        viewEdit: "Görüntüle / Düzenle", 
+        remove: "Kaldır", 
+        noParts: "Henüz parça eklenmedi. Lütfen parça ekleyin." 
+    },
+    de: { 
+        header: "Deine Teile", 
+        description: "Alle deine Teile sind hier willkommen.", 
+        back: "Zurück zum Schrank", 
+        viewEdit: "Ansehen / Bearbeiten", 
+        remove: "Entfernen", 
+        noParts: "Noch keine Teile hinzugefügt. Bitte füge Teile hinzu." 
+    }
 };
 
 let currentLanguage = localStorage.getItem('language') || 'en';
@@ -52,17 +173,30 @@ function loadParts() {
     table.innerHTML = '';
 
     if (parts.length === 0) {
-        table.innerHTML = `<p>${translations[currentLanguage].description}</p>`;
+        table.innerHTML = `<p>${translations[currentLanguage].noParts}</p>`;
         return;
     }
 
-    parts.forEach(part => {
+    const radius = 160;
+    const centerX = 200;
+    const centerY = 200;
+    const angleStep = (2 * Math.PI) / parts.length;
+
+    parts.forEach((part, index) => {
+        const angle = index * angleStep;
+        const x = centerX + radius * Math.cos(angle) - 50;
+        const y = centerY + radius * Math.sin(angle) - 50;
+
         const div = document.createElement('div');
+        div.className = 'part-seat';
+        div.style.left = `${x}px`;
+        div.style.top = `${y}px`;
         div.innerHTML = `
-            <img src="${part.img}" alt="${part.name}">
+            <img src="${part.img || 'images/girl.jpg'}" alt="${part.name}">
             <span>${part.name}</span>
             <button onclick="viewPart('${part.name}')">${translations[currentLanguage].viewEdit}</button>
-            <button onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>`;
+            <button class="remove" onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>
+        `;
         table.appendChild(div);
     });
 }
@@ -72,12 +206,16 @@ function viewPart(name) {
 }
 
 function removePart(name) {
-    const parts = JSON.parse(localStorage.getItem('innerParts')).filter(p => p.name !== name);
-    localStorage.setItem('innerParts', JSON.stringify(parts));
+    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+    const updatedParts = parts.filter(part => part.name !== name);
+    localStorage.setItem('innerParts', JSON.stringify(updatedParts));
     loadParts();
 }
 
-document.addEventListener('DOMContentLoaded', () => switchLanguage(currentLanguage));
+document.addEventListener('DOMContentLoaded', () => {
+    switchLanguage(currentLanguage);
+});
 </script>
+
 </body>
 </html>
