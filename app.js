@@ -1,96 +1,292 @@
-document.addEventListener('DOMContentLoaded', () => {
-    loadParts();
-
-    const addPartButton = document.getElementById('addPartButton');
-    if (addPartButton) addPartButton.addEventListener('click', showAddPartModal);
-
-    const confirmAddPartButton = document.getElementById('confirmAddPart');
-    if (confirmAddPartButton) confirmAddPartButton.addEventListener('click', addPart);
-
-    const startCheckInButton = document.getElementById('startCheckInButton');
-    if (startCheckInButton) startCheckInButton.addEventListener('click', () => {
-        window.location.href = 'daily-checkin.html';
-    });
-
-    const viewCheckInHistoryButton = document.getElementById('viewCheckInHistoryButton');
-    if (viewCheckInHistoryButton) viewCheckInHistoryButton.addEventListener('click', viewCheckInHistory);
-});
-
-function loadParts() {
-    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-    const container = document.getElementById('partsContainer');
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    parts.forEach(part => {
-        const partElement = document.createElement('div');
-        partElement.classList.add('part-item');
-
-        const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
-
-        const profileImage = document.createElement('img');
-        profileImage.src = savedPart.image || 'images/girl.jpg';
-        profileImage.classList.add('part-profile-image');
-
-        const partLink = document.createElement('button');
-        partLink.innerText = part.name;
-        partLink.classList.add('part-name-button');
-        partLink.onclick = () => {
-            window.location.href = `part-details.html?part=${encodeURIComponent(part.name)}`;
-        };
-
-        const removeButton = document.createElement('button');
-        removeButton.innerText = '❌ Remove';
-        removeButton.classList.add('remove-part-button');
-        removeButton.onclick = () => removePart(part.name);
-
-        partElement.appendChild(profileImage);
-        partElement.appendChild(partLink);
-        partElement.appendChild(removeButton);
-
-        container.appendChild(partElement);
-    });
+/* General Body and Page Styles */
+body {
+    font-family: 'Quicksand', Arial, sans-serif;
+    background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
+    margin: 0;
+    padding: 0;
+    color: #4a4a4a;
+    animation: fadeIn 1s ease-out;
+    text-align: center;
+    overflow-x: hidden;
 }
 
-function removePart(partName) {
-    if (!confirm(`Are you sure you want to remove "${partName}"?`)) return;
-
-    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-    parts = parts.filter(part => part.name !== partName);
-
-    localStorage.removeItem(`part-${partName}`);
-    localStorage.setItem('innerParts', JSON.stringify(parts));
-    loadParts();
+/* Header Styles */
+header h1 {
+    margin: 20px 0 5px;
+    font-size: 2.5rem;
+    color: #0077b6;
 }
 
-function showAddPartModal() {
-    const modal = document.getElementById('partModal');
-    if (modal) modal.style.display = 'block';
+header p {
+    font-size: 1rem;
+    margin: 0;
+    color: #555;
 }
 
-function hideAddPartModal() {
-    const modal = document.getElementById('partModal');
-    if (modal) modal.style.display = 'none';
+/* Main Container */
+main {
+    background: white;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-function addPart() {
-    const partNameInput = document.getElementById('partName');
-    const partName = partNameInput ? partNameInput.value.trim() : '';
+/* Sections */
+section {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
-    if (partName === '') {
-        alert('Please enter a name for the part!');
-        return;
+/* Section Headings */
+h2 {
+    font-size: 1.3rem;
+    color: #4a90a2;
+    margin-bottom: 10px;
+}
+
+/* Links */
+a {
+    color: #0077b6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Form Elements */
+input, select, textarea {
+    width: calc(100% - 10px);
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+button {
+    padding: 12px 15px;
+    background-color: #74c69d;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 5px;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #52b788;
+    transform: translateY(-3px);
+}
+
+/* Remove Button Special Style */
+.remove-btn {
+    background-color: #ff6b6b;
+}
+
+.remove-btn:hover {
+    background-color: #e63946;
+}
+
+/* Back to Cabinet Button */
+.back-to-cabinet {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 12px 18px;
+    background-color: #74c69d;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-to-cabinet:hover {
+    background-color: #52b788;
+}
+
+/* Parts Table (for parts.html) */
+.parts-table {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.part-card {
+    background: #e0f7fa;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 140px;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.part-card:hover {
+    transform: translateY(-5px);
+}
+
+.part-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
+.part-name {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+/* Modal (for Add New Part) */
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.modal h3 {
+    margin-top: 0;
+    color: #4a90a2;
+}
+
+/* Welcome Animation Overlay */
+#welcomeAnimation {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    z-index: 999;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    animation: fadeIn 0.8s ease-out;
+}
+
+#welcomeAnimation h2 {
+    margin-bottom: 15px;
+    color: #0077b6;
+}
+
+/* Language Selector */
+.language-selector {
+    text-align: right;
+    padding: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 200;
+}
+
+.language-selector select {
+    padding: 8px 12px;
+    background-color: #74c69d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    appearance: none;
+    outline: none;
+}
+
+.language-selector select:hover {
+    background-color: #52b788;
+}
+
+/* Install Banner for iPhone */
+.install-banner {
+    display: none;
+    background-color: #74c69d;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.install-banner button {
+    background-color: #52b788;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+        padding: 15px;
     }
 
-    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-    parts.push({ name: partName });
+    button {
+        width: 100%;
+        font-size: 0.9rem;
+    }
 
-    localStorage.setItem('innerParts', JSON.stringify(parts));
+    .parts-table {
+        flex-direction: column;
+        align-items: center;
+    }
 
-    window.location.href = `part-details.html?part=${encodeURIComponent(partName)}`;
+    .part-card {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .language-selector {
+        position: static;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .language-selector select {
+        width: 90%;
+        max-width: 300px;
+    }
 }
 
-function viewCheckInHistory() {
-    window.location.href = 'checkin-history.html';
+/* Fade-In Animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
