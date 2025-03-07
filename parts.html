@@ -6,6 +6,7 @@
     <title>Your Parts - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
+
     <style>
         body {
             font-family: 'Quicksand', Arial, sans-serif;
@@ -99,6 +100,28 @@
             background-color: #52b788;
         }
 
+        .add-part-button {
+            position: absolute;
+            background-color: #52b788;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .add-part-button:hover {
+            background-color: #40916c;
+        }
+
         dotlottie-wc {
             width: 200px;
             height: 200px;
@@ -146,7 +169,7 @@
 
 <main>
     <div class="table-container" id="partsTable">
-        <!-- Parts will be injected here dynamically -->
+        <button class="add-part-button" onclick="showAddPartModal()">+</button>
     </div>
 
     <a href="index.html" class="back-to-cabinet">Back to Cabinet</a>
@@ -154,17 +177,45 @@
     <dotlottie-wc src="https://lottie.host/dd3bc15b-e3cc-41ee-86b8-47e37863f8d6/s8l3FcuPpS.lottie" autoplay loop></dotlottie-wc>
 </main>
 
-<script>
-    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-    const table = document.getElementById('partsTable');
+<!-- Add Part Modal -->
+<div id="partModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+    <h3>Add New Part</h3>
+    <input type="text" id="partNameInput" placeholder="Part Name">
+    <button onclick="addPart()">Add</button>
+    <button onclick="hideAddPartModal()">Cancel</button>
+</div>
 
-    if (parts.length === 0) {
-        table.innerHTML = '<p>No parts added yet. Please add parts from the Cabinet.</p>';
-    } else {
+<script>
+    function showAddPartModal() {
+        document.getElementById('partModal').style.display = 'block';
+    }
+
+    function hideAddPartModal() {
+        document.getElementById('partModal').style.display = 'none';
+    }
+
+    function addPart() {
+        const name = document.getElementById('partNameInput').value.trim();
+        if (!name) return alert("Please enter a part name.");
+
+        const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+        parts.push({ name, img: 'images/girl.jpg' });
+        localStorage.setItem('innerParts', JSON.stringify(parts));
+
+        hideAddPartModal();
+        loadParts();
+    }
+
+    function loadParts() {
+        const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+        const table = document.getElementById('partsTable');
+
+        table.innerHTML = `<button class="add-part-button" onclick="showAddPartModal()">+</button>`;
+
         const radius = 160;
         const centerX = 200;
         const centerY = 200;
-        const angleStep = (2 * Math.PI) / parts.length;
+        const angleStep = (2 * Math.PI) / Math.max(parts.length, 1);
 
         parts.forEach((part, index) => {
             const angle = index * angleStep;
@@ -176,22 +227,15 @@
             partDiv.style.left = `${x}px`;
             partDiv.style.top = `${y}px`;
 
-            // Load saved part details (including updated images) if available
-            const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
-            const partImage = savedPart.image || part.img || 'images/girl.jpg';
-
             const img = document.createElement('img');
-            img.src = partImage;
+            img.src = part.img || 'images/girl.jpg';
 
             const name = document.createElement('span');
-            name.innerText = part.name || 'Unnamed';
+            name.innerText = part.name;
 
             const editButton = document.createElement('button');
             editButton.innerText = 'View / Edit';
-            editButton.onclick = () => {
-                localStorage.setItem('currentPart', JSON.stringify(part));
-                window.location.href = `part-details.html?part=${encodeURIComponent(part.name)}`;
-            };
+            editButton.onclick = () => window.location.href = `part-details.html?part=${encodeURIComponent(part.name)}`;
 
             const removeButton = document.createElement('button');
             removeButton.innerText = 'Remove';
@@ -202,25 +246,11 @@
             partDiv.appendChild(name);
             partDiv.appendChild(editButton);
             partDiv.appendChild(removeButton);
-
             table.appendChild(partDiv);
         });
     }
 
-    function removePart(index) {
-        if (confirm('Are you sure you want to remove this part?')) {
-            const updatedParts = JSON.parse(localStorage.getItem('innerParts')) || [];
-            const removedPart = updatedParts[index];
-            updatedParts.splice(index, 1);
-
-            // Remove associated part data (including uploaded image)
-            localStorage.removeItem(`part-${removedPart.name}`);
-
-            localStorage.setItem('innerParts', JSON.stringify(updatedParts));
-            alert('Part removed successfully!');
-            location.reload();
-        }
-    }
+    document.addEventListener('DOMContentLoaded', loadParts);
 </script>
 
 </body>
