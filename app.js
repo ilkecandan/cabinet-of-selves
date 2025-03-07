@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmAddPartButton = document.getElementById('confirmAddPart');
     if (confirmAddPartButton) confirmAddPartButton.addEventListener('click', addPart);
 
-    // Language setup
     const lang = localStorage.getItem('language') || 'en';
     document.getElementById('language').value = lang;
     switchLanguage(lang);
@@ -46,7 +45,7 @@ function addPart() {
         return;
     }
 
-    parts.push({ name: partName, img: 'images/girl.jpg' }); // Default image
+    parts.push({ name: partName, img: 'images/girl.jpg' });
     localStorage.setItem('innerParts', JSON.stringify(parts));
 
     showNotification(translations[currentLanguage].partAdded, 'success');
@@ -54,7 +53,7 @@ function addPart() {
 
     setTimeout(() => {
         window.location.href = 'parts.html';
-    }, 1000); // Short delay to show the notification before navigating
+    }, 1000);
 }
 
 function loadParts() {
@@ -76,19 +75,15 @@ function loadParts() {
     }
 }
 
-// 🔔 Floating Notification System
 function showNotification(message, type) {
     const notification = document.createElement('div');
     notification.innerText = message;
     notification.className = `notification ${type}`;
     document.body.appendChild(notification);
 
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    setTimeout(() => notification.remove(), 3000);
 }
 
-// 🈯️ Language Switching with Global Translations
 const translations = {
     en: {
         addPartHeading: "Add a New Part",
@@ -116,7 +111,7 @@ const translations = {
     }
 };
 
-let currentLanguage = 'en'; // Default language
+let currentLanguage = 'en';
 
 function switchLanguage(lang) {
     currentLanguage = lang;
@@ -124,25 +119,11 @@ function switchLanguage(lang) {
 
     const t = translations[lang];
 
-    if (document.getElementById('addPartHeading')) {
-        document.getElementById('addPartHeading').innerText = t.addPartHeading;
-        document.getElementById('partNameLabel').innerText = t.partNameLabel;
-        document.getElementById('confirmAddPart').innerText = t.confirmAddPart;
-        document.getElementById('cancelButton').innerText = t.cancelButton;
+    ['addPartHeading', 'partNameLabel', 'confirmAddPart', 'cancelButton'].forEach(id => {
+        if (document.getElementById(id)) document.getElementById(id).innerText = t[id];
+    });
+
+    if (document.getElementById('partName')) {
         document.getElementById('partName').placeholder = t.partNamePlaceholder;
     }
-
-    // Other elements on index.html
-    if (document.getElementById('title')) document.getElementById('title').innerText = t.title || "Cabinet of Selves";
-    if (document.getElementById('welcomeTitle')) document.getElementById('welcomeTitle').innerText = t.welcomeTitle || "";
-    if (document.getElementById('welcomeSubtitle')) document.getElementById('welcomeSubtitle').innerText = t.welcomeSubtitle || "";
-    if (document.getElementById('welcomeText')) document.getElementById('welcomeText').innerText = t.welcomeText || "";
-    if (document.getElementById('partsHeading')) document.getElementById('partsHeading').innerText = t.partsHeading || "";
-    if (document.getElementById('seeAllPartsButton')) document.getElementById('seeAllPartsButton').innerText = t.seeAllPartsButton || "";
-    if (document.getElementById('addNewPartButton')) document.getElementById('addNewPartButton').innerText = t.addNewPartButton || "";
-    if (document.getElementById('checkInHeading')) document.getElementById('checkInHeading').innerText = t.checkInHeading || "";
-    if (document.getElementById('startCheckInButton')) document.getElementById('startCheckInButton').innerText = t.startCheckInButton || "";
-    if (document.getElementById('viewCheckInHistoryButton')) document.getElementById('viewCheckInHistoryButton').innerText = t.viewCheckInHistoryButton || "";
-    if (document.getElementById('resourcesHeading')) document.getElementById('resourcesHeading').innerText = t.resourcesHeading || "";
-    if (document.getElementById('youAreEnoughText')) document.getElementById('youAreEnoughText').innerText = t.youAreEnoughText || "";
 }
