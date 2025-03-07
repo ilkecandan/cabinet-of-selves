@@ -100,8 +100,12 @@
             background-color: #52b788;
         }
 
-        .add-part-button {
+        .add-part-container {
             position: absolute;
+            text-align: center;
+        }
+
+        .add-part-button {
             background-color: #52b788;
             color: white;
             border: none;
@@ -110,16 +114,22 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             width: 50px;
             height: 50px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: block;
+            margin: 0 auto;
         }
 
         .add-part-button:hover {
             background-color: #40916c;
+        }
+
+        .add-part-text {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #0077b6;
+            margin-top: 5px;
         }
 
         dotlottie-wc {
@@ -127,36 +137,6 @@
             height: 200px;
             margin: 20px auto;
             display: block;
-        }
-
-        @media (max-width: 600px) {
-            .table-container {
-                width: 300px;
-                height: 300px;
-            }
-
-            .part-seat {
-                width: 80px;
-                height: 100px;
-            }
-
-            .part-seat img {
-                width: 60px;
-                height: 60px;
-            }
-
-            .part-seat span {
-                font-size: 0.75rem;
-            }
-
-            .part-seat button {
-                font-size: 0.7rem;
-            }
-
-            dotlottie-wc {
-                width: 150px;
-                height: 150px;
-            }
         }
     </style>
 </head>
@@ -169,7 +149,10 @@
 
 <main>
     <div class="table-container" id="partsTable">
-        <button class="add-part-button" onclick="showAddPartModal()">+</button>
+        <div class="add-part-container">
+            <button class="add-part-button" onclick="showAddPartModal()">+</button>
+            <p class="add-part-text">Add New Part</p>
+        </div>
     </div>
 
     <a href="index.html" class="back-to-cabinet">Back to Cabinet</a>
@@ -210,7 +193,10 @@
         const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
         const table = document.getElementById('partsTable');
 
-        table.innerHTML = `<button class="add-part-button" onclick="showAddPartModal()">+</button>`;
+        table.innerHTML = `<div class="add-part-container">
+            <button class="add-part-button" onclick="showAddPartModal()">+</button>
+            <p class="add-part-text">Add New Part</p>
+        </div>`;
 
         const radius = 160;
         const centerX = 200;
@@ -222,13 +208,16 @@
             const x = centerX + radius * Math.cos(angle) - 50;
             const y = centerY + radius * Math.sin(angle) - 50;
 
+            const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
+            const partImage = savedPart.image || part.img || 'images/girl.jpg';
+
             const partDiv = document.createElement('div');
             partDiv.className = 'part-seat';
             partDiv.style.left = `${x}px`;
             partDiv.style.top = `${y}px`;
 
             const img = document.createElement('img');
-            img.src = part.img || 'images/girl.jpg';
+            img.src = partImage;
 
             const name = document.createElement('span');
             name.innerText = part.name;
