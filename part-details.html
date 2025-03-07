@@ -9,31 +9,112 @@
 <body>
 <header class="main-header">
     <h1 id="partTitle">Meet Your Part</h1>
-    <p>This is a gentle place to explore and understand this part of you.</p>
+    <p id="pageDescription">This is a gentle place to explore and understand this part of you.</p>
 </header>
+
+<!-- Language Selector -->
+<div class="language-selector">
+    <label for="language">🌐</label>
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
 
 <main class="part-details-box">
     <!-- Image Upload and Preview -->
     <img id="partImagePreview" src="images/girl.jpg" class="part-image-small">
     <input type="file" id="partImageInput" accept="image/*">
 
-    <label>🌱 How long have you known this part?</label>
+    <label id="labelKnownSince">🌱 How long have you known this part?</label>
     <input type="text" id="partSince" placeholder="A long time, since childhood, etc.">
 
-    <label>💬 What does this part want for you?</label>
+    <label id="labelWants">💬 What does this part want for you?</label>
     <textarea id="partWants"></textarea>
 
-    <label>🌟 Which parts does this part work well with?</label>
+    <label id="labelWorksWith">🌟 Which parts does this part work well with?</label>
     <input type="text" id="partWorksWith">
 
-    <label>⚔️ Which parts does this part clash with?</label>
+    <label id="labelClashesWith">⚔️ Which parts does this part clash with?</label>
     <input type="text" id="partClashesWith">
 
-    <label>🎭 What role does this part play?</label>
+    <label id="labelRole">🎭 What role does this part play?</label>
     <input type="text" id="partRole">
 
-    <button onclick="savePartDetails()">💾 Save Part Details</button>
-    <button onclick="location.href='index.html'">⬅️ Back to Cabinet</button>
+    <button onclick="savePartDetails()" id="saveButton">💾 Save Part Details</button>
+    <button onclick="location.href='index.html'" id="backCabinetButton">⬅️ Back to Cabinet</button>
+    <button onclick="location.href='parts.html'" id="backPartsButton">📂 Back to All Parts</button>
 </main>
+
+<script>
+    const translations = {
+        en: {
+            pageTitle: "Meet Your Part",
+            pageDescription: "This is a gentle place to explore and understand this part of you.",
+            labelKnownSince: "🌱 How long have you known this part?",
+            labelWants: "💬 What does this part want for you?",
+            labelWorksWith: "🌟 Which parts does this part work well with?",
+            labelClashesWith: "⚔️ Which parts does this part clash with?",
+            labelRole: "🎭 What role does this part play?",
+            saveButton: "💾 Save Part Details",
+            backCabinetButton: "⬅️ Back to Cabinet",
+            backPartsButton: "📂 Back to All Parts",
+            knownSincePlaceholder: "A long time, since childhood, etc."
+        },
+        tr: {
+            pageTitle: "Parçanızı Tanıyın",
+            pageDescription: "Bu, bu parçanızı keşfetmek ve anlamak için nazik bir alandır.",
+            labelKnownSince: "🌱 Bu parçayı ne zamandır tanıyorsunuz?",
+            labelWants: "💬 Bu parça sizden ne istiyor?",
+            labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışıyor?",
+            labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışıyor?",
+            labelRole: "🎭 Bu parça hangi rolü oynuyor?",
+            saveButton: "💾 Parça Detaylarını Kaydet",
+            backCabinetButton: "⬅️ Kabine Geri Dön",
+            backPartsButton: "📂 Tüm Parçalar'a Geri Dön",
+            knownSincePlaceholder: "Uzun zamandır, çocukluktan beri, vb."
+        },
+        de: {
+            pageTitle: "Lerne deinen Teil kennen",
+            pageDescription: "Dies ist ein sanfter Ort, um diesen Teil von dir zu erkunden und zu verstehen.",
+            labelKnownSince: "🌱 Wie lange kennst du diesen Teil?",
+            labelWants: "💬 Was will dieser Teil von dir?",
+            labelWorksWith: "🌟 Mit welchen Teilen arbeitet dieser Teil gut zusammen?",
+            labelClashesWith: "⚔️ Mit welchen Teilen gerät dieser Teil in Konflikt?",
+            labelRole: "🎭 Welche Rolle spielt dieser Teil?",
+            saveButton: "💾 Teil speichern",
+            backCabinetButton: "⬅️ Zurück zum Kabinett",
+            backPartsButton: "📂 Zurück zu allen Teilen",
+            knownSincePlaceholder: "Seit langer Zeit, seit der Kindheit, etc."
+        }
+    };
+
+    function switchLanguage(lang) {
+        localStorage.setItem('language', lang);
+        const t = translations[lang];
+
+        document.title = t.pageTitle;
+        document.getElementById('partTitle').innerText = t.pageTitle;
+        document.getElementById('pageDescription').innerText = t.pageDescription;
+        document.getElementById('labelKnownSince').innerText = t.labelKnownSince;
+        document.getElementById('labelWants').innerText = t.labelWants;
+        document.getElementById('labelWorksWith').innerText = t.labelWorksWith;
+        document.getElementById('labelClashesWith').innerText = t.labelClashesWith;
+        document.getElementById('labelRole').innerText = t.labelRole;
+        document.getElementById('saveButton').innerText = t.saveButton;
+        document.getElementById('backCabinetButton').innerText = t.backCabinetButton;
+        document.getElementById('backPartsButton').innerText = t.backPartsButton;
+
+        document.getElementById('partSince').placeholder = t.knownSincePlaceholder;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lang = localStorage.getItem('language') || 'en';
+        document.getElementById('language').value = lang;
+        switchLanguage(lang);
+    });
+</script>
+
 </body>
 </html>
