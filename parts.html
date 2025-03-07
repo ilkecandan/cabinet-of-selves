@@ -176,7 +176,7 @@
             partDiv.style.left = `${x}px`;
             partDiv.style.top = `${y}px`;
 
-            // Load the saved image from part-details (if available)
+            // Load saved part details (including updated images) if available
             const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
             const partImage = savedPart.image || part.img || 'images/girl.jpg';
 
@@ -213,7 +213,7 @@
             const removedPart = updatedParts[index];
             updatedParts.splice(index, 1);
 
-            // Remove the saved part data (including image) when removing part
+            // Remove associated part data (including uploaded image)
             localStorage.removeItem(`part-${removedPart.name}`);
 
             localStorage.setItem('innerParts', JSON.stringify(updatedParts));
