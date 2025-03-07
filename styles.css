@@ -1,5 +1,26 @@
 /* General Page Styles - Soft Relaxing Theme */
 /* =============================== */
+.back-to-cabinet {
+    display: block;
+    width: 90%;
+    max-width: 300px;
+    margin: 20px auto; /* centers horizontally */
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #8C5E58;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.back-to-cabinet:hover {
+    background-color: #73463e;
+}
 
 body {
     font-family: 'Quicksand', Arial, sans-serif;
