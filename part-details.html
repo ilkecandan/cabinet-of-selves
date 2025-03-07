@@ -4,117 +4,34 @@
     <meta charset="UTF-8">
     <title>Meet Your Part</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-
-        main {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            max-width: 800px;
-            margin: 20px auto;
-        }
-
-        img.part-image-small {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #74c69d;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        button {
-            margin: 10px;
-            padding: 10px 15px;
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #4caf50;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            z-index: 1000;
-            font-family: 'Quicksand', Arial, sans-serif;
-        }
-
-        .notification.error {
-            background-color: #f44336;
-        }
-
-        .language-selector {
-            margin: 10px 0;
-        }
-    </style>
 </head>
 <body>
 
 <header>
     <h1 id="partTitle">Meet Your Part</h1>
-    <p id="pageDescription">This is a gentle place to explore and understand this part of you.</p>
 </header>
 
-<div class="language-selector">
-    <label for="language">🌐</label>
-    <select id="language" onchange="switchLanguage(this.value)">
-        <option value="en">English</option>
-        <option value="tr">Türkçe</option>
-        <option value="de">Deutsch</option>
-    </select>
-</div>
-
 <main>
-    <img id="partImagePreview" src="images/girl.jpg" class="part-image-small">
+    <img id="partImagePreview" src="images/girl.jpg">
     <input type="file" id="partImageInput" accept="image/*">
-
-    <label id="labelKnownSince">🌱 How long have you known this part?</label>
+    
+    <label>How long have you known this part?</label>
     <input type="text" id="partSince">
 
-    <label id="labelWants">💬 What does this part want for you?</label>
+    <label>What does this part want?</label>
     <textarea id="partWants"></textarea>
 
-    <label id="labelWorksWith">🌟 Which parts does this part work well with?</label>
+    <label>Which parts does this part work well with?</label>
     <input type="text" id="partWorksWith">
 
-    <label id="labelClashesWith">⚔️ Which parts does this part clash with?</label>
+    <label>Which parts does this part clash with?</label>
     <input type="text" id="partClashesWith">
 
-    <label id="labelRole">🎭 What role does this part play?</label>
+    <label>What role does this part play?</label>
     <input type="text" id="partRole">
 
-    <button onclick="savePartDetails()" id="saveButton">💾 Save Part Details</button>
-    <button onclick="window.location.href='index.html'">⬅️ Back to Cabinet</button>
-    <button onclick="window.location.href='parts.html'">📂 Back to All Parts</button>
+    <button onclick="savePartDetails()">Save</button>
+    <button onclick="window.location.href='parts.html'">Back to Parts</button>
 </main>
 
 <script>
@@ -123,8 +40,6 @@ const partName = params.get('part');
 document.getElementById('partTitle').innerText = `Meet ${partName}`;
 
 let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
-let allParts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-
 document.getElementById('partSince').value = part.knownSince || '';
 document.getElementById('partWants').value = part.wants || '';
 document.getElementById('partWorksWith').value = part.worksWith || '';
@@ -139,8 +54,7 @@ document.getElementById('partImageInput').addEventListener('change', (event) => 
         reader.onload = () => {
             part.image = reader.result;
             document.getElementById('partImagePreview').src = part.image;
-            savePart(true);
-            showNotification('✅ Image saved!', 'success');
+            savePart();
         };
         reader.readAsDataURL(file);
     }
@@ -154,64 +68,11 @@ function savePartDetails() {
     part.role = document.getElementById('partRole').value;
 
     savePart();
-    showNotification('✅ Details saved!', 'success');
 }
 
-function savePart(isImageOnly = false) {
+function savePart() {
     localStorage.setItem(`part-${partName}`, JSON.stringify(part));
-
-    const index = allParts.findIndex(p => p.name === partName);
-    if (index !== -1) {
-        allParts[index].img = part.image;
-    } else if (!isImageOnly) {
-        allParts.push({ name: partName, img: part.image || 'images/girl.jpg' });
-    }
-
-    localStorage.setItem('innerParts', JSON.stringify(allParts));
 }
-
-function showNotification(message, type = 'success') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type === 'error' ? 'error' : ''}`;
-    notification.innerText = message;
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 3000);
-}
-
-const translations = {
-    en: {
-        pageDescription: "This is a gentle place to explore and understand this part of you.",
-        labelKnownSince: "🌱 How long have you known this part?",
-        labelWants: "💬 What does this part want for you?",
-        labelWorksWith: "🌟 Which parts does this part work well with?",
-        labelClashesWith: "⚔️ Which parts does this part clash with?",
-        labelRole: "🎭 What role does this part play?",
-        saveButton: "💾 Save Part Details"
-    },
-    tr: {
-        pageDescription: "Bu parçanızı keşfetmek ve anlamak için nazik bir yer.",
-        labelKnownSince: "🌱 Bu parçayı ne zamandır tanıyorsunuz?",
-        labelWants: "💬 Bu parça sizden ne istiyor?",
-        labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışır?",
-        labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışır?",
-        labelRole: "🎭 Bu parça hangi rolü oynar?",
-        saveButton: "💾 Parça Detaylarını Kaydet"
-    }
-};
-
-function switchLanguage(lang) {
-    localStorage.setItem('language', lang);
-    const t = translations[lang];
-    document.getElementById('pageDescription').innerText = t.pageDescription;
-    document.getElementById('labelKnownSince').innerText = t.labelKnownSince;
-    document.getElementById('labelWants').innerText = t.labelWants;
-    document.getElementById('labelWorksWith').innerText = t.labelWorksWith;
-    document.getElementById('labelClashesWith').innerText = t.labelClashesWith;
-    document.getElementById('labelRole').innerText = t.labelRole;
-    document.getElementById('saveButton').innerText = t.saveButton;
-}
-
-document.addEventListener('DOMContentLoaded', () => switchLanguage(localStorage.getItem('language') || 'en'));
 </script>
 
 </body>
