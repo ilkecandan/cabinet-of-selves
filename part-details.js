@@ -1,11 +1,11 @@
 const params = new URLSearchParams(window.location.search);
 const partName = params.get('part');
 
+// Load the part details from localStorage on page load
+let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
+
 // Set page title to include the part's name
 document.getElementById('partTitle').innerText = `Meet ${partName}`;
-
-// Load the part details from localStorage
-let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
 
 // Pre-fill all fields and set image preview (use default if none saved)
 document.getElementById('partSince').value = part.knownSince || '';
@@ -15,7 +15,7 @@ document.getElementById('partClashesWith').value = part.clashesWith || '';
 document.getElementById('partRole').value = part.role || '';
 document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
 
-// Handle image upload with preview and immediate save
+// Handle image upload with preview and **immediate save** to localStorage
 document.getElementById('partImageInput').addEventListener('change', (event) => {
     const file = event.target.files[0];
 
@@ -24,32 +24,35 @@ document.getElementById('partImageInput').addEventListener('change', (event) => 
         reader.onload = () => {
             document.getElementById('partImagePreview').src = reader.result;
 
-            // Save image immediately into the part object and localStorage
+            // Immediately save the new image to localStorage
             part.image = reader.result;
             localStorage.setItem(`part-${partName}`, JSON.stringify(part));
 
-            alert('Image uploaded successfully!');
+            alert('✅ Your image has been uploaded and saved!');
         };
         reader.readAsDataURL(file);
     }
 });
 
-// Save part details (text inputs) to localStorage when the user clicks save
+// Save all part details (including any previously saved image) when user clicks save
 function savePartDetails() {
+    // Reload part to ensure we don’t lose previously saved fields (like the image)
+    const existingPart = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
+
     const updatedPart = {
         knownSince: document.getElementById('partSince').value,
         wants: document.getElementById('partWants').value,
         worksWith: document.getElementById('partWorksWith').value,
         clashesWith: document.getElementById('partClashesWith').value,
         role: document.getElementById('partRole').value,
-        image: part.image || document.getElementById('partImagePreview').src // Ensure image is preserved
+        image: existingPart.image || document.getElementById('partImagePreview').src // Preserve image
     };
 
     localStorage.setItem(`part-${partName}`, JSON.stringify(updatedPart));
-    alert('Details saved!');
+    alert('✅ Details saved successfully!');
 }
 
-// Language support logic (this works with the language selector in the HTML)
+// Language handling (this part stays as you already have it working)
 const translations = {
     en: {
         pageTitle: `Meet ${partName}`,
