@@ -2,191 +2,222 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Check-In - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="app.js" defer></script>
     <style>
-        #checkinSavedMessage {
-            display: none;
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border: 1px solid #c3e6cb;
-            border-radius: 5px;
-            margin: 15px 0;
+        body {
+            font-family: 'Quicksand', Arial, sans-serif;
+            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
+            margin: 0;
+            padding: 0;
+            color: #4a4a4a;
+            animation: fadeIn 1s ease-out;
+        }
+
+        header {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2rem;
+            color: #4a4a4a;
+        }
+
+        main {
+            background: white;
+            width: 90%;
+            max-width: 750px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             text-align: center;
         }
 
-        /* Styling for Active Parts Selection (Tag-like UI) */
-        .active-parts-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #fff;
-            min-height: 40px;
-            align-items: center;
-        }
-
-        .part-tag {
-            background-color: #8c5e58;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .part-tag button {
-            background: none;
-            border: none;
-            color: white;
+        .welcome-message {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: #52b788;
             font-weight: bold;
-            cursor: pointer;
         }
 
-        select#activePartsSelect {
-            width: 100%;
-            margin-top: 5px;
+        .form-group {
+            text-align: left;
+            margin: 10px 0;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #4a90a2;
+        }
+
+        input, select, textarea {
+            width: calc(100% - 10px);
             padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 3px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            height: 60px;
+        }
+
+        .parts-checkboxes {
+            background: #f0f9ff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            text-align: left;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 5px;
+        }
+
+        .parts-checkboxes label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            background-color: #74c69d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #52b788;
+            transform: translateY(-3px);
+        }
+
+        .back-to-cabinet {
+            background-color: #74c69d;
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-to-cabinet:hover {
+            background-color: #52b788;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
-
-<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
 
 <header>
     <h1>🌈 Daily Check-In</h1>
     <p>Reflect on your day and connect with your inner world.</p>
 </header>
 
-<main class="checkin-container">
+<main>
+    <p class="welcome-message">💚 All parts of you are welcome here.</p>
 
-    <div id="checkinSavedMessage">✅ Your check-in is saved!</div>
+    <div class="form-group">
+        <label for="checkin-date">📅 Date:</label>
+        <input type="date" id="checkin-date">
+    </div>
 
-    <label><span>📅 Date:</span>
-        <input type="date" id="checkinDate">
-    </label>
-
-    <label><span>🌈 Today's Mood:</span>
-        <select id="moodSelect">
+    <div class="form-group">
+        <label for="mood">🌦️ Today's Mood:</label>
+        <select id="mood">
             <option>Calm</option>
+            <option>Reflective</option>
             <option>Anxious</option>
             <option>Joyful</option>
-            <option>Reflective</option>
-            <option>Overwhelmed</option>
-            <option>Grateful</option>
+            <option>Sad</option>
         </select>
-    </label>
-
-    <label><span>💚 Active Parts (select from your parts):</span></label>
-    <div class="active-parts-container" id="activePartsContainer">
-        <span style="color: #999;">(Select parts below)</span>
     </div>
-    <select id="activePartsSelect"></select>
 
-    <label><span>✨ Significant Events:</span>
-        <textarea id="significantEvents" placeholder="Any key events, insights, or triggers today?"></textarea>
-    </label>
+    <div class="form-group">
+        <label>💚 Active Parts (select from your parts):</label>
+        <div class="parts-checkboxes" id="partsCheckboxList"></div>
+    </div>
 
-    <label><span>📝 Additional Thoughts:</span>
+    <div class="form-group">
+        <label for="significantEvents">✨ Significant Events:</label>
+        <textarea id="significantEvents" placeholder="Any key events, insights, or experiences"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="additionalThoughts">📝 Additional Thoughts:</label>
         <textarea id="additionalThoughts" placeholder="Anything else you want to capture?"></textarea>
-    </label>
+    </div>
 
     <div class="button-row">
-        <button class="save-checkin-btn" onclick="saveCheckIn()">💾 Save Check-In</button>
-        <button class="view-history-btn" onclick="viewCheckInHistory()">📖 View Check-In History</button>
-        <button class="back-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
+        <button onclick="saveCheckIn()">💾 Save Check-In</button>
+        <button onclick="window.location.href='checkin-history.html'">📖 View Check-In History</button>
+        <a href="index.html" class="back-to-cabinet">🔙 Back to Cabinet</a>
     </div>
-
 </main>
 
 <script>
-    const selectedParts = [];
-
     document.addEventListener('DOMContentLoaded', () => {
-        populatePartsDropdown();
-        setupPartSelection();
+        loadPartsIntoCheckboxes();
     });
 
-    function populatePartsDropdown() {
-        const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-        const select = document.getElementById('activePartsSelect');
-        select.innerHTML = '<option value="">-- Select a part --</option>';
-
-        parts.forEach(part => {
-            const option = document.createElement('option');
-            option.value = part.name;
-            option.innerText = part.name;
-            select.appendChild(option);
-        });
-    }
-
-    function setupPartSelection() {
-        const select = document.getElementById('activePartsSelect');
-        select.addEventListener('change', () => {
-            const selectedPart = select.value;
-
-            if (selectedPart && !selectedParts.includes(selectedPart)) {
-                selectedParts.push(selectedPart);
-                updateSelectedPartsUI();
-                select.value = '';  // Reset dropdown
-            }
-        });
-    }
-
-    function updateSelectedPartsUI() {
-        const container = document.getElementById('activePartsContainer');
+    function loadPartsIntoCheckboxes() {
+        const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+        const container = document.getElementById('partsCheckboxList');
         container.innerHTML = '';
 
-        if (selectedParts.length === 0) {
-            container.innerHTML = '<span style="color: #999;">(Select parts below)</span>';
+        if (parts.length === 0) {
+            container.innerHTML = '<p style="color: #ff6347;">No parts available - add parts first!</p>';
         } else {
-            selectedParts.forEach(part => {
-                const tag = document.createElement('div');
-                tag.className = 'part-tag';
-                tag.innerHTML = `${part} <button onclick="removePart('${part}')">x</button>`;
-                container.appendChild(tag);
+            parts.forEach(part => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = part.name;
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(` ${part.name}`));
+                container.appendChild(label);
             });
         }
     }
 
-    function removePart(part) {
-        const index = selectedParts.indexOf(part);
-        if (index !== -1) {
-            selectedParts.splice(index, 1);
-            updateSelectedPartsUI();
-        }
+    function getSelectedParts() {
+        return Array.from(document.querySelectorAll('#partsCheckboxList input:checked')).map(cb => cb.value);
     }
 
     function saveCheckIn() {
         const checkin = {
-            date: document.getElementById('checkinDate').value,
-            mood: document.getElementById('moodSelect').value,
-            activeParts: [...selectedParts],  // Save selected parts
-            events: document.getElementById('significantEvents').value,
-            thoughts: document.getElementById('additionalThoughts').value
+            date: document.getElementById('checkin-date').value,
+            mood: document.getElementById('mood').value,
+            activeParts: getSelectedParts(),
+            significantEvents: document.getElementById('significantEvents').value,
+            additionalThoughts: document.getElementById('additionalThoughts').value
         };
 
-        const checkins = JSON.parse(localStorage.getItem('checkins')) || [];
+        const checkins = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
         checkins.push(checkin);
-        localStorage.setItem('checkins', JSON.stringify(checkins));
+        localStorage.setItem('dailyCheckIns', JSON.stringify(checkins));
 
-        const message = document.getElementById('checkinSavedMessage');
-        message.style.display = 'block';
-        setTimeout(() => message.style.display = 'none', 3000);
-
-        // Clear parts after saving (optional)
-        selectedParts.length = 0;
-        updateSelectedPartsUI();
-    }
-
-    function viewCheckInHistory() {
-        window.location.href = 'checkin-history.html';
+        alert('✅ Check-in saved successfully!');
+        window.location.href = 'index.html';
     }
 </script>
 
