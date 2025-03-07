@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
+
+    <meta charset="UTF-8">
+    <title>Journal History - Cabinet of Selves</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <h1>📖 Journal History</h1>
+    <p>See all your past journal entries, organized by date.</p>
+</header>
+
+<main class="history-container">
+    <ul id="journalHistoryList"></ul>
+    <button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', loadJournalHistory);
+
+    function loadJournalHistory() {
+        const journals = JSON.parse(localStorage.getItem('dailyJournals')) || {};
+        const list = document.getElementById('journalHistoryList');
+        list.innerHTML = '';
+
+        const dates = Object.keys(journals);
+        if (dates.length === 0) {
+            list.innerHTML = '<li>No journal entries found.</li>';
+            return;
+        }
+
+        dates.sort().reverse();
+
+        dates.forEach(date => {
+            const entry = journals[date];
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <h3>${date}</h3>
+                <p><strong>What does my inner protector want me to know today?</strong><br>${entry.prompt1}</p>
+                <p><strong>Which part of me needs attention right now?</strong><br>${entry.prompt2}</p>
+                <p><strong>What would comfort look like for my inner child?</strong><br>${entry.prompt3}</p>
+            `;
+            list.appendChild(li);
+        });
+    }
+</script>
+
+<style>
+    .history-container {
+        max-width: 800px;
+        margin: 30px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #f9f9f9;
+        margin-bottom: 10px;
+    }
+</style>
+<button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
+
+
+</body>
+</html>

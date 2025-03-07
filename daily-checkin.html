@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Check-In - Cabinet of Selves</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+    <style>
+        /* Simple style to show confirmation message */
+        #checkinSavedMessage {
+            display: none;
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🌈 Daily Check-In</h1>
+    <p>Reflect on your day and connect with your inner world.</p>
+</header>
+
+<main class="checkin-container">
+
+    <div id="checkinSavedMessage">✅ Your check-in is saved!</div>
+
+    <label><span>📅 Date:</span>
+        <input type="date" id="checkinDate">
+    </label>
+
+    <label><span>🌈 Today's Mood:</span>
+        <select id="moodSelect">
+            <option>Calm</option>
+            <option>Anxious</option>
+            <option>Joyful</option>
+            <option>Reflective</option>
+            <option>Overwhelmed</option>
+            <option>Grateful</option>
+        </select>
+    </label>
+
+    <label><span>💚 Active Parts (select from your parts):</span>
+        <select id="activePartsSelect" multiple></select>
+    </label>
+
+    <label><span>✨ Significant Events:</span>
+        <textarea id="significantEvents" placeholder="Any key events, insights, or triggers today?"></textarea>
+    </label>
+
+    <label><span>📝 Additional Thoughts:</span>
+        <textarea id="additionalThoughts" placeholder="Anything else you want to capture?"></textarea>
+    </label>
+
+    <div class="button-row">
+        <button class="save-checkin-btn" onclick="saveCheckIn()">💾 Save Check-In</button>
+        <button class="view-history-btn" onclick="viewCheckInHistory()">📖 View Check-In History</button>
+        <button class="back-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
+    </div>
+
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', populatePartsDropdown);
+
+    function populatePartsDropdown() {
+        const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+        const select = document.getElementById('activePartsSelect');
+
+        select.innerHTML = '';  // Clear existing
+        parts.forEach(part => {
+            const option = document.createElement('option');
+            option.value = part.name;
+            option.innerText = part.name;
+            select.appendChild(option);
+        });
+    }
+
+    function saveCheckIn() {
+        const checkin = {
+            date: document.getElementById('checkinDate').value,
+            mood: document.getElementById('moodSelect').value,
+            activeParts: Array.from(document.getElementById('activePartsSelect').selectedOptions).map(option => option.value),
+            events: document.getElementById('significantEvents').value,
+            thoughts: document.getElementById('additionalThoughts').value
+        };
+
+        const checkins = JSON.parse(localStorage.getItem('checkins')) || [];
+        checkins.push(checkin);
+        localStorage.setItem('checkins', JSON.stringify(checkins));
+
+        // Show confirmation message
+        const message = document.getElementById('checkinSavedMessage');
+        message.style.display = 'block';
+
+        // Hide message after 3 seconds
+        setTimeout(() => {
+            message.style.display = 'none';
+        }, 3000);
+    }
+
+    function viewCheckInHistory() {
+        window.location.href = 'checkin-history.html';
+    }
+    <a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
+
+</script>
+<a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabinet of Selves</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Favicon for browser tab -->
+    <link rel="icon" href="images/main.png" type="image/png">
+
+    <!-- PWA Manifest - allows installation -->
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        /* Added this to hide the modal initially */
+        #partModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Cabinet of Selves</h1>
+    <p>Welcome to your inner world. Which parts want to speak today?</p>
+</header>
+
+<main class="dashboard">
+    <section class="column">
+        <h2>📚 Your Parts</h2>
+        <div id="partsContainer"></div>
+        <button id="addPartButton" class="primary-button" onclick="showAddPartModal()">➕ Add New Part</button>
+    </section>
+
+    <section class="column">
+        <h2>🌈 Daily Check-In</h2>
+        <button id="startCheckInButton" class="primary-button">📅 Start Daily Check-In</button>
+        <button id="viewCheckInHistoryButton" class="primary-button">📖 View Check-In History</button>
+    </section>
+
+    <section class="column">
+        <h2>📚 Resources & Tips</h2>
+        <p>✨ You are enough, even on the quiet days.</p>
+        <a href="resources.html">Resources & Articles</a> |
+        <a href="journal-prompts.html">Journal Prompts</a>
+    </section>
+</main>
+
+<!-- Custom Modal for Adding Parts -->
+<div id="partModal" class="modal">
+    <div class="modal-content">
+        <h3>Add a New Part</h3>
+        <label for="partName">What would you like to name this part?</label>
+        <input type="text" id="partName" placeholder="e.g., The Protector">
+        <div class="modal-actions">
+            <button id="confirmAddPart" class="primary-button">Add Part</button>
+            <button class="secondary-button" onclick="hideAddPartModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAddPartModal() {
+        document.getElementById('partModal').style.display = 'block';
+    }
+
+    function hideAddPartModal() {
+        document.getElementById('partModal').style.display = 'none';
+    }
+
+    // Service Worker Registration (PWA support for install + offline)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+            .then(() => console.log('Service Worker Registered'))
+            .catch((error) => console.log('Service Worker Registration Failed:', error));
+    }
+</script>
+
+<script src="app.js"></script>
+</body>
+</html>

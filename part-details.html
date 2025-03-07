@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meet Your Part</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="app.js"></script>
+</head>
+<body>
+<header class="main-header">
+    <h1 id="partTitle">Meet Your Part</h1>
+    <p>This is a gentle place to explore and understand this part of you.</p>
+</header>
+
+<main class="part-details-box">
+    <img id="partImagePreview" src="images/girl.jpg" class="part-image-small">
+    <input type="file" id="partImageInput" accept="image/*">
+
+    <label>🌱 How long have you known this part?</label>
+    <input type="text" id="partSince" placeholder="A long time, since childhood, etc.">
+
+    <label>💬 What does this part want for you?</label>
+    <textarea id="partWants"></textarea>
+
+    <label>🌟 Which parts does this part work well with?</label>
+    <input type="text" id="partWorksWith">
+
+    <label>⚔️ Which parts does this part clash with?</label>
+    <input type="text" id="partClashesWith">
+
+    <button onclick="savePartDetails()">💾 Save Part Details</button>
+    <button onclick="location.href='index.html'">⬅️ Back to Cabinet</button>
+</main>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check-In History - Cabinet of Selves</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
+
+<body>
+
+<header>
+    <h1>📖 Check-In History</h1>
+    <p>See all your past check-ins, or select a date to filter.</p>
+</header>
+
+<main class="history-container">
+    <label>
+        📅 Select Date: 
+        <input type="date" id="filterDate" onchange="loadCheckInHistory()">
+    </label>
+
+    <ul id="checkinHistoryList"></ul>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', loadCheckInHistory);
+
+    function loadCheckInHistory() {
+        const checkins = JSON.parse(localStorage.getItem('checkins')) || [];
+        const list = document.getElementById('checkinHistoryList');
+        const filterDate = document.getElementById('filterDate').value;
+
+        // Clear list
+        list.innerHTML = '';
+
+        // Filter check-ins if date selected
+        const filteredCheckins = filterDate
+            ? checkins.filter(checkin => checkin.date === filterDate)
+            : checkins;
+
+        if (filteredCheckins.length === 0) {
+            list.innerHTML = '<li>No check-ins found for this date.</li>';
+            return;
+        }
+
+        // Render check-ins
+        filteredCheckins.forEach(checkin => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <strong>${checkin.date}</strong> - ${checkin.mood}
+                <p><strong>Parts:</strong> ${checkin.activeParts.join(', ')}</p>
+                <p><strong>Events:</strong> ${checkin.events}</p>
+                <p><strong>Thoughts:</strong> ${checkin.thoughts}</p>
+            `;
+            list.appendChild(li);
+        });
+    }
+</script>
+
+<style>
+    .history-container {
+        padding: 20px;
+        background: white;
+        max-width: 600px;
+        margin: 30px auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    li {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #f9f9f9;
+    }
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    input[type="date"] {
+        padding: 5px;
+        font-size: 1rem;
+    }
+    .back-btn {
+        background-color: #ddd;
+        color: black;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    .back-btn:hover {
+        background-color: #ccc;
+    }
+</style>
+<a href="index.html" class="back-link">⬅️ Back to Cabinet</a>
+
+</body>
+</html>

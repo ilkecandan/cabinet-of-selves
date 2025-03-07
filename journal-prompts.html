@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Journal Prompts - Cabinet of Selves</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="journal.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f5f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            color: #5a3e36;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .journal-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #5a3e36;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        input[type="date"] {
+            padding: 8px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+
+        .primary-btn {
+            background-color: #8c5e58;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: #73463e;
+        }
+
+        .secondary-btn {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .secondary-btn:hover {
+            background-color: #ccc;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">⬅️Back to Cabinet</a>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <button class="primary-btn" onclick="viewJournalHistory()">📖 View Journal History</button>
+    </div>
+    
+<header>
+    <h1>📄 Journal Prompts</h1>
+    <p>Inspiration for your self-reflection journey.</p>
+</header>
+
+<main>
+    <label>📅 Date:
+        <input type="date" id="journalDate">
+    </label>
+
+    <div class="journal-section">
+        <label>🔸 What does my inner protector want me to know today?</label>
+        <textarea id="journalPrompt1"></textarea>
+    </div>
+
+    <div class="journal-section">
+        <label>🔸 Which part of me needs attention right now?</label>
+        <textarea id="journalPrompt2"></textarea>
+    </div>
+
+    <div class="journal-section">
+        <label>🔸 What would comfort look like for my inner child?</label>
+        <textarea id="journalPrompt3"></textarea>
+    </div>
+
+    <div class="button-row">
+        <button class="primary-btn" onclick="saveJournal()">💾 Save Journal</button>
+        <button class="primary-btn" onclick="viewJournalHistory()">📖 View Journal History</button>
+        <button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
+    </div>
+</main>
+
+</body>
+</html>
