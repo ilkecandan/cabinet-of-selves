@@ -224,7 +224,7 @@ function loadParts() {
     parts.forEach((part, i) => {
         const angle = (2 * Math.PI * i) / parts.length;
         const x = centerX + radius * Math.cos(angle) - 50;
-        const y = centerY + radius * Math.sin(angle) - 50;
+        const y = centerY + radius *sin(angle) - 50;
 
         const div = document.createElement('div');
         div.className = 'part-seat';
@@ -235,6 +235,16 @@ function loadParts() {
             <button class="remove" onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>`;
         table.appendChild(div);
     });
+}
+
+function viewPart(name) {
+    window.location.href = `part-details.html?part=${encodeURIComponent(name)}`;
+}
+
+function removePart(name) {
+    const parts = JSON.parse(localStorage.getItem('innerParts') || []).filter(p => p.name !== name);
+    localStorage.setItem('innerParts', JSON.stringify(parts));
+    loadParts();
 }
 
 document.addEventListener('DOMContentLoaded', () => switchLanguage(currentLanguage));
