@@ -6,6 +6,7 @@
     <title>Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
+    <script defer src="app.js"></script>
 </head>
 <body>
 
@@ -37,7 +38,7 @@
     <section>
         <h2 id="partsHeading">Your Parts</h2>
         <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
-        <button id="addNewPartButton" onclick="showAddPartModal()">Add New Part</button>
+        <button id="addNewPartButton">Add New Part</button>
     </section>
 
     <section>
@@ -70,106 +71,9 @@
     <h3 id="addPartHeading">Add a New Part</h3>
     <label for="partName" id="partNameLabel">Part Name:</label>
     <input type="text" id="partName" placeholder="Enter part name">
-    <button id="addPartButton" onclick="addPart()">Add</button>
+    <button id="confirmAddPart">Add</button>
     <button id="cancelButton" onclick="hideAddPartModal()">Cancel</button>
 </div>
 
-<script>
-    // Language Support
-    const translations = {
-        en: {
-            welcomeTitle: "Welcome to Your Cabinet of Selves",
-            welcomeSubtitle: "All parts of you are welcomed here.",
-            welcomeText: "Welcome to your inner world. Which parts want to speak today?",
-            partsHeading: "Your Parts",
-            seeAllPartsButton: "See All Parts",
-            addNewPartButton: "Add New Part",
-            checkInHeading: "Daily Check-In",
-            startCheckInButton: "Start Daily Check-In",
-            viewCheckInHistoryButton: "View Check-In History",
-            resourcesHeading: "Resources & Tips",
-            youAreEnoughText: "You are enough, even on the quiet days.",
-            addPartHeading: "Add a New Part",
-            partNameLabel: "Part Name:",
-            addPartButton: "Add",
-            cancelButton: "Cancel",
-            partNamePlaceholder: "Enter part name"
-        },
-        tr: {
-            welcomeTitle: "Benlikler Kabinine Hoş Geldiniz",
-            welcomeSubtitle: "Tüm parçalarınız burada hoş karşılanır.",
-            welcomeText: "İç dünyanıza hoş geldiniz. Bugün hangi parçalar konuşmak istiyor?",
-            partsHeading: "Parçalarınız",
-            seeAllPartsButton: "Tüm Parçaları Gör",
-            addNewPartButton: "Yeni Parça Ekle",
-            checkInHeading: "Günlük Kontrol",
-            startCheckInButton: "Günlük Kontrole Başla",
-            viewCheckInHistoryButton: "Kontrol Geçmişini Gör",
-            resourcesHeading: "Kaynaklar & İpuçları",
-            youAreEnoughText: "Sessiz günlerde bile, yeterlisiniz.",
-            addPartHeading: "Yeni Bir Parça Ekle",
-            partNameLabel: "Parça Adı:",
-            addPartButton: "Ekle",
-            cancelButton: "İptal",
-            partNamePlaceholder: "Parça adını girin"
-        },
-        de: {
-            welcomeTitle: "Willkommen im Schrank der Selbste",
-            welcomeSubtitle: "Alle Teile von dir sind hier willkommen.",
-            welcomeText: "Willkommen in Ihrer inneren Welt. Welche Teile möchten heute sprechen?",
-            partsHeading: "Ihre Teile",
-            seeAllPartsButton: "Alle Teile anzeigen",
-            addNewPartButton: "Neuen Teil hinzufügen",
-            checkInHeading: "Täglicher Check-In",
-            startCheckInButton: "Check-In starten",
-            viewCheckInHistoryButton: "Verlauf anzeigen",
-            resourcesHeading: "Ressourcen & Tipps",
-            youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
-            addPartHeading: "Neuen Teil hinzufügen",
-            partNameLabel: "Teilname:",
-            addPartButton: "Hinzufügen",
-            cancelButton: "Abbrechen",
-            partNamePlaceholder: "Teilname eingeben"
-        }
-    };
-
-    function switchLanguage(lang) {
-        localStorage.setItem('language', lang);
-        const t = translations[lang];
-
-        const ids = [
-            "welcomeTitle", "welcomeSubtitle", "welcomeText",
-            "partsHeading", "seeAllPartsButton", "addNewPartButton",
-            "checkInHeading", "startCheckInButton", "viewCheckInHistoryButton",
-            "resourcesHeading", "youAreEnoughText", "addPartHeading",
-            "partNameLabel", "addPartButton", "cancelButton"
-        ];
-
-        ids.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.innerText = t[id];
-        });
-
-        document.getElementById('partName').placeholder = t.partNamePlaceholder;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const lang = localStorage.getItem('language') || 'en';
-        document.getElementById('language').value = lang;
-        switchLanguage(lang);
-
-        if (!localStorage.getItem('hasVisitedBefore')) {
-            showWelcomeAnimation();
-        }
-    });
-
-    function showWelcomeAnimation() {
-        document.getElementById('welcomeAnimation').style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('welcomeAnimation').style.display = 'none';
-            localStorage.setItem('hasVisitedBefore', 'true');
-        }, 5000);
-    }
-</script>
 </body>
 </html>
