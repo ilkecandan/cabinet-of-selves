@@ -99,28 +99,20 @@
             background-color: #52b788;
         }
 
-        dotlottie-wc {
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            display: block;
-        }
-
         .notification {
             position: fixed;
             bottom: 20px;
             right: 20px;
+            background-color: #4caf50;
+            color: white;
             padding: 12px 18px;
             border-radius: 8px;
-            color: white;
             font-weight: bold;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
             font-family: 'Quicksand', Arial, sans-serif;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .notification.success {
-            background-color: #4caf50;
-        }
+
         .notification.error {
             background-color: #f44336;
         }
@@ -130,23 +122,23 @@
                 width: 300px;
                 height: 300px;
             }
+
             .part-seat {
                 width: 80px;
                 height: 100px;
             }
+
             .part-seat img {
                 width: 60px;
                 height: 60px;
             }
+
             .part-seat span {
                 font-size: 0.75rem;
             }
+
             .part-seat button {
                 font-size: 0.7rem;
-            }
-            dotlottie-wc {
-                width: 150px;
-                height: 150px;
             }
         }
     </style>
@@ -154,74 +146,84 @@
 <body>
 
 <header>
-    <h1 id="pageTitle">Your Parts</h1>
-    <p id="pageDescription">Your inner parts collection. Click to explore each part.</p>
+    <h1>Your Parts</h1>
+    <p>Your inner parts collection. Click to explore each part.</p>
 </header>
 
 <main>
     <div class="table-container" id="partsTable"></div>
-    <a href="index.html" class="back-to-cabinet" id="backToCabinetButton">Back to Cabinet</a>
+    <a href="index.html" class="back-to-cabinet">Back to Cabinet</a>
     <dotlottie-wc src="https://lottie.host/dd3bc15b-e3cc-41ee-86b8-47e37863f8d6/s8l3FcuPpS.lottie" autoplay loop></dotlottie-wc>
 </main>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+    loadParts();
+});
+
+function loadParts() {
     const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
     const table = document.getElementById('partsTable');
+    table.innerHTML = '';
 
     if (parts.length === 0) {
         table.innerHTML = '<p>No parts added yet. Please add parts from the Cabinet.</p>';
-    } else {
-        const radius = 160;
-        const centerX = 200;
-        const centerY = 200;
-        const angleStep = (2 * Math.PI) / parts.length;
-
-        parts.forEach((part, index) => {
-            const angle = index * angleStep;
-            const x = centerX + radius * Math.cos(angle) - 50;
-            const y = centerY + radius * Math.sin(angle) - 50;
-
-            const partDiv = document.createElement('div');
-            partDiv.className = 'part-seat';
-            partDiv.style.left = `${x}px`;
-            partDiv.style.top = `${y}px`;
-
-            const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
-            const partImage = savedPart.image || part.img || 'images/girl.jpg';
-
-            partDiv.innerHTML = `
-                <img src="${partImage}" alt="${part.name}">
-                <span>${part.name}</span>
-                <button onclick="editPart('${part.name}')">View / Edit</button>
-                <button class="remove" onclick="removePart(${index})">Remove</button>
-            `;
-            table.appendChild(partDiv);
-        });
+        return;
     }
 
-    function editPart(partName) {
-        window.location.href = `part-details.html?part=${encodeURIComponent(partName)}`;
-    }
+    const radius = 160;
+    const centerX = 200;
+    const centerY = 200;
+    const angleStep = (2 * Math.PI) / parts.length;
 
-    function removePart(index) {
-        if (confirm('Are you sure you want to remove this part?')) {
-            const updatedParts = JSON.parse(localStorage.getItem('innerParts')) || [];
-            const removedPart = updatedParts[index];
-            updatedParts.splice(index, 1);
-            localStorage.removeItem(`part-${removedPart.name}`);
-            localStorage.setItem('innerParts', JSON.stringify(updatedParts));
-            showNotification('✅ Part removed successfully!', 'success');
-            setTimeout(() => location.reload(), 1500);
-        }
-    }
+    parts.forEach((part, index) => {
+        const angle = index * angleStep;
+        const x = centerX + radius * Math.cos(angle) - 50;
+        const y = centerY + radius * Math.sin(angle) - 50;
 
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.innerText = message;
-        notification.className = `notification ${type}`;
-        document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
-    }
+        const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
+        const partImage = savedPart.image || part.img || 'images/girl.jpg';
+
+        const partDiv = document.createElement('div');
+        partDiv.className = 'part-seat';
+        partDiv.style.left = `${x}px`;
+        partDiv.style.top = `${y}px`;
+
+        partDiv.innerHTML = `
+            <img src="${partImage}" alt="${part.name}">
+            <span>${part.name}</span>
+            <button onclick="viewPart('${part.name}')">View / Edit</button>
+            <button class="remove" onclick="removePart('${part.name}')">Remove</button>
+        `;
+
+        table.appendChild(partDiv);
+    });
+}
+
+function viewPart(name) {
+    window.location.href = `part-details.html?part=${encodeURIComponent(name)}`;
+}
+
+function removePart(partName) {
+    if (!confirm('Are you sure you want to remove this part?')) return;
+
+    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+    parts = parts.filter(p => p.name !== partName);
+    localStorage.setItem('innerParts', JSON.stringify(parts));
+
+    localStorage.removeItem(`part-${partName}`);
+
+    showNotification('✅ Part removed successfully!', 'success');
+    setTimeout(() => location.reload(), 1500);
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type === 'error' ? 'error' : ''}`;
+    notification.innerText = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
 </script>
 
 </body>
