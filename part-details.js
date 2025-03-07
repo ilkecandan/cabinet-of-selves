@@ -5,7 +5,7 @@ const partName = params.get('part');
 let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
 let allParts = JSON.parse(localStorage.getItem('innerParts')) || [];
 
-// Pre-fill data
+// Pre-fill data on page load
 document.getElementById('partTitle').innerText = `Meet ${partName}`;
 document.getElementById('partSince').value = part.knownSince || '';
 document.getElementById('partWants').value = part.wants || '';
@@ -14,7 +14,7 @@ document.getElementById('partClashesWith').value = part.clashesWith || '';
 document.getElementById('partRole').value = part.role || '';
 document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
 
-// When user uploads a new image
+// Handle image upload (with immediate save and notification)
 document.getElementById('partImageInput').addEventListener('change', (event) => {
     const file = event.target.files[0];
 
@@ -25,7 +25,7 @@ document.getElementById('partImageInput').addEventListener('change', (event) => 
             document.getElementById('partImagePreview').src = newImage;
             part.image = newImage;
 
-            savePart();  // Save to both storage places
+            savePart(true);  // Save immediately
             showNotification('✅ Your image has been uploaded and saved!', 'success');
         };
         reader.readAsDataURL(file);
@@ -40,21 +40,22 @@ function savePartDetails() {
     part.clashesWith = document.getElementById('partClashesWith').value;
     part.role = document.getElementById('partRole').value;
 
-    savePart();  // Save to both storage places
+    savePart();
     showNotification('✅ All details saved successfully!', 'success');
 }
 
-// Save part to both individual part record and master innerParts list
-function savePart() {
+// Save part data to both part-{partName} and innerParts
+function savePart(isImageOnly = false) {
     localStorage.setItem(`part-${partName}`, JSON.stringify(part));
 
-    // Update innerParts list
+    // Update or add the part in innerParts
     const index = allParts.findIndex(p => p.name === partName);
     if (index !== -1) {
-        allParts[index] = { name: partName, img: part.image };  // Ensure name + image updated
-    } else {
-        allParts.push({ name: partName, img: part.image });  // New part case
+        allParts[index].img = part.image;
+    } else if (!isImageOnly) {
+        allParts.push({ name: partName, img: part.image });
     }
+
     localStorage.setItem('innerParts', JSON.stringify(allParts));
 }
 
@@ -75,16 +76,53 @@ function showNotification(message, type) {
     setTimeout(() => notification.remove(), 3000);
 }
 
-// Your existing language logic — untouched, works as is
+// Language system (already working, included for completeness)
 const translations = {
-    en: { /* Your existing translations here */ },
-    tr: { /* Your existing translations here */ },
-    de: { /* Your existing translations here */ }
+    en: {
+        pageTitle: `Meet ${partName}`,
+        pageDescription: "This is a gentle place to explore and understand this part of you.",
+        labelKnownSince: "🌱 How long have you known this part?",
+        labelWants: "💬 What does this part want for you?",
+        labelWorksWith: "🌟 Which parts does this part work well with?",
+        labelClashesWith: "⚔️ Which parts does this part clash with?",
+        labelRole: "🎭 What role does this part play?",
+        saveButton: "💾 Save Part Details",
+        backCabinetButton: "⬅️ Back to Cabinet",
+        backPartsButton: "📂 Back to All Parts",
+        knownSincePlaceholder: "A long time, since childhood, etc."
+    },
+    tr: {
+        pageTitle: `${partName} ile Tanış`,
+        pageDescription: "Bu, bu parçanızı keşfetmek ve anlamak için nazik bir alandır.",
+        labelKnownSince: "🌱 Bu parçayı ne zamandır tanıyorsunuz?",
+        labelWants: "💬 Bu parça sizden ne istiyor?",
+        labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışıyor?",
+        labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışıyor?",
+        labelRole: "🎭 Bu parça hangi rolü oynuyor?",
+        saveButton: "💾 Parça Detaylarını Kaydet",
+        backCabinetButton: "⬅️ Kabine Geri Dön",
+        backPartsButton: "📂 Tüm Parçalar'a Geri Dön",
+        knownSincePlaceholder: "Uzun zamandır, çocukluktan beri, vb."
+    },
+    de: {
+        pageTitle: `Lerne ${partName} kennen`,
+        pageDescription: "Dies ist ein sanfter Ort, um diesen Teil von dir zu erkunden und zu verstehen.",
+        labelKnownSince: "🌱 Wie lange kennst du diesen Teil?",
+        labelWants: "💬 Was will dieser Teil von dir?",
+        labelWorksWith: "🌟 Mit welchen Teilen arbeitet dieser Teil gut zusammen?",
+        labelClashesWith: "⚔️ Mit welchen Teilen gerät dieser Teil in Konflikt?",
+        labelRole: "🎭 Welche Rolle spielt dieser Teil?",
+        saveButton: "💾 Teil speichern",
+        backCabinetButton: "⬅️ Zurück zum Kabinett",
+        backPartsButton: "📂 Zurück zu allen Teilen",
+        knownSincePlaceholder: "Seit langer Zeit, seit der Kindheit, etc."
+    }
 };
 
 function switchLanguage(lang) {
     localStorage.setItem('language', lang);
     const t = translations[lang];
+
     document.title = t.pageTitle;
     document.getElementById('partTitle').innerText = t.pageTitle;
     document.getElementById('pageDescription').innerText = t.pageDescription;
@@ -96,6 +134,7 @@ function switchLanguage(lang) {
     document.getElementById('saveButton').innerText = t.saveButton;
     document.getElementById('backCabinetButton').innerText = t.backCabinetButton;
     document.getElementById('backPartsButton').innerText = t.backPartsButton;
+
     document.getElementById('partSince').placeholder = t.knownSincePlaceholder;
 }
 
