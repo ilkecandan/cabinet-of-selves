@@ -2,173 +2,151 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Check-In History - Cabinet of Selves</title>
+    <title>Daily Check-In - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f5f0;
-            margin: 0;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 1.8rem;
-            color: #5a3e36;
-        }
-
-        .history-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: #f9f9f9;
-            margin-bottom: 10px;
-        }
-
-        h3 {
-            margin: 0 0 5px;
-            color: #5a3e36;
-        }
-
-        p {
-            margin: 5px 0;
-            color: #555;
-        }
-
-        .back-btn {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 20px auto;
-            padding: 12px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: white;
-            background-color: #8C5E58;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background-color: #73463e;
-        }
-
-        /* Calendar Styles */
-        .calendar {
-            margin: 20px auto;
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
-        }
-
-        .calendar input[type="date"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .no-checkins {
-            text-align: center;
-            font-weight: bold;
-            margin: 20px 0;
-            color: #8c5e58;
-        }
+        body { font-family: 'Quicksand', Arial, sans-serif; background: linear-gradient(to bottom, #bde0fe, #a2d2ff); }
+        main { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin: 20px auto; max-width: 750px; text-align: center; }
+        label { font-weight: bold; display: block; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border-radius: 8px; }
+        button { margin-top: 15px; cursor: pointer; background: #74c69d; color: white; padding: 10px 15px; border: none; border-radius: 8px; }
+        .back-to-cabinet { display: block; margin-top: 15px; text-decoration: none; padding: 10px; background: #74c69d; color: white; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<a href="index.html" class="back-btn">⬅️ Back to Cabinet</a>
-
 <header>
-    <h1>📖 Check-In History</h1>
-    <p>See all your past check-ins.</p>
+    <h1 id="checkinHeader">🌈 Daily Check-In</h1>
+    <p id="checkinDescription">Reflect on your day and connect with your inner world.</p>
 </header>
 
-<div class="calendar">
-    <label for="checkinDate">📅 Filter by Date:</label>
-    <input type="date" id="checkinDate" onchange="filterCheckIns()">
+<div>
+    <label for="language">🌐</label>
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
 </div>
 
-<main class="history-container">
-    <ul id="checkinHistoryList"></ul>
-    <p id="noCheckinsMessage" class="no-checkins" style="display: none;">No check-ins found for this date.</p>
+<main>
+    <label>📅 <span id="dateLabel">Date</span>:</label>
+    <input type="date" id="checkin-date">
+
+    <label>🌦️ <span id="moodLabel">Today's Mood</span>:</label>
+    <select id="mood">
+        <option>Calm</option>
+        <option>Reflective</option>
+        <option>Anxious</option>
+        <option>Joyful</option>
+        <option>Sad</option>
+    </select>
+
+    <label>💚 <span id="partsLabel">Active Parts</span>:</label>
+    <div id="partsCheckboxList"></div>
+
+    <label>✨ <span id="eventsLabel">Significant Events</span>:</label>
+    <textarea id="significantEvents"></textarea>
+
+    <label>📝 <span id="thoughtsLabel">Additional Thoughts</span>:</label>
+    <textarea id="additionalThoughts"></textarea>
+
+    <button onclick="saveCheckIn()" id="saveButton">💾 Save Check-In</button>
+    <a href="checkin-history.html" class="back-to-cabinet" id="viewHistoryButton">📖 View Check-In History</a>
+    <a href="index.html" class="back-to-cabinet" id="backToCabinetButton">🔙 Back to Cabinet</a>
 </main>
 
-<a href="index.html" class="back-btn">⬅️ Back to Cabinet</a>
-
 <script>
-    let allCheckIns = [];
+document.addEventListener('DOMContentLoaded', () => {
+    loadParts();
+    const lang = localStorage.getItem('language') || 'en';
+    document.getElementById('language').value = lang;
+    switchLanguage(lang);
+});
 
-    document.addEventListener('DOMContentLoaded', () => {
-        loadCheckInHistory();
-    });
+function loadParts() {
+    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+    const container = document.getElementById('partsCheckboxList');
+    container.innerHTML = parts.map(part => `<label><input type="checkbox" value="${part.name}"> ${part.name}</label>`).join('');
+}
 
-    function loadCheckInHistory() {
-        allCheckIns = JSON.parse(localStorage.getItem('checkins')) || [];
-        displayCheckIns(allCheckIns);
+function saveCheckIn() {
+    const checkin = {
+        date: document.getElementById('checkin-date').value,
+        mood: document.getElementById('mood').value,
+        parts: Array.from(document.querySelectorAll('#partsCheckboxList input:checked')).map(cb => cb.value),
+        events: document.getElementById('significantEvents').value,
+        thoughts: document.getElementById('additionalThoughts').value
+    };
+
+    const checkins = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
+    checkins.push(checkin);
+    localStorage.setItem('dailyCheckIns', JSON.stringify(checkins));
+
+    alert(translations[currentLanguage].saved);
+    window.location.href = 'index.html';
+}
+
+const translations = {
+    en: {
+        checkinHeader: "🌈 Daily Check-In",
+        checkinDescription: "Reflect on your day and connect with your inner world.",
+        dateLabel: "Date",
+        moodLabel: "Today's Mood",
+        partsLabel: "Active Parts",
+        eventsLabel: "Significant Events",
+        thoughtsLabel: "Additional Thoughts",
+        saveButton: "💾 Save Check-In",
+        viewHistoryButton: "📖 View Check-In History",
+        backToCabinetButton: "🔙 Back to Cabinet",
+        saved: "✅ Check-In saved successfully!"
+    },
+    tr: {
+        checkinHeader: "🌈 Günlük Kontrol",
+        checkinDescription: "Gününüzü yansıtın ve iç dünyanızla bağlantı kurun.",
+        dateLabel: "Tarih",
+        moodLabel: "Bugünkü Ruh Hali",
+        partsLabel: "Aktif Parçalar",
+        eventsLabel: "Önemli Olaylar",
+        thoughtsLabel: "Ek Düşünceler",
+        saveButton: "💾 Kaydet",
+        viewHistoryButton: "📖 Geçmişi Görüntüle",
+        backToCabinetButton: "🔙 Kabine Dön",
+        saved: "✅ Günlük kontrol başarıyla kaydedildi!"
+    },
+    de: {
+        checkinHeader: "🌈 Tägliches Check-In",
+        checkinDescription: "Reflektiere deinen Tag und verbinde dich mit deiner inneren Welt.",
+        dateLabel: "Datum",
+        moodLabel: "Heutige Stimmung",
+        partsLabel: "Aktive Teile",
+        eventsLabel: "Wichtige Ereignisse",
+        thoughtsLabel: "Zusätzliche Gedanken",
+        saveButton: "💾 Check-In speichern",
+        viewHistoryButton: "📖 Check-In Verlauf anzeigen",
+        backToCabinetButton: "🔙 Zurück zum Kabinett",
+        saved: "✅ Check-In erfolgreich gespeichert!"
     }
+};
 
-    function displayCheckIns(checkins) {
-        const list = document.getElementById('checkinHistoryList');
-        const noCheckinsMessage = document.getElementById('noCheckinsMessage');
-        list.innerHTML = '';
+let currentLanguage = 'en';
 
-        if (checkins.length === 0) {
-            noCheckinsMessage.style.display = 'block';
-            return;
-        }
+function switchLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('language', lang);
 
-        noCheckinsMessage.style.display = 'none';
-
-        checkins.reverse().forEach(checkin => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <h3>📅 ${checkin.date}</h3>
-                <p><strong>Mood:</strong> ${checkin.mood}</p>
-                <p><strong>Active Parts:</strong> ${checkin.activeParts.join(', ') || 'None'}</p>
-                <p><strong>Events:</strong> ${checkin.events}</p>
-                <p><strong>Thoughts:</strong> ${checkin.thoughts}</p>
-            `;
-            list.appendChild(li);
-        });
-    }
-
-    function filterCheckIns() {
-        const selectedDate = document.getElementById('checkinDate').value;
-        if (!selectedDate) {
-            displayCheckIns(allCheckIns); // Show all if no date selected
-            return;
-        }
-
-        const filtered = allCheckIns.filter(checkin => checkin.date === selectedDate);
-        displayCheckIns(filtered);
-
-        const noCheckinsMessage = document.getElementById('noCheckinsMessage');
-        noCheckinsMessage.style.display = filtered.length ? 'none' : 'block';
-    }
+    const t = translations[lang];
+    document.getElementById('checkinHeader').innerText = t.checkinHeader;
+    document.getElementById('checkinDescription').innerText = t.checkinDescription;
+    document.getElementById('dateLabel').innerText = t.dateLabel;
+    document.getElementById('moodLabel').innerText = t.moodLabel;
+    document.getElementById('partsLabel').innerText = t.partsLabel;
+    document.getElementById('eventsLabel').innerText = t.eventsLabel;
+    document.getElementById('thoughtsLabel').innerText = t.thoughtsLabel;
+    document.getElementById('saveButton').innerText = t.saveButton;
+    document.getElementById('viewHistoryButton').innerText = t.viewHistoryButton;
+    document.getElementById('backToCabinetButton').innerText = t.backToCabinetButton;
+}
 </script>
-
 </body>
 </html>
