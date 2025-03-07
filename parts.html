@@ -5,117 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Parts - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
-    <style>
-        body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
-            margin: 0;
-            padding: 0;
-            color: #4a4a4a;
-            text-align: center;
-        }
-
-        header {
-            margin: 20px 0;
-        }
-
-        main {
-            background: white;
-            width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .table-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            border: 12px solid #74c69d;
-            border-radius: 50%;
-            margin: 30px auto;
-            background-color: #fefefe;
-        }
-
-        .part-seat {
-            position: absolute;
-            width: 100px;
-            height: 120px;
-            text-align: center;
-        }
-
-        .part-seat img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #74c69d;
-        }
-
-        .part-seat span {
-            display: block;
-            font-weight: bold;
-            margin-top: 5px;
-            color: #0077b6;
-        }
-
-        .part-seat button {
-            margin: 3px;
-            padding: 5px;
-            font-size: 0.8rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .remove {
-            background-color: #ff6b6b;
-            color: white;
-        }
-
-        .language-selector {
-            text-align: center;
-            margin: 15px 0;
-        }
-
-        .language-selector select {
-            padding: 6px 12px;
-            border-radius: 8px;
-            background-color: #74c69d;
-            color: white;
-        }
-
-        #addPartButton {
-            padding: 10px 15px;
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 15px;
-        }
-
-        #partModal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 1000;
-        }
-
-        #partModal input {
-            padding: 10px;
-            width: 90%;
-            margin: 10px 0;
-        }
-    </style>
 </head>
 <body>
 
@@ -133,56 +22,16 @@
     <p id="partsDescription">Your parts are sitting here, all of them welcomed.</p>
 </header>
 
-<button id="addPartButton" onclick="showAddPartModal()">➕ Add New Part</button>
-
 <main>
     <div class="table-container" id="partsTable"></div>
     <a href="index.html" class="back-to-cabinet" id="backToCabinet">Back to Cabinet</a>
-    <dotlottie-wc src="https://lottie.host/dd3bc15b-e3cc-41ee-86b8-47e37863f8d6/s8l3FcuPpS.lottie" autoplay loop></dotlottie-wc>
 </main>
-
-<div id="partModal">
-    <h3 id="modalTitle">Add New Part</h3>
-    <input type="text" id="partName" placeholder="Part Name">
-    <button onclick="addPart()">Add</button>
-    <button onclick="hideAddPartModal()">Cancel</button>
-</div>
 
 <script>
 const translations = {
-    en: {
-        header: "Your Parts",
-        description: "Your parts are sitting here, all of them welcomed.",
-        back: "Back to Cabinet",
-        noParts: "No parts added yet.",
-        viewEdit: "View / Edit",
-        remove: "Remove",
-        addPartButton: "➕ Add New Part",
-        modalTitle: "Add New Part",
-        partNamePlaceholder: "Part Name"
-    },
-    tr: {
-        header: "Parçalarınız",
-        description: "Tüm parçalarınız burada, hepsi hoş karşılanır.",
-        back: "Kabine Geri Dön",
-        noParts: "Henüz parça eklenmedi.",
-        viewEdit: "Görüntüle / Düzenle",
-        remove: "Kaldır",
-        addPartButton: "➕ Yeni Parça Ekle",
-        modalTitle: "Yeni Parça Ekle",
-        partNamePlaceholder: "Parça Adı"
-    },
-    de: {
-        header: "Deine Teile",
-        description: "Alle deine Teile sind hier willkommen.",
-        back: "Zurück zum Schrank",
-        noParts: "Noch keine Teile hinzugefügt.",
-        viewEdit: "Ansehen / Bearbeiten",
-        remove: "Entfernen",
-        addPartButton: "➕ Neuen Teil hinzufügen",
-        modalTitle: "Neuen Teil hinzufügen",
-        partNamePlaceholder: "Teilname"
-    }
+    en: { header: "Your Parts", description: "Your parts are sitting here, all of them welcomed.", back: "Back to Cabinet", viewEdit: "View / Edit", remove: "Remove" },
+    tr: { header: "Parçalarınız", description: "Tüm parçalarınız burada, hepsi hoş karşılanır.", back: "Kabine Geri Dön", viewEdit: "Görüntüle / Düzenle", remove: "Kaldır" },
+    de: { header: "Deine Teile", description: "Alle deine Teile sind hier willkommen.", back: "Zurück zum Schrank", viewEdit: "Ansehen / Bearbeiten", remove: "Entfernen" }
 };
 
 let currentLanguage = localStorage.getItem('language') || 'en';
@@ -194,48 +43,26 @@ function switchLanguage(lang) {
     document.getElementById('partsHeader').innerText = t.header;
     document.getElementById('partsDescription').innerText = t.description;
     document.getElementById('backToCabinet').innerText = t.back;
-    document.getElementById('addPartButton').innerText = t.addPartButton;
-    document.getElementById('modalTitle').innerText = t.modalTitle;
-    document.getElementById('partName').placeholder = t.partNamePlaceholder;
-}
-
-function showAddPartModal() {
-    document.getElementById('partModal').style.display = 'block';
-}
-
-function hideAddPartModal() {
-    document.getElementById('partModal').style.display = 'none';
-}
-
-function addPart() {
-    const name = document.getElementById('partName').value.trim();
-    if (!name) return alert(translations[currentLanguage].partNamePlaceholder);
-
-    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-    parts.push({ name, img: 'images/girl.jpg' });
-    localStorage.setItem('innerParts', JSON.stringify(parts));
-
-    hideAddPartModal();
     loadParts();
 }
 
 function loadParts() {
-    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
     const table = document.getElementById('partsTable');
-    table.innerHTML = parts.length === 0 ? `<p>${translations[currentLanguage].noParts}</p>` : '';
+    table.innerHTML = '';
 
-    const radius = 160, centerX = 200, centerY = 200;
-    parts.forEach((part, i) => {
-        const angle = (2 * Math.PI * i) / parts.length;
-        const x = centerX + radius * Math.cos(angle) - 50;
-        const y = centerY + radius * Math.sin(angle) - 50;
+    if (parts.length === 0) {
+        table.innerHTML = `<p>${translations[currentLanguage].description}</p>`;
+        return;
+    }
 
+    parts.forEach(part => {
         const div = document.createElement('div');
-        div.className = 'part-seat';
-        div.style.left = `${x}px`; div.style.top = `${y}px`;
-        div.innerHTML = `<img src="${part.img}"><span>${part.name}</span>
+        div.innerHTML = `
+            <img src="${part.img}" alt="${part.name}">
+            <span>${part.name}</span>
             <button onclick="viewPart('${part.name}')">${translations[currentLanguage].viewEdit}</button>
-            <button class="remove" onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>`;
+            <button onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>`;
         table.appendChild(div);
     });
 }
@@ -245,13 +72,12 @@ function viewPart(name) {
 }
 
 function removePart(name) {
-    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-    localStorage.setItem('innerParts', JSON.stringify(parts.filter(p => p.name !== name)));
+    const parts = JSON.parse(localStorage.getItem('innerParts')).filter(p => p.name !== name);
+    localStorage.setItem('innerParts', JSON.stringify(parts));
     loadParts();
 }
 
-document.addEventListener('DOMContentLoaded', () => switchLanguage(currentLanguage) || loadParts());
+document.addEventListener('DOMContentLoaded', () => switchLanguage(currentLanguage));
 </script>
-
 </body>
 </html>
