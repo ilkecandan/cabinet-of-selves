@@ -4,15 +4,33 @@
     <meta charset="UTF-8">
     <title>Meet Your Part</title>
     <link rel="stylesheet" href="styles.css">
-    <script defer src="part-details.js"></script>
+    <style>
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 1000;
+            font-family: 'Quicksand', Arial, sans-serif;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .notification.error {
+            background-color: #f44336;
+        }
+    </style>
 </head>
 <body>
+
 <header class="main-header">
     <h1 id="partTitle">Meet Your Part</h1>
     <p id="pageDescription">This is a gentle place to explore and understand this part of you.</p>
 </header>
 
-<!-- Language Selector -->
 <div class="language-selector">
     <label for="language">🌐</label>
     <select id="language" onchange="switchLanguage(this.value)">
@@ -23,7 +41,6 @@
 </div>
 
 <main class="part-details-box">
-    <!-- Image Upload and Preview -->
     <img id="partImagePreview" src="images/girl.jpg" class="part-image-small">
     <input type="file" id="partImageInput" accept="image/*">
 
@@ -47,29 +64,68 @@
     <button onclick="location.href='parts.html'" id="backPartsButton">📂 Back to All Parts</button>
 </main>
 
-<!-- No need for notification HTML here — they are dynamically created in part-details.js -->
-
 <script>
     const params = new URLSearchParams(window.location.search);
     const partName = params.get('part');
+    document.getElementById('partTitle').innerText = `Meet ${partName}`;
 
-    // Initial page setup (title, pre-filling fields, setting language)
-    document.addEventListener('DOMContentLoaded', () => {
-        const part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
-        document.getElementById('partTitle').innerText = `Meet ${partName}`;
-        document.getElementById('partSince').value = part.knownSince || '';
-        document.getElementById('partWants').value = part.wants || '';
-        document.getElementById('partWorksWith').value = part.worksWith || '';
-        document.getElementById('partClashesWith').value = part.clashesWith || '';
-        document.getElementById('partRole').value = part.role || '';
-        document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
+    let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
+    let allParts = JSON.parse(localStorage.getItem('innerParts')) || [];
 
-        const lang = localStorage.getItem('language') || 'en';
-        document.getElementById('language').value = lang;
-        switchLanguage(lang);
+    document.getElementById('partSince').value = part.knownSince || '';
+    document.getElementById('partWants').value = part.wants || '';
+    document.getElementById('partWorksWith').value = part.worksWith || '';
+    document.getElementById('partClashesWith').value = part.clashesWith || '';
+    document.getElementById('partRole').value = part.role || '';
+    document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
+
+    document.getElementById('partImageInput').addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const newImage = reader.result;
+                document.getElementById('partImagePreview').src = newImage;
+                part.image = newImage;
+                savePart(true);
+                showNotification('✅ Your image has been uploaded and saved!', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
     });
 
-    // Language translations (same logic you already have, no changes here)
+    function savePartDetails() {
+        part.knownSince = document.getElementById('partSince').value;
+        part.wants = document.getElementById('partWants').value;
+        part.worksWith = document.getElementById('partWorksWith').value;
+        part.clashesWith = document.getElementById('partClashesWith').value;
+        part.role = document.getElementById('partRole').value;
+
+        savePart();
+        showNotification('✅ All details saved successfully!', 'success');
+    }
+
+    function savePart(isImageOnly = false) {
+        localStorage.setItem(`part-${partName}`, JSON.stringify(part));
+
+        const existingIndex = allParts.findIndex(p => p.name === partName);
+        if (existingIndex !== -1) {
+            allParts[existingIndex].img = part.image;
+        } else if (!isImageOnly) {
+            allParts.push({ name: partName, img: part.image });
+        }
+
+        localStorage.setItem('innerParts', JSON.stringify(allParts));
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type === 'error' ? 'error' : ''}`;
+        notification.innerText = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+
     const translations = {
         en: {
             pageTitle: "Meet Your Part",
@@ -79,10 +135,7 @@
             labelWorksWith: "🌟 Which parts does this part work well with?",
             labelClashesWith: "⚔️ Which parts does this part clash with?",
             labelRole: "🎭 What role does this part play?",
-            saveButton: "💾 Save Part Details",
-            backCabinetButton: "⬅️ Back to Cabinet",
-            backPartsButton: "📂 Back to All Parts",
-            knownSincePlaceholder: "A long time, since childhood, etc."
+            saveButton: "💾 Save Part Details"
         },
         tr: {
             pageTitle: "Parçanızı Tanıyın",
@@ -92,10 +145,7 @@
             labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışıyor?",
             labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışıyor?",
             labelRole: "🎭 Bu parça hangi rolü oynuyor?",
-            saveButton: "💾 Parça Detaylarını Kaydet",
-            backCabinetButton: "⬅️ Kabine Geri Dön",
-            backPartsButton: "📂 Tüm Parçalar'a Geri Dön",
-            knownSincePlaceholder: "Uzun zamandır, çocukluktan beri, vb."
+            saveButton: "💾 Parça Detaylarını Kaydet"
         },
         de: {
             pageTitle: "Lerne deinen Teil kennen",
@@ -105,19 +155,14 @@
             labelWorksWith: "🌟 Mit welchen Teilen arbeitet dieser Teil gut zusammen?",
             labelClashesWith: "⚔️ Mit welchen Teilen gerät dieser Teil in Konflikt?",
             labelRole: "🎭 Welche Rolle spielt dieser Teil?",
-            saveButton: "💾 Teil speichern",
-            backCabinetButton: "⬅️ Zurück zum Kabinett",
-            backPartsButton: "📂 Zurück zu allen Teilen",
-            knownSincePlaceholder: "Seit langer Zeit, seit der Kindheit, etc."
+            saveButton: "💾 Teil speichern"
         }
     };
 
     function switchLanguage(lang) {
         localStorage.setItem('language', lang);
         const t = translations[lang];
-
         document.title = t.pageTitle;
-        document.getElementById('partTitle').innerText = t.pageTitle;
         document.getElementById('pageDescription').innerText = t.pageDescription;
         document.getElementById('labelKnownSince').innerText = t.labelKnownSince;
         document.getElementById('labelWants').innerText = t.labelWants;
@@ -125,11 +170,13 @@
         document.getElementById('labelClashesWith').innerText = t.labelClashesWith;
         document.getElementById('labelRole').innerText = t.labelRole;
         document.getElementById('saveButton').innerText = t.saveButton;
-        document.getElementById('backCabinetButton').innerText = t.backCabinetButton;
-        document.getElementById('backPartsButton').innerText = t.backPartsButton;
-
-        document.getElementById('partSince').placeholder = t.knownSincePlaceholder;
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lang = localStorage.getItem('language') || 'en';
+        document.getElementById('language').value = lang;
+        switchLanguage(lang);
+    });
 </script>
 
 </body>
