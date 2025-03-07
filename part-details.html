@@ -5,6 +5,56 @@
     <title>Meet Your Part</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        body {
+            font-family: 'Quicksand', Arial, sans-serif;
+            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        img.part-image-small {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #74c69d;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px 15px;
+            background-color: #74c69d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
         .notification {
             position: fixed;
             bottom: 20px;
@@ -16,17 +66,20 @@
             font-weight: bold;
             z-index: 1000;
             font-family: 'Quicksand', Arial, sans-serif;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .notification.error {
             background-color: #f44336;
         }
+
+        .language-selector {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
 
-<header class="main-header">
+<header>
     <h1 id="partTitle">Meet Your Part</h1>
     <p id="pageDescription">This is a gentle place to explore and understand this part of you.</p>
 </header>
@@ -40,12 +93,12 @@
     </select>
 </div>
 
-<main class="part-details-box">
+<main>
     <img id="partImagePreview" src="images/girl.jpg" class="part-image-small">
     <input type="file" id="partImageInput" accept="image/*">
 
     <label id="labelKnownSince">🌱 How long have you known this part?</label>
-    <input type="text" id="partSince" placeholder="A long time, since childhood, etc.">
+    <input type="text" id="partSince">
 
     <label id="labelWants">💬 What does this part want for you?</label>
     <textarea id="partWants"></textarea>
@@ -60,123 +113,105 @@
     <input type="text" id="partRole">
 
     <button onclick="savePartDetails()" id="saveButton">💾 Save Part Details</button>
-    <button onclick="location.href='index.html'" id="backCabinetButton">⬅️ Back to Cabinet</button>
-    <button onclick="location.href='parts.html'" id="backPartsButton">📂 Back to All Parts</button>
+    <button onclick="window.location.href='index.html'">⬅️ Back to Cabinet</button>
+    <button onclick="window.location.href='parts.html'">📂 Back to All Parts</button>
 </main>
 
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const partName = params.get('part');
-    document.getElementById('partTitle').innerText = `Meet ${partName}`;
+const params = new URLSearchParams(window.location.search);
+const partName = params.get('part');
+document.getElementById('partTitle').innerText = `Meet ${partName}`;
 
-    let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
-    let allParts = JSON.parse(localStorage.getItem('innerParts')) || [];
+let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
+let allParts = JSON.parse(localStorage.getItem('innerParts') || '[]');
 
-    document.getElementById('partSince').value = part.knownSince || '';
-    document.getElementById('partWants').value = part.wants || '';
-    document.getElementById('partWorksWith').value = part.worksWith || '';
-    document.getElementById('partClashesWith').value = part.clashesWith || '';
-    document.getElementById('partRole').value = part.role || '';
-    document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
+document.getElementById('partSince').value = part.knownSince || '';
+document.getElementById('partWants').value = part.wants || '';
+document.getElementById('partWorksWith').value = part.worksWith || '';
+document.getElementById('partClashesWith').value = part.clashesWith || '';
+document.getElementById('partRole').value = part.role || '';
+document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
 
-    document.getElementById('partImageInput').addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const newImage = reader.result;
-                document.getElementById('partImagePreview').src = newImage;
-                part.image = newImage;
-                savePart(true);
-                showNotification('✅ Your image has been uploaded and saved!', 'success');
-            };
-            reader.readAsDataURL(file);
-        }
-    });
+document.getElementById('partImageInput').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            part.image = reader.result;
+            document.getElementById('partImagePreview').src = part.image;
+            savePart(true);
+            showNotification('✅ Image saved!', 'success');
+        };
+        reader.readAsDataURL(file);
+    }
+});
 
-    function savePartDetails() {
-        part.knownSince = document.getElementById('partSince').value;
-        part.wants = document.getElementById('partWants').value;
-        part.worksWith = document.getElementById('partWorksWith').value;
-        part.clashesWith = document.getElementById('partClashesWith').value;
-        part.role = document.getElementById('partRole').value;
+function savePartDetails() {
+    part.knownSince = document.getElementById('partSince').value;
+    part.wants = document.getElementById('partWants').value;
+    part.worksWith = document.getElementById('partWorksWith').value;
+    part.clashesWith = document.getElementById('partClashesWith').value;
+    part.role = document.getElementById('partRole').value;
 
-        savePart();
-        showNotification('✅ All details saved successfully!', 'success');
+    savePart();
+    showNotification('✅ Details saved!', 'success');
+}
+
+function savePart(isImageOnly = false) {
+    localStorage.setItem(`part-${partName}`, JSON.stringify(part));
+
+    const index = allParts.findIndex(p => p.name === partName);
+    if (index !== -1) {
+        allParts[index].img = part.image;
+    } else if (!isImageOnly) {
+        allParts.push({ name: partName, img: part.image || 'images/girl.jpg' });
     }
 
-    function savePart(isImageOnly = false) {
-        localStorage.setItem(`part-${partName}`, JSON.stringify(part));
+    localStorage.setItem('innerParts', JSON.stringify(allParts));
+}
 
-        const existingIndex = allParts.findIndex(p => p.name === partName);
-        if (existingIndex !== -1) {
-            allParts[existingIndex].img = part.image;
-        } else if (!isImageOnly) {
-            allParts.push({ name: partName, img: part.image });
-        }
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type === 'error' ? 'error' : ''}`;
+    notification.innerText = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
 
-        localStorage.setItem('innerParts', JSON.stringify(allParts));
+const translations = {
+    en: {
+        pageDescription: "This is a gentle place to explore and understand this part of you.",
+        labelKnownSince: "🌱 How long have you known this part?",
+        labelWants: "💬 What does this part want for you?",
+        labelWorksWith: "🌟 Which parts does this part work well with?",
+        labelClashesWith: "⚔️ Which parts does this part clash with?",
+        labelRole: "🎭 What role does this part play?",
+        saveButton: "💾 Save Part Details"
+    },
+    tr: {
+        pageDescription: "Bu parçanızı keşfetmek ve anlamak için nazik bir yer.",
+        labelKnownSince: "🌱 Bu parçayı ne zamandır tanıyorsunuz?",
+        labelWants: "💬 Bu parça sizden ne istiyor?",
+        labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışır?",
+        labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışır?",
+        labelRole: "🎭 Bu parça hangi rolü oynar?",
+        saveButton: "💾 Parça Detaylarını Kaydet"
     }
+};
 
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type === 'error' ? 'error' : ''}`;
-        notification.innerText = message;
-        document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
-    }
+function switchLanguage(lang) {
+    localStorage.setItem('language', lang);
+    const t = translations[lang];
+    document.getElementById('pageDescription').innerText = t.pageDescription;
+    document.getElementById('labelKnownSince').innerText = t.labelKnownSince;
+    document.getElementById('labelWants').innerText = t.labelWants;
+    document.getElementById('labelWorksWith').innerText = t.labelWorksWith;
+    document.getElementById('labelClashesWith').innerText = t.labelClashesWith;
+    document.getElementById('labelRole').innerText = t.labelRole;
+    document.getElementById('saveButton').innerText = t.saveButton;
+}
 
-    const translations = {
-        en: {
-            pageTitle: "Meet Your Part",
-            pageDescription: "This is a gentle place to explore and understand this part of you.",
-            labelKnownSince: "🌱 How long have you known this part?",
-            labelWants: "💬 What does this part want for you?",
-            labelWorksWith: "🌟 Which parts does this part work well with?",
-            labelClashesWith: "⚔️ Which parts does this part clash with?",
-            labelRole: "🎭 What role does this part play?",
-            saveButton: "💾 Save Part Details"
-        },
-        tr: {
-            pageTitle: "Parçanızı Tanıyın",
-            pageDescription: "Bu, bu parçanızı keşfetmek ve anlamak için nazik bir alandır.",
-            labelKnownSince: "🌱 Bu parçayı ne zamandır tanıyorsunuz?",
-            labelWants: "💬 Bu parça sizden ne istiyor?",
-            labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışıyor?",
-            labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışıyor?",
-            labelRole: "🎭 Bu parça hangi rolü oynuyor?",
-            saveButton: "💾 Parça Detaylarını Kaydet"
-        },
-        de: {
-            pageTitle: "Lerne deinen Teil kennen",
-            pageDescription: "Dies ist ein sanfter Ort, um diesen Teil von dir zu erkunden und zu verstehen.",
-            labelKnownSince: "🌱 Wie lange kennst du diesen Teil?",
-            labelWants: "💬 Was will dieser Teil von dir?",
-            labelWorksWith: "🌟 Mit welchen Teilen arbeitet dieser Teil gut zusammen?",
-            labelClashesWith: "⚔️ Mit welchen Teilen gerät dieser Teil in Konflikt?",
-            labelRole: "🎭 Welche Rolle spielt dieser Teil?",
-            saveButton: "💾 Teil speichern"
-        }
-    };
-
-    function switchLanguage(lang) {
-        localStorage.setItem('language', lang);
-        const t = translations[lang];
-        document.title = t.pageTitle;
-        document.getElementById('pageDescription').innerText = t.pageDescription;
-        document.getElementById('labelKnownSince').innerText = t.labelKnownSince;
-        document.getElementById('labelWants').innerText = t.labelWants;
-        document.getElementById('labelWorksWith').innerText = t.labelWorksWith;
-        document.getElementById('labelClashesWith').innerText = t.labelClashesWith;
-        document.getElementById('labelRole').innerText = t.labelRole;
-        document.getElementById('saveButton').innerText = t.saveButton;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const lang = localStorage.getItem('language') || 'en';
-        document.getElementById('language').value = lang;
-        switchLanguage(lang);
-    });
+document.addEventListener('DOMContentLoaded', () => switchLanguage(localStorage.getItem('language') || 'en'));
 </script>
 
 </body>
