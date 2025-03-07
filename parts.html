@@ -4,191 +4,30 @@
     <meta charset="UTF-8">
     <title>Your Parts - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
-            margin: 0;
-            padding: 20px;
-            color: #4a4a4a;
-            text-align: center;
-        }
-
-        main {
-            background: white;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .table-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            margin: 20px auto;
-            border: 12px solid #74c69d;
-            border-radius: 50%;
-            background-color: #fefefe;
-        }
-
-        .part-seat {
-            position: absolute;
-            width: 100px;
-            height: 120px;
-            text-align: center;
-        }
-
-        .part-seat img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #74c69d;
-        }
-
-        .part-seat span {
-            display: block;
-            margin-top: 5px;
-            font-weight: bold;
-            color: #0077b6;
-        }
-
-        .part-seat button {
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            padding: 5px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            margin: 3px;
-        }
-
-        .part-seat button.remove {
-            background-color: #ff6b6b;
-        }
-
-        .language-selector {
-            text-align: center;
-            margin: 10px 0;
-        }
-
-        .language-selector select {
-            padding: 6px 12px;
-            border-radius: 8px;
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .back-to-cabinet {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 15px;
-            background: #74c69d;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        #addPartButton {
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-    </style>
 </head>
 <body>
 
-<div class="language-selector">
-    <label for="language">🌐</label>
-    <select id="language" onchange="switchLanguage(this.value)">
-        <option value="en">English</option>
-        <option value="tr">Türkçe</option>
-        <option value="de">Deutsch</option>
-    </select>
-</div>
-
 <header>
-    <h1 id="partsHeader">Your Parts</h1>
-    <p id="partsDescription">Your parts are sitting here, all of them welcomed.</p>
+    <h1>Your Parts</h1>
+    <p>Your parts are sitting here, all of them welcomed.</p>
 </header>
 
 <main>
     <button id="addPartButton" onclick="showAddPartModal()">➕ Add New Part</button>
     <div class="table-container" id="partsTable"></div>
-    <a href="index.html" class="back-to-cabinet" id="backToCabinet">Back to Cabinet</a>
+    <a href="index.html">Back to Cabinet</a>
 </main>
 
 <!-- Add Part Modal -->
-<div id="partModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
-    <h3 id="modalTitle">Add New Part</h3>
+<div id="partModal" style="display: none;">
+    <h3>Add New Part</h3>
     <input type="text" id="partNameInput" placeholder="Part Name">
     <button onclick="addPart()">Add</button>
     <button onclick="hideAddPartModal()">Cancel</button>
 </div>
 
 <script>
-const translations = {
-    en: {
-        header: "Your Parts",
-        description: "Your parts are sitting here, all of them welcomed.",
-        back: "Back to Cabinet",
-        viewEdit: "View / Edit",
-        remove: "Remove",
-        noParts: "No parts added yet. Please add parts.",
-        addPartButton: "➕ Add New Part",
-        modalTitle: "Add New Part",
-        partNamePlaceholder: "Part Name"
-    },
-    tr: {
-        header: "Parçalarınız",
-        description: "Tüm parçalarınız burada, hepsi hoş karşılanır.",
-        back: "Kabine Geri Dön",
-        viewEdit: "Görüntüle / Düzenle",
-        remove: "Kaldır",
-        noParts: "Henüz parça eklenmedi. Lütfen parça ekleyin.",
-        addPartButton: "➕ Yeni Parça Ekle",
-        modalTitle: "Yeni Parça Ekle",
-        partNamePlaceholder: "Parça Adı"
-    },
-    de: {
-        header: "Deine Teile",
-        description: "Alle deine Teile sind hier willkommen.",
-        back: "Zurück zum Schrank",
-        viewEdit: "Ansehen / Bearbeiten",
-        remove: "Entfernen",
-        noParts: "Noch keine Teile hinzugefügt. Bitte füge Teile hinzu.",
-        addPartButton: "➕ Neuen Teil hinzufügen",
-        modalTitle: "Neuen Teil hinzufügen",
-        partNamePlaceholder: "Teilname"
-    }
-};
-
-let currentLanguage = localStorage.getItem('language') || 'en';
-
-function switchLanguage(lang) {
-    currentLanguage = lang;
-    localStorage.setItem('language', lang);
-    const t = translations[lang];
-    document.getElementById('partsHeader').innerText = t.header;
-    document.getElementById('partsDescription').innerText = t.description;
-    document.getElementById('backToCabinet').innerText = t.back;
-    document.getElementById('addPartButton').innerText = t.addPartButton;
-    document.getElementById('modalTitle').innerText = t.modalTitle;
-    document.getElementById('partNameInput').placeholder = t.partNamePlaceholder;
-    loadParts();
-}
+document.addEventListener('DOMContentLoaded', loadParts);
 
 function showAddPartModal() {
     document.getElementById('partModal').style.display = 'block';
@@ -200,9 +39,9 @@ function hideAddPartModal() {
 
 function addPart() {
     const name = document.getElementById('partNameInput').value.trim();
-    if (!name) return alert(translations[currentLanguage].partNamePlaceholder);
+    if (!name) return alert("Please enter a part name.");
 
-    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
     parts.push({ name, img: 'images/girl.jpg' });
     localStorage.setItem('innerParts', JSON.stringify(parts));
 
@@ -211,28 +50,23 @@ function addPart() {
 }
 
 function loadParts() {
-    const parts = JSON.parse(localStorage.getItem('innerParts') || []);
+    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
     const table = document.getElementById('partsTable');
     table.innerHTML = '';
 
     if (parts.length === 0) {
-        table.innerHTML = `<p>${translations[currentLanguage].noParts}</p>`;
+        table.innerHTML = `<p>No parts added yet.</p>`;
         return;
     }
 
-    const radius = 160, centerX = 200, centerY = 200;
-    parts.forEach((part, i) => {
-        const angle = (2 * Math.PI * i) / parts.length;
-        const x = centerX + radius * Math.cos(angle) - 50;
-        const y = centerY + radius *sin(angle) - 50;
-
+    parts.forEach(part => {
         const div = document.createElement('div');
-        div.className = 'part-seat';
-        div.style.left = `${x}px`;
-        div.style.top = `${y}px`;
-        div.innerHTML = `<img src="${part.img}" alt=""><span>${part.name}</span>
-            <button onclick="viewPart('${part.name}')">${translations[currentLanguage].viewEdit}</button>
-            <button class="remove" onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>`;
+        div.innerHTML = `
+            <img src="${part.img}" alt="">
+            <span>${part.name}</span>
+            <button onclick="viewPart('${part.name}')">View/Edit</button>
+            <button onclick="removePart('${part.name}')">Remove</button>
+        `;
         table.appendChild(div);
     });
 }
@@ -242,12 +76,11 @@ function viewPart(name) {
 }
 
 function removePart(name) {
-    const parts = JSON.parse(localStorage.getItem('innerParts') || []).filter(p => p.name !== name);
+    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+    parts = parts.filter(p => p.name !== name);
     localStorage.setItem('innerParts', JSON.stringify(parts));
     loadParts();
 }
-
-document.addEventListener('DOMContentLoaded', () => switchLanguage(currentLanguage));
 </script>
 
 </body>
