@@ -60,12 +60,6 @@
     </section>
 </main>
 
-<!-- iPhone Install Banner -->
-<div id="installBanner" class="install-banner">
-    📲 Install Cabinet of Selves on your phone!
-    <button onclick="hideInstallBanner()">Got it!</button>
-</div>
-
 <!-- Add New Part Modal -->
 <div id="partModal" class="modal" style="display: none;">
     <h3 id="addPartHeading">Add a New Part</h3>
@@ -93,77 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
     switchLanguage(lang);
 });
 
-const translations = {
-    en: {
-        title: "Cabinet of Selves",
-        welcomeTitle: "Welcome to Your Cabinet of Selves",
-        welcomeSubtitle: "All parts of you are welcomed here.",
-        welcomeText: "Welcome to your inner world. Which parts want to speak today?",
-        partsHeading: "Your Parts",
-        seeAllPartsButton: "See All Parts",
-        addNewPartButton: "Add New Part",
-        checkInHeading: "Daily Check-In",
-        startCheckInButton: "Start Daily Check-In",
-        viewCheckInHistoryButton: "View Check-In History",
-        resourcesHeading: "Resources & Tips",
-        youAreEnoughText: "You are enough, even on the quiet days.",
-        addPartHeading: "Add a New Part",
-        partNameLabel: "Part Name:",
-        confirmAddPart: "Add",
-        cancelButton: "Cancel"
-    },
-    tr: {
-        title: "İç Benlikler Dolabı",
-        welcomeTitle: "İç Benlikler Dolabınıza Hoş Geldiniz",
-        welcomeSubtitle: "Tüm parçalarınız burada hoş karşılanır.",
-        welcomeText: "İç dünyanıza hoş geldiniz. Bugün hangi parçalar konuşmak istiyor?",
-        partsHeading: "Parçalarınız",
-        seeAllPartsButton: "Tüm Parçaları Gör",
-        addNewPartButton: "Yeni Parça Ekle",
-        checkInHeading: "Günlük Kontrol",
-        startCheckInButton: "Günlük Kontrole Başla",
-        viewCheckInHistoryButton: "Kontrol Geçmişini Görüntüle",
-        resourcesHeading: "Kaynaklar & İpuçları",
-        youAreEnoughText: "Sessiz günlerde bile yeterlisiniz.",
-        addPartHeading: "Yeni Parça Ekle",
-        partNameLabel: "Parça Adı:",
-        confirmAddPart: "Ekle",
-        cancelButton: "İptal"
-    },
-    de: {
-        title: "Schrank der Selbst",
-        welcomeTitle: "Willkommen in deinem Schrank der Selbst",
-        welcomeSubtitle: "Alle Teile von dir sind hier willkommen.",
-        welcomeText: "Willkommen in deiner inneren Welt. Welche Teile möchten heute sprechen?",
-        partsHeading: "Deine Teile",
-        seeAllPartsButton: "Alle Teile ansehen",
-        addNewPartButton: "Neuen Teil hinzufügen",
-        checkInHeading: "Täglicher Check-In",
-        startCheckInButton: "Täglichen Check-In starten",
-        viewCheckInHistoryButton: "Check-In Verlauf anzeigen",
-        resourcesHeading: "Ressourcen & Tipps",
-        youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
-        addPartHeading: "Neuen Teil hinzufügen",
-        partNameLabel: "Teilname:",
-        confirmAddPart: "Hinzufügen",
-        cancelButton: "Abbrechen"
-    }
-};
-
-function switchLanguage(lang) {
-    localStorage.setItem('language', lang);
-    const t = translations[lang];
-
-    for (const key in t) {
-        if (document.getElementById(key)) {
-            document.getElementById(key).innerText = t[key];
-        }
-        if (key === 'partNameLabel') {
-            document.getElementById('partName').placeholder = t.partNameLabel;
-        }
-    }
-}
-
 function showAddPartModal() {
     document.getElementById('partModal').style.display = 'block';
 }
@@ -174,7 +97,15 @@ function hideAddPartModal() {
 
 function addPart() {
     const partName = document.getElementById('partName').value.trim();
-    alert(`✅ Added part: ${partName}`);
+    if (!partName) {
+        alert("Please enter a part name.");
+        return;
+    }
+
+    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+    parts.push({ name: partName, img: 'images/girl.jpg' });
+    localStorage.setItem('innerParts', JSON.stringify(parts));
+
     hideAddPartModal();
 }
 </script>
