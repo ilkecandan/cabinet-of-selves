@@ -251,6 +251,44 @@ button:hover {
     font-weight: bold;
 }
 
+/* New: Part Details Box (for part-details.html) */
+.part-details-box {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: left;
+}
+
+.part-details-box label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.part-details-box input, 
+.part-details-box textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+/* New: Image Upload Preview */
+.part-image-small {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #74c69d;
+    display: block;
+    margin: 0 auto 15px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     main {
