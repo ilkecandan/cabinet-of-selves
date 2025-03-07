@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="title">Cabinet of Selves</title>
+    <title>Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
-    <script defer src="app.js"></script>
 </head>
 <body>
 
@@ -18,13 +16,6 @@
         <option value="tr">Türkçe</option>
         <option value="de">Deutsch</option>
     </select>
-</div>
-
-<!-- Welcome Animation (First Visit) -->
-<div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-    <h2 id="welcomeTitle">Welcome to Your Cabinet of Selves</h2>
-    <p id="welcomeSubtitle">All parts of you are welcomed here.</p>
-    <img src="images/hi.gif" alt="Welcome GIF" style="max-width: 200px; height: auto; margin-top: 15px;">
 </div>
 
 <!-- Header -->
@@ -40,51 +31,21 @@
         <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
         <button id="addNewPartButton">Add New Part</button>
     </section>
-
-    <section>
-        <h2 id="checkInHeading">Daily Check-In</h2>
-        <button id="startCheckInButton" onclick="window.location.href='daily-checkin.html'">Start Daily Check-In</button>
-        <button id="viewCheckInHistoryButton" onclick="window.location.href='checkin-history.html'">View Check-In History</button>
-    </section>
-
-    <section>
-        <h2 id="resourcesHeading">Resources & Tips</h2>
-        <p id="youAreEnoughText">You are enough, even on the quiet days.</p>
-        <a href="resources.html">Resources & Articles</a> | <a href="journal-prompts.html">Journal Prompts</a>
-    </section>
-
-    <section>
-        <h2>About Us</h2>
-        <p>Part of <a href="https://inktempest.com/" target="_blank">Ink & Tempest</a>, a digital experiences store.</p>
-        <p>Created by <a href="https://www.linkedin.com/in/ilkecandan" target="_blank">İlke Candan</a>.</p>
-    </section>
 </main>
 
 <!-- Add New Part Modal -->
-<div id="partModal" class="modal" style="display: none;">
-    <h3 id="addPartHeading">Add a New Part</h3>
-    <label for="partName" id="partNameLabel">Part Name:</label>
+<div id="partModal" style="display: none;">
+    <h3>Add a New Part</h3>
     <input type="text" id="partName" placeholder="Enter part name">
     <button id="confirmAddPart">Add</button>
-    <button id="cancelButton" onclick="hideAddPartModal()">Cancel</button>
+    <button onclick="hideAddPartModal()">Cancel</button>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    if (!localStorage.getItem('hasVisitedBefore')) {
-        document.getElementById('welcomeAnimation').style.display = 'flex';
-        setTimeout(() => {
-            document.getElementById('welcomeAnimation').style.display = 'none';
-            localStorage.setItem('hasVisitedBefore', 'true');
-        }, 5000);
-    }
-
     document.getElementById('addNewPartButton').addEventListener('click', showAddPartModal);
     document.getElementById('confirmAddPart').addEventListener('click', addPart);
-
-    const lang = localStorage.getItem('language') || 'en';
-    document.getElementById('language').value = lang;
-    switchLanguage(lang);
+    switchLanguage(localStorage.getItem('language') || 'en');
 });
 
 function showAddPartModal() {
@@ -97,17 +58,16 @@ function hideAddPartModal() {
 
 function addPart() {
     const partName = document.getElementById('partName').value.trim();
-    if (!partName) {
-        alert("Please enter a part name.");
-        return;
-    }
+    if (!partName) return alert("Please enter a part name.");
 
-    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
     parts.push({ name: partName, img: 'images/girl.jpg' });
     localStorage.setItem('innerParts', JSON.stringify(parts));
 
     hideAddPartModal();
+    alert("Part added!");
 }
 </script>
+
 </body>
 </html>
