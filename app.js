@@ -1,31 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
+    loadParts();
+
+    if (!localStorage.getItem('hasVisitedBefore')) {
+        const welcomeAnimation = document.getElementById('welcomeAnimation');
+        if (welcomeAnimation) {
+            welcomeAnimation.style.display = 'flex';
+            setTimeout(() => {
+                welcomeAnimation.style.display = 'none';
+                localStorage.setItem('hasVisitedBefore', 'true');
+            }, 5000);
+        }
+    }
+
+    const addPartButton = document.getElementById('addNewPartButton');
+    if (addPartButton) addPartButton.addEventListener('click', showAddPartModal);
+
+    const confirmAddPartButton = document.getElementById('confirmAddPart');
+    if (confirmAddPartButton) confirmAddPartButton.addEventListener('click', addPart);
+
     const lang = localStorage.getItem('language') || 'en';
     document.getElementById('language').value = lang;
     switchLanguage(lang);
-
-    if (document.getElementById('welcomeAnimation') && !localStorage.getItem('hasVisitedBefore')) {
-        showWelcomeAnimation();
-    }
-
-    if (document.getElementById('addNewPartButton')) {
-        document.getElementById('addNewPartButton').addEventListener('click', showAddPartModal);
-    }
-
-    if (document.getElementById('confirmAddPart')) {
-        document.getElementById('confirmAddPart').addEventListener('click', addPart);
-    }
-
-    loadParts();  // Only runs if parts-table or similar exists.
 });
-
-function showWelcomeAnimation() {
-    const welcomeAnimation = document.getElementById('welcomeAnimation');
-    welcomeAnimation.style.display = 'flex';
-    setTimeout(() => {
-        welcomeAnimation.style.display = 'none';
-        localStorage.setItem('hasVisitedBefore', 'true');
-    }, 5000);
-}
 
 function showAddPartModal() {
     document.getElementById('partModal').style.display = 'block';
@@ -39,13 +35,13 @@ function addPart() {
     const partName = document.getElementById('partName').value.trim();
 
     if (!partName) {
-        showNotification('⚠️ ' + translations[currentLanguage].partNamePlaceholder, 'error');
+        showNotification('⚠️ Please enter a name for the part.', 'error');
         return;
     }
 
     const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
     if (parts.some(part => part.name === partName)) {
-        showNotification('⚠️ Part with this name already exists.', 'error');
+        showNotification('⚠️ A part with this name already exists.', 'error');
         return;
     }
 
@@ -55,54 +51,28 @@ function addPart() {
     showNotification(translations[currentLanguage].partAdded, 'success');
     hideAddPartModal();
 
-    setTimeout(() => window.location.href = 'parts.html', 1000);
+    setTimeout(() => {
+        window.location.href = 'parts.html';
+    }, 1000);
 }
 
 function loadParts() {
     const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-    const container = document.querySelector('.parts-table') || document.getElementById('partsTable');
+    const container = document.querySelector('.parts-table');
 
-    if (!container) return;  // Don't run if no parts container (prevents console errors)
-
-    container.innerHTML = '';
-
-    if (parts.length === 0) {
-        container.innerHTML = `<p>${translations[currentLanguage].noParts || 'No parts added yet.'}</p>`;
-        return;
+    if (container) {
+        container.innerHTML = '';
+        parts.forEach(part => {
+            const card = document.createElement('div');
+            card.className = 'part-card';
+            card.innerHTML = `
+                <img src="${part.img}" class="part-image" alt="${part.name}">
+                <span class="part-name">${part.name}</span>
+                <button onclick="location.href='part-details.html?part=${encodeURIComponent(part.name)}'">View</button>
+            `;
+            container.appendChild(card);
+        });
     }
-
-    const radius = 160;
-    const centerX = 200;
-    const centerY = 200;
-
-    parts.forEach((part, index) => {
-        const angle = (2 * Math.PI) / parts.length;
-        const x = centerX + radius * Math.cos(index * angle) - 50;
-        const y = centerY + radius * Math.sin(index * angle) - 50;
-
-        const partDiv = document.createElement('div');
-        partDiv.className = 'part-seat';
-        partDiv.style.left = `${x}px`;
-        partDiv.style.top = `${y}px`;
-
-        partDiv.innerHTML = `
-            <img src="${part.img}" class="part-image" alt="${part.name}">
-            <span class="part-name">${part.name}</span>
-            <button onclick="viewPart('${part.name}')">${translations[currentLanguage].viewEdit}</button>
-            <button class="remove" onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>
-        `;
-        container.appendChild(partDiv);
-    });
-}
-
-function viewPart(name) {
-    window.location.href = `part-details.html?part=${encodeURIComponent(name)}`;
-}
-
-function removePart(name) {
-    const parts = JSON.parse(localStorage.getItem('innerParts') || '[]').filter(p => p.name !== name);
-    localStorage.setItem('innerParts', JSON.stringify(parts));
-    loadParts();
 }
 
 function showNotification(message, type) {
@@ -110,32 +80,8 @@ function showNotification(message, type) {
     notification.innerText = message;
     notification.className = `notification ${type}`;
     document.body.appendChild(notification);
+
     setTimeout(() => notification.remove(), 3000);
-}
-
-function switchLanguage(lang) {
-    currentLanguage = lang;
-    localStorage.setItem('language', lang);
-
-    const t = translations[lang];
-
-    // Apply general translations
-    document.querySelectorAll('[data-translate]').forEach(el => {
-        const key = el.getAttribute('data-translate');
-        el.innerText = t[key] || el.innerText;
-    });
-
-    // Modal and form-specific
-    const placeholders = {
-        'partName': t.partNamePlaceholder,
-    };
-
-    Object.keys(placeholders).forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.placeholder = placeholders[id];
-    });
-
-    loadParts();  // Refresh parts with translated buttons
 }
 
 const translations = {
@@ -145,10 +91,7 @@ const translations = {
         confirmAddPart: "Add",
         cancelButton: "Cancel",
         partAdded: "✅ Part added successfully!",
-        partNamePlaceholder: "Enter part name",
-        viewEdit: "View / Edit",
-        remove: "Remove",
-        noParts: "No parts added yet."
+        partNamePlaceholder: "Enter part name"
     },
     tr: {
         addPartHeading: "Yeni Bir Parça Ekle",
@@ -156,10 +99,7 @@ const translations = {
         confirmAddPart: "Ekle",
         cancelButton: "İptal",
         partAdded: "✅ Parça başarıyla eklendi!",
-        partNamePlaceholder: "Parça adını girin",
-        viewEdit: "Görüntüle / Düzenle",
-        remove: "Kaldır",
-        noParts: "Henüz parça eklenmedi."
+        partNamePlaceholder: "Parça adını girin"
     },
     de: {
         addPartHeading: "Neuen Teil hinzufügen",
@@ -167,11 +107,23 @@ const translations = {
         confirmAddPart: "Hinzufügen",
         cancelButton: "Abbrechen",
         partAdded: "✅ Teil erfolgreich hinzugefügt!",
-        partNamePlaceholder: "Teilname eingeben",
-        viewEdit: "Ansehen / Bearbeiten",
-        remove: "Entfernen",
-        noParts: "Noch keine Teile hinzugefügt."
+        partNamePlaceholder: "Teilname eingeben"
     }
 };
 
 let currentLanguage = 'en';
+
+function switchLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('language', lang);
+
+    const t = translations[lang];
+
+    ['addPartHeading', 'partNameLabel', 'confirmAddPart', 'cancelButton'].forEach(id => {
+        if (document.getElementById(id)) document.getElementById(id).innerText = t[id];
+    });
+
+    if (document.getElementById('partName')) {
+        document.getElementById('partName').placeholder = t.partNamePlaceholder;
+    }
+}
