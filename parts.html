@@ -117,29 +117,24 @@
             background-color: #f44336;
         }
 
-        @media (max-width: 600px) {
-            .table-container {
-                width: 300px;
-                height: 300px;
-            }
+        .language-selector {
+            margin: 10px;
+            text-align: right;
+        }
 
-            .part-seat {
-                width: 80px;
-                height: 100px;
-            }
+        .language-selector select {
+            padding: 6px 12px;
+            border: 1px solid #74c69d;
+            border-radius: 8px;
+            font-family: 'Quicksand', Arial, sans-serif;
+            cursor: pointer;
+            background-color: #74c69d;
+            color: white;
+            font-weight: bold;
+        }
 
-            .part-seat img {
-                width: 60px;
-                height: 60px;
-            }
-
-            .part-seat span {
-                font-size: 0.75rem;
-            }
-
-            .part-seat button {
-                font-size: 0.7rem;
-            }
+        .language-selector select:hover {
+            background-color: #52b788;
         }
     </style>
 </head>
@@ -167,6 +162,41 @@
 </main>
 
 <script>
+const translations = {
+    en: {
+        header: "Your Parts",
+        description: "Your parts are sitting here, all of them welcomed.",
+        back: "Back to Cabinet",
+        noParts: "No parts added yet. Please add parts from the Cabinet.",
+        confirmRemove: "Are you sure you want to remove this part?",
+        partRemoved: "✅ Part removed successfully!",
+        viewEdit: "View / Edit",
+        remove: "Remove"
+    },
+    tr: {
+        header: "Parçalarınız",
+        description: "Tüm parçalarınız burada, hepsi hoş karşılanır.",
+        back: "Kabine Geri Dön",
+        noParts: "Henüz parça eklenmedi. Lütfen Kabinden parça ekleyin.",
+        confirmRemove: "Bu parçayı kaldırmak istediğinize emin misiniz?",
+        partRemoved: "✅ Parça başarıyla kaldırıldı!",
+        viewEdit: "Görüntüle / Düzenle",
+        remove: "Kaldır"
+    },
+    de: {
+        header: "Deine Teile",
+        description: "Alle deine Teile sind hier willkommen.",
+        back: "Zurück zum Schrank",
+        noParts: "Noch keine Teile hinzugefügt. Bitte füge Teile aus dem Schrank hinzu.",
+        confirmRemove: "Bist du sicher, dass du diesen Teil entfernen möchtest?",
+        partRemoved: "✅ Teil erfolgreich entfernt!",
+        viewEdit: "Ansehen / Bearbeiten",
+        remove: "Entfernen"
+    }
+};
+
+let currentLanguage = 'en';
+
 document.addEventListener('DOMContentLoaded', () => {
     loadParts();
 
@@ -181,7 +211,7 @@ function loadParts() {
     table.innerHTML = '';
 
     if (parts.length === 0) {
-        table.innerHTML = `<p id="noPartsMessage">${translations[currentLanguage].noParts}</p>`;
+        table.innerHTML = `<p>${translations[currentLanguage].noParts}</p>`;
         return;
     }
 
@@ -198,71 +228,30 @@ function loadParts() {
         const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
         const partImage = savedPart.image || part.img || 'images/girl.jpg';
 
-        const partDiv = document.createElement('div');
-        partDiv.className = 'part-seat';
-        partDiv.style.left = `${x}px`;
-        partDiv.style.top = `${y}px`;
-
-        partDiv.innerHTML = `
+        const div = document.createElement('div');
+        div.className = 'part-seat';
+        div.style.left = `${x}px`;
+        div.style.top = `${y}px`;
+        div.innerHTML = `
             <img src="${partImage}" alt="${part.name}">
             <span>${part.name}</span>
             <button onclick="viewPart('${part.name}')">${translations[currentLanguage].viewEdit}</button>
             <button class="remove" onclick="removePart('${part.name}')">${translations[currentLanguage].remove}</button>
         `;
-
-        table.appendChild(partDiv);
+        table.appendChild(div);
     });
 }
-
-function viewPart(name) {
-    window.location.href = `part-details.html?part=${encodeURIComponent(name)}`;
-}
-
-function removePart(partName) {
-    if (!confirm(translations[currentLanguage].confirmRemove)) return;
-
-    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-    parts = parts.filter(p => p.name !== partName);
-    localStorage.setItem('innerParts', JSON.stringify(parts));
-    localStorage.removeItem(`part-${partName}`);
-
-    showNotification(translations[currentLanguage].partRemoved, 'success');
-    setTimeout(() => location.reload(), 1500);
-}
-
-function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type === 'error' ? 'error' : ''}`;
-    notification.innerText = message;
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 3000);
-}
-
-const translations = {
-    en: {
-        header: "Your Parts",
-        description: "Your parts are sitting here, all of them welcomed.",
-        back: "Back to Cabinet",
-        noParts: "No parts added yet. Please add parts from the Cabinet.",
-        confirmRemove: "Are you sure you want to remove this part?",
-        partRemoved: "✅ Part removed successfully!",
-        viewEdit: "View / Edit",
-        remove: "Remove"
-    },
-    tr: { /* Turkish translations here */ },
-    de: { /* German translations here */ }
-};
-
-let currentLanguage = 'en';
 
 function switchLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('language', lang);
     const t = translations[lang];
+
     document.getElementById('partsHeader').innerText = t.header;
     document.getElementById('partsDescription').innerText = t.description;
     document.getElementById('backToCabinet').innerText = t.back;
 }
 </script>
+
 </body>
 </html>
