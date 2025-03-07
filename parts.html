@@ -189,6 +189,18 @@
         loadParts();
     }
 
+    function removePart(index) {
+        const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+        const removedPart = parts[index];
+        parts.splice(index, 1);
+        
+        // Remove associated part data (including uploaded image)
+        localStorage.removeItem(`part-${removedPart.name}`);
+
+        localStorage.setItem('innerParts', JSON.stringify(parts));
+        loadParts();
+    }
+
     function loadParts() {
         const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
         const table = document.getElementById('partsTable');
