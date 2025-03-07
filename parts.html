@@ -146,19 +146,34 @@
 <body>
 
 <header>
-    <h1>Your Parts</h1>
-    <p>Your inner parts collection. Click to explore each part.</p>
+    <h1 id="partsHeader">Your Parts</h1>
+    <p id="partsDescription">Your inner parts collection. Click to explore each part.</p>
 </header>
+
+<!-- Language Selector -->
+<div class="language-selector">
+    <label for="language">🌐</label>
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
 
 <main>
     <div class="table-container" id="partsTable"></div>
-    <a href="index.html" class="back-to-cabinet">Back to Cabinet</a>
+    <a href="index.html" class="back-to-cabinet" id="backToCabinet">Back to Cabinet</a>
     <dotlottie-wc src="https://lottie.host/dd3bc15b-e3cc-41ee-86b8-47e37863f8d6/s8l3FcuPpS.lottie" autoplay loop></dotlottie-wc>
 </main>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     loadParts();
+
+    // Set language
+    const lang = localStorage.getItem('language') || 'en';
+    document.getElementById('language').value = lang;
+    switchLanguage(lang);
 });
 
 function loadParts() {
@@ -167,7 +182,7 @@ function loadParts() {
     table.innerHTML = '';
 
     if (parts.length === 0) {
-        table.innerHTML = '<p>No parts added yet. Please add parts from the Cabinet.</p>';
+        table.innerHTML = '<p id="noPartsMessage">No parts added yet. Please add parts from the Cabinet.</p>';
         return;
     }
 
@@ -205,7 +220,7 @@ function viewPart(name) {
 }
 
 function removePart(partName) {
-    if (!confirm('Are you sure you want to remove this part?')) return;
+    if (!confirm(translations[currentLanguage].confirmRemove)) return;
 
     let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
     parts = parts.filter(p => p.name !== partName);
@@ -213,7 +228,7 @@ function removePart(partName) {
 
     localStorage.removeItem(`part-${partName}`);
 
-    showNotification('✅ Part removed successfully!', 'success');
+    showNotification(translations[currentLanguage].partRemoved, 'success');
     setTimeout(() => location.reload(), 1500);
 }
 
@@ -224,7 +239,22 @@ function showNotification(message, type) {
     document.body.appendChild(notification);
     setTimeout(() => notification.remove(), 3000);
 }
-</script>
 
+// Language system
+const translations = {
+    en: { header: "Your Parts", description: "Your inner parts collection. Click to explore each part.", back: "Back to Cabinet", noParts: "No parts added yet. Please add parts from the Cabinet.", confirmRemove: "Are you sure you want to remove this part?", partRemoved: "✅ Part removed successfully!" },
+    tr: { header: "Parçalarınız", description: "İç parçalarınızın koleksiyonu. Keşfetmek için tıklayın.", back: "Kabine Geri Dön", noParts: "Henüz parça eklenmedi. Lütfen Kabinden parça ekleyin.", confirmRemove: "Bu parçayı kaldırmak istediğinizden emin misiniz?", partRemoved: "✅ Parça başarıyla kaldırıldı!" }
+};
+
+let currentLanguage = 'en';
+function switchLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('language', lang);
+    const t = translations[lang];
+    document.getElementById('partsHeader').innerText = t.header;
+    document.getElementById('partsDescription').innerText = t.description;
+    document.getElementById('backToCabinet').innerText = t.back;
+}
+</script>
 </body>
 </html>
