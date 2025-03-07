@@ -82,23 +82,6 @@
             background-color: #ff6b6b;
         }
 
-        .back-to-cabinet {
-            margin-top: 20px;
-            padding: 12px 18px;
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .back-to-cabinet:hover {
-            background-color: #52b788;
-        }
-
         .language-selector {
             text-align: center;
             margin: 15px 0;
@@ -108,11 +91,9 @@
             padding: 6px 12px;
             border: 1px solid #74c69d;
             border-radius: 8px;
-            font-family: 'Quicksand', Arial, sans-serif;
             cursor: pointer;
             background-color: #74c69d;
             color: white;
-            font-weight: bold;
         }
 
         .notification {
@@ -123,14 +104,7 @@
             color: white;
             padding: 12px 18px;
             border-radius: 8px;
-            font-weight: bold;
             z-index: 1000;
-            font-family: 'Quicksand', Arial, sans-serif;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-
-        .notification.error {
-            background-color: #f44336;
         }
 
         #addPartButton {
@@ -140,19 +114,32 @@
             color: white;
             border: none;
             border-radius: 8px;
-            font-weight: bold;
             cursor: pointer;
         }
 
-        #addPartButton:hover {
-            background-color: #52b788;
+        /* Modal Styles */
+        #partModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
         }
 
+        #partModal input {
+            padding: 10px;
+            width: 90%;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
 
-<!-- Language Selector - Centered -->
 <div class="language-selector">
     <label for="language">🌐</label>
     <select id="language" onchange="switchLanguage(this.value)">
@@ -167,8 +154,7 @@
     <p id="partsDescription">Your parts are sitting here, all of them welcomed.</p>
 </header>
 
-<!-- Add New Part Button -->
-<button id="addPartButton" onclick="addNewPart()"></button>
+<button id="addPartButton" onclick="showAddPartModal()"></button>
 
 <main>
     <div class="table-container" id="partsTable"></div>
@@ -176,40 +162,40 @@
     <dotlottie-wc src="https://lottie.host/dd3bc15b-e3cc-41ee-86b8-47e37863f8d6/s8l3FcuPpS.lottie" autoplay loop></dotlottie-wc>
 </main>
 
+<div id="partModal">
+    <h3 id="modalTitle">Add New Part</h3>
+    <input type="text" id="partName" placeholder="Part Name">
+    <button onclick="addPart()">Add</button>
+    <button onclick="hideAddPartModal()">Cancel</button>
+</div>
+
 <script>
 const translations = {
     en: {
         header: "Your Parts",
         description: "Your parts are sitting here, all of them welcomed.",
         back: "Back to Cabinet",
-        noParts: "No parts added yet. Please add parts from the Cabinet.",
+        noParts: "No parts added yet. Please add parts.",
         confirmRemove: "Are you sure you want to remove this part?",
         partRemoved: "✅ Part removed successfully!",
         viewEdit: "View / Edit",
         remove: "Remove",
-        addPartButton: "➕ Add New Part"
+        addPartButton: "➕ Add New Part",
+        modalTitle: "Add New Part",
+        partNamePlaceholder: "Part Name"
     },
     tr: {
         header: "Parçalarınız",
         description: "Tüm parçalarınız burada, hepsi hoş karşılanır.",
         back: "Kabine Geri Dön",
-        noParts: "Henüz parça eklenmedi. Lütfen Kabinden parça ekleyin.",
-        confirmRemove: "Bu parçayı kaldırmak istediğinizden emin misiniz?",
+        noParts: "Henüz parça eklenmedi. Lütfen ekleyin.",
+        confirmRemove: "Bu parçayı kaldırmak istiyor musunuz?",
         partRemoved: "✅ Parça başarıyla kaldırıldı!",
         viewEdit: "Görüntüle / Düzenle",
         remove: "Kaldır",
-        addPartButton: "➕ Yeni Parça Ekle"
-    },
-    de: {
-        header: "Deine Teile",
-        description: "Alle deine Teile sind hier willkommen.",
-        back: "Zurück zum Schrank",
-        noParts: "Noch keine Teile hinzugefügt. Bitte füge Teile aus dem Schrank hinzu.",
-        confirmRemove: "Bist du sicher, dass du diesen Teil entfernen möchtest?",
-        partRemoved: "✅ Teil erfolgreich entfernt!",
-        viewEdit: "Ansehen / Bearbeiten",
-        remove: "Entfernen",
-        addPartButton: "➕ Neuen Teil hinzufügen"
+        addPartButton: "➕ Yeni Parça Ekle",
+        modalTitle: "Yeni Parça Ekle",
+        partNamePlaceholder: "Parça Adı"
     }
 };
 
@@ -226,22 +212,36 @@ function switchLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('language', lang);
     const t = translations[lang];
-
     document.getElementById('partsHeader').innerText = t.header;
     document.getElementById('partsDescription').innerText = t.description;
     document.getElementById('backToCabinet').innerText = t.back;
     document.getElementById('addPartButton').innerText = t.addPartButton;
+    document.getElementById('modalTitle').innerText = t.modalTitle;
+    document.getElementById('partName').placeholder = t.partNamePlaceholder;
+}
+
+function showAddPartModal() {
+    document.getElementById('partModal').style.display = 'block';
+}
+
+function hideAddPartModal() {
+    document.getElementById('partModal').style.display = 'none';
+}
+
+function addPart() {
+    const name = document.getElementById('partName').value.trim();
+    if (!name) return alert("Please enter a name.");
+
+    const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+    parts.push({ name, img: 'images/girl.jpg' });
+    localStorage.setItem('innerParts', JSON.stringify(parts));
+    hideAddPartModal();
+    loadParts();
 }
 
 function loadParts() {
     const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-    const table = document.getElementById('partsTable');
-    table.innerHTML = parts.length ? '' : `<p>${translations[currentLanguage].noParts}</p>`;
-    // (part rendering logic stays the same - your existing code is fine)
-}
-
-function addNewPart() {
-    window.location.href = 'index.html'; // Can direct to a dedicated add-part modal if needed
+    document.getElementById('partsTable').innerText = parts.map(p => `${p.name}`).join(", ");
 }
 </script>
 
