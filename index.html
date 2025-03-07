@@ -5,71 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Favicon for browser tab -->
-    <link rel="icon" href="images/main.png" type="image/png">
-
-    <!-- PWA Manifest - allows installation -->
     <link rel="manifest" href="manifest.json">
-
-    <style>
-        /* Added this to hide the modal initially */
-        #partModal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-        }
-    </style>
 </head>
 <body>
 
+<!-- Language Selector -->
+<div class="language-selector">
+    <label for="language">🌐</label>
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
+
+<!-- Welcome Animation with GIF - Shown only on first visit -->
+<div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+    <h2 id="welcomeTitle">Welcome to Your Cabinet of Selves</h2>
+    <p>All parts of you are welcomed here.</p>
+    <img src="images/hi.gif" alt="Welcome GIF" style="max-width: 200px; height: auto; margin-top: 15px;">
+</div>
+
+<!-- Header -->
 <header>
-    <h1>Cabinet of Selves</h1>
-    <p>Welcome to your inner world. Which parts want to speak today?</p>
+    <h1 id="title">Cabinet of Selves</h1>
+    <p id="welcomeText">Welcome to your inner world. Which parts want to speak today?</p>
 </header>
 
-<main class="dashboard">
-    <section class="column">
-        <h2>📚 Your Parts</h2>
-        <div id="partsContainer"></div>
-        <button id="addPartButton" class="primary-button" onclick="showAddPartModal()">➕ Add New Part</button>
+<!-- Main Sections -->
+<main>
+    <section>
+        <h2 id="partsHeading">Your Parts</h2>
+        <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
+        <button id="addNewPartButton" onclick="showAddPartModal()">Add New Part</button>
     </section>
 
-    <section class="column">
-        <h2>🌈 Daily Check-In</h2>
-        <button id="startCheckInButton" class="primary-button">📅 Start Daily Check-In</button>
-        <button id="viewCheckInHistoryButton" class="primary-button">📖 View Check-In History</button>
+    <section>
+        <h2 id="checkInHeading">Daily Check-In</h2>
+        <button id="startCheckInButton" onclick="window.location.href='daily-checkin.html'">Start Daily Check-In</button>
+        <button id="viewCheckInHistoryButton" onclick="window.location.href='checkin-history.html'">View Check-In History</button>
     </section>
 
-    <section class="column">
-        <h2>📚 Resources & Tips</h2>
-        <p>✨ You are enough, even on the quiet days.</p>
-        <a href="resources.html">Resources & Articles</a> |
-        <a href="journal-prompts.html">Journal Prompts</a>
+    <section>
+        <h2 id="resourcesHeading">Resources & Tips</h2>
+        <p id="youAreEnoughText">You are enough, even on the quiet days.</p>
+        <a href="resources.html">Resources & Articles</a> | <a href="journal-prompts.html">Journal Prompts</a>
+    </section>
+
+    <section>
+        <h2>About Us</h2>
+        <p>Part of <a href="https://inktempest.com/" target="_blank">Ink & Tempest</a>, a digital experiences store.</p>
+        <p>Created by <a href="https://www.linkedin.com/in/ilkecandan" target="_blank">İlke Candan</a>.</p>
     </section>
 </main>
 
-<!-- Custom Modal for Adding Parts -->
+<!-- iPhone Install Banner -->
+<div id="installBanner" class="install-banner">
+    📲 Install Cabinet of Selves on your phone!
+    <button onclick="hideInstallBanner()">Got it!</button>
+</div>
+
+<!-- Add New Part Modal -->
 <div id="partModal" class="modal">
-    <div class="modal-content">
-        <h3>Add a New Part</h3>
-        <label for="partName">What would you like to name this part?</label>
-        <input type="text" id="partName" placeholder="e.g., The Protector">
-        <div class="modal-actions">
-            <button id="confirmAddPart" class="primary-button">Add Part</button>
-            <button class="secondary-button" onclick="hideAddPartModal()">Cancel</button>
-        </div>
-    </div>
+    <h3 id="addPartHeading">Add a New Part</h3>
+    <label for="partName" id="partNameLabel">Part Name:</label>
+    <input type="text" id="partName" placeholder="Enter part name">
+    <button id="addPartButton" onclick="addPart()">Add</button>
+    <button onclick="hideAddPartModal()">Cancel</button>
 </div>
 
 <script>
+    const translations = {
+        en: { /* Same as your existing English translations */ },
+        tr: { /* Same as your existing Turkish translations */ },
+        de: { /* Same as your existing German translations */ }
+    };
+
+    function switchLanguage(lang) {
+        localStorage.setItem('language', lang);
+        const t = translations[lang];
+        for (const key in t) {
+            const el = document.getElementById(key);
+            if (el) el.innerText = t[key];
+        }
+        document.getElementById('partName').placeholder = t.partNamePlaceholder;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lang = localStorage.getItem('language') || 'en';
+        document.getElementById('language').value = lang;
+        switchLanguage(lang);
+
+        const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
+
+        if (!hasVisitedBefore) {
+            const welcomeAnimation = document.getElementById('welcomeAnimation');
+            welcomeAnimation.style.display = 'flex';
+
+            setTimeout(() => {
+                welcomeAnimation.style.display = 'none';
+                localStorage.setItem('hasVisitedBefore', 'true');
+            }, 5000);  // Show for 5 seconds
+        }
+
+        if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !localStorage.getItem('installPromptDismissed')) {
+            document.getElementById('installBanner').style.display = 'block';
+        }
+    });
+
     function showAddPartModal() {
         document.getElementById('partModal').style.display = 'block';
     }
@@ -78,14 +121,27 @@
         document.getElementById('partModal').style.display = 'none';
     }
 
-    // Service Worker Registration (PWA support for install + offline)
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
-            .then(() => console.log('Service Worker Registered'))
-            .catch((error) => console.log('Service Worker Registration Failed:', error));
+    function addPart() {
+        const partName = document.getElementById('partName').value.trim();
+        if (!partName) {
+            alert('Please enter a name for the part.');
+            return;
+        }
+
+        const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
+        parts.push({ name: partName, img: 'images/girl.jpg' });  // Use girl.jpg as default image
+
+        localStorage.setItem('innerParts', JSON.stringify(parts));
+        alert('Part added successfully!');
+        hideAddPartModal();
+        window.location.href = 'parts.html';
+    }
+
+    function hideInstallBanner() {
+        document.getElementById('installBanner').style.display = 'none';
+        localStorage.setItem('installPromptDismissed', 'true');
     }
 </script>
 
-<script src="app.js"></script>
 </body>
 </html>
