@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Meet Your Part</title>
     <link rel="stylesheet" href="styles.css">
-    <script defer src="app.js"></script>
+    <script defer src="part-details.js"></script>
 </head>
 <body>
 <header class="main-header">
@@ -13,6 +13,7 @@
 </header>
 
 <main class="part-details-box">
+    <!-- Image Upload and Preview -->
     <img id="partImagePreview" src="images/girl.jpg" class="part-image-small">
     <input type="file" id="partImageInput" accept="image/*">
 
@@ -27,6 +28,9 @@
 
     <label>⚔️ Which parts does this part clash with?</label>
     <input type="text" id="partClashesWith">
+
+    <label>🎭 What role does this part play?</label>
+    <input type="text" id="partRole">
 
     <button onclick="savePartDetails()">💾 Save Part Details</button>
     <button onclick="location.href='index.html'">⬅️ Back to Cabinet</button>
