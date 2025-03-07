@@ -106,7 +106,115 @@
 </main>
 
 <script>
-// Your existing script code (translations, filterCheckIns, etc.) stays the same
+    let allCheckIns = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCheckInHistory();
+        const lang = localStorage.getItem('language') || 'en';
+        document.getElementById('language').value = lang;
+        switchLanguage(lang);
+    });
+
+    function loadCheckInHistory() {
+        allCheckIns = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
+        displayCheckIns(allCheckIns);
+    }
+
+    function displayCheckIns(checkins) {
+        const list = document.getElementById('checkinHistoryList');
+        list.innerHTML = '';
+
+        if (checkins.length === 0) {
+            document.getElementById('noCheckinsMessage').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('noCheckinsMessage').style.display = 'none';
+
+        checkins.reverse().forEach(checkin => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <h3>📅 ${checkin.date}</h3>
+                <p><strong>${translations[currentLanguage].mood}</strong> ${checkin.mood}</p>
+                <p><strong>${translations[currentLanguage].parts}</strong> ${checkin.parts.join(', ') || translations[currentLanguage].none}</p>
+                <p><strong>${translations[currentLanguage].events}</strong> ${checkin.events || '-'}</p>
+                <p><strong>${translations[currentLanguage].thoughts}</strong> ${checkin.thoughts || '-'}</p>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    function filterCheckIns() {
+        const selectedDate = document.getElementById('checkinDate').value;
+        if (!selectedDate) {
+            displayCheckIns(allCheckIns);
+            return;
+        }
+
+        const filtered = allCheckIns.filter(checkin => checkin.date === selectedDate);
+        displayCheckIns(filtered);
+        document.getElementById('noCheckinsMessage').style.display = filtered.length ? 'none' : 'block';
+    }
+
+    const translations = {
+        en: {
+            title: "Check-In History - Cabinet of Selves",
+            header: "📖 Check-In History",
+            description: "See all your past check-ins.",
+            filter: "📅 Filter by Date:",
+            back: "⬅️ Back to Cabinet",
+            noCheckins: "No check-ins found for this date.",
+            mood: "Mood:",
+            parts: "Active Parts:",
+            events: "Significant Events:",
+            thoughts: "Additional Thoughts:",
+            none: "None"
+        },
+        tr: {
+            title: "Günlük Kontrol Geçmişi - İç Benlikler Dolabı",
+            header: "📖 Kontrol Geçmişi",
+            description: "Tüm geçmiş kontrollerinizi görün.",
+            filter: "📅 Tarihe Göre Filtrele:",
+            back: "⬅️ Kabine Geri Dön",
+            noCheckins: "Bu tarihte herhangi bir kontrol bulunamadı.",
+            mood: "Ruh Hali:",
+            parts: "Aktif Parçalar:",
+            events: "Önemli Olaylar:",
+            thoughts: "Ek Düşünceler:",
+            none: "Yok"
+        },
+        de: {
+            title: "Check-In Verlauf - Schrank der Selbst",
+            header: "📖 Check-In Verlauf",
+            description: "Sehen Sie sich alle Ihre vergangenen Check-Ins an.",
+            filter: "📅 Nach Datum filtern:",
+            back: "⬅️ Zurück zum Kabinett",
+            noCheckins: "Keine Check-Ins für dieses Datum gefunden.",
+            mood: "Stimmung:",
+            parts: "Aktive Teile:",
+            events: "Wichtige Ereignisse:",
+            thoughts: "Zusätzliche Gedanken:",
+            none: "Keine"
+        }
+    };
+
+    let currentLanguage = 'en';
+
+    function switchLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+
+        const t = translations[lang];
+
+        document.title = t.title;
+        document.getElementById('historyHeader').innerText = t.header;
+        document.getElementById('historyDescription').innerText = t.description;
+        document.getElementById('filterLabel').innerText = t.filter;
+        document.getElementById('backToCabinetButton').innerText = t.back;
+        document.getElementById('noCheckinsMessage').innerText = t.noCheckins;
+
+        displayCheckIns(allCheckIns);  // Re-render with translated labels
+    }
 </script>
 
 </body>
