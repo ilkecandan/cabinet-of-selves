@@ -64,7 +64,7 @@
     document.getElementById('partRole').value = part.role || '';
     document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
 
-    // Handle image upload and immediate save
+    // Handle image upload and immediate save with friendly notification
     document.getElementById('partImageInput').addEventListener('change', (event) => {
         const file = event.target.files[0];
 
@@ -74,7 +74,7 @@
                 document.getElementById('partImagePreview').src = reader.result;
                 part.image = reader.result;
                 localStorage.setItem(`part-${partName}`, JSON.stringify(part));
-                alert('✅ Your image has been uploaded and saved!');
+                showNotification('✅ Your image has been uploaded and saved!', 'success');
             };
             reader.readAsDataURL(file);
         }
@@ -88,7 +88,25 @@
         part.role = document.getElementById('partRole').value;
 
         localStorage.setItem(`part-${partName}`, JSON.stringify(part));
-        alert('✅ Details saved successfully!');
+        showNotification('✅ All details saved successfully!', 'success');
+    }
+
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.innerText = message;
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '10px 20px';
+        notification.style.borderRadius = '8px';
+        notification.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
+        notification.style.color = 'white';
+        notification.style.zIndex = '1000';
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 
     const translations = {
