@@ -2,30 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Check-In History - Cabinet of Selves</title>
+    <title id="historyTitle">Check-In History - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f5f0;
+            font-family: 'Quicksand', Arial, sans-serif;
+            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
             margin: 0;
             padding: 20px;
-        }
-
-        header {
+            color: #4a4a4a;
             text-align: center;
-            margin: 20px 0;
-            font-size: 1.8rem;
-            color: #5a3e36;
         }
 
-        .history-container {
+        main {
+            background: white;
             max-width: 800px;
             margin: 0 auto;
-            background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         ul {
@@ -34,122 +29,97 @@
         }
 
         li {
+            background: #f0f9ff;
             padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: #f9f9f9;
+            border: 1px solid #ccc;
             margin-bottom: 10px;
-        }
-
-        h3 {
-            margin: 0 0 5px;
-            color: #5a3e36;
-        }
-
-        p {
-            margin: 5px 0;
-            color: #555;
+            border-radius: 8px;
+            text-align: left;
         }
 
         .back-btn {
-            display: block;
-            width: 100%;
-            max-width: 300px;
-            margin: 20px auto;
-            padding: 12px;
-            font-size: 1rem;
-            font-weight: bold;
+            display: inline-block;
+            margin: 15px;
+            padding: 10px 15px;
+            background: #74c69d;
             color: white;
-            background-color: #8C5E58;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
             text-decoration: none;
-            transition: background-color 0.3s ease;
+            border-radius: 8px;
+            font-weight: bold;
         }
 
         .back-btn:hover {
-            background-color: #73463e;
+            background-color: #52b788;
         }
 
-        /* Calendar Styles */
-        .calendar {
-            margin: 20px auto;
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
-        }
-
-        .calendar input[type="date"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .no-checkins {
-            text-align: center;
+        #noCheckinsMessage {
             font-weight: bold;
-            margin: 20px 0;
-            color: #8c5e58;
+            color: #f44336;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-<a href="index.html" class="back-btn">⬅️ Back to Cabinet</a>
-
 <header>
-    <h1>📖 Check-In History</h1>
-    <p>See all your past check-ins.</p>
+    <h1 id="historyHeader">📖 Check-In History</h1>
+    <p id="historyDescription">See all your past check-ins.</p>
 </header>
 
-<div class="calendar">
-    <label for="checkinDate">📅 Filter by Date:</label>
-    <input type="date" id="checkinDate" onchange="filterCheckIns()">
+<!-- Language Selector -->
+<div>
+    <label for="language">🌐</label>
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
 </div>
 
-<main class="history-container">
-    <ul id="checkinHistoryList"></ul>
-    <p id="noCheckinsMessage" class="no-checkins" style="display: none;">No check-ins found for this date.</p>
-</main>
+<main>
+    <label for="checkinDate" id="filterLabel">📅 Filter by Date:</label>
+    <input type="date" id="checkinDate" onchange="filterCheckIns()">
 
-<a href="index.html" class="back-btn">⬅️ Back to Cabinet</a>
+    <ul id="checkinHistoryList"></ul>
+    <p id="noCheckinsMessage" style="display: none;">No check-ins found for this date.</p>
+
+    <a href="index.html" class="back-btn" id="backToCabinetButton">⬅️ Back to Cabinet</a>
+</main>
 
 <script>
     let allCheckIns = [];
 
     document.addEventListener('DOMContentLoaded', () => {
         loadCheckInHistory();
+        const lang = localStorage.getItem('language') || 'en';
+        document.getElementById('language').value = lang;
+        switchLanguage(lang);
     });
 
     function loadCheckInHistory() {
-        allCheckIns = JSON.parse(localStorage.getItem('checkins')) || [];
+        allCheckIns = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
         displayCheckIns(allCheckIns);
     }
 
     function displayCheckIns(checkins) {
         const list = document.getElementById('checkinHistoryList');
-        const noCheckinsMessage = document.getElementById('noCheckinsMessage');
         list.innerHTML = '';
 
         if (checkins.length === 0) {
-            noCheckinsMessage.style.display = 'block';
+            document.getElementById('noCheckinsMessage').style.display = 'block';
             return;
         }
 
-        noCheckinsMessage.style.display = 'none';
+        document.getElementById('noCheckinsMessage').style.display = 'none';
 
         checkins.reverse().forEach(checkin => {
             const li = document.createElement('li');
             li.innerHTML = `
                 <h3>📅 ${checkin.date}</h3>
-                <p><strong>Mood:</strong> ${checkin.mood}</p>
-                <p><strong>Active Parts:</strong> ${checkin.activeParts.join(', ') || 'None'}</p>
-                <p><strong>Events:</strong> ${checkin.events}</p>
-                <p><strong>Thoughts:</strong> ${checkin.thoughts}</p>
+                <p><strong>${translations[currentLanguage].mood}</strong> ${checkin.mood}</p>
+                <p><strong>${translations[currentLanguage].parts}</strong> ${checkin.parts.join(', ') || translations[currentLanguage].none}</p>
+                <p><strong>${translations[currentLanguage].events}</strong> ${checkin.events || '-'}</p>
+                <p><strong>${translations[currentLanguage].thoughts}</strong> ${checkin.thoughts || '-'}</p>
             `;
             list.appendChild(li);
         });
@@ -158,15 +128,72 @@
     function filterCheckIns() {
         const selectedDate = document.getElementById('checkinDate').value;
         if (!selectedDate) {
-            displayCheckIns(allCheckIns); // Show all if no date selected
+            displayCheckIns(allCheckIns);
             return;
         }
 
         const filtered = allCheckIns.filter(checkin => checkin.date === selectedDate);
         displayCheckIns(filtered);
+        document.getElementById('noCheckinsMessage').style.display = filtered.length ? 'none' : 'block';
+    }
 
-        const noCheckinsMessage = document.getElementById('noCheckinsMessage');
-        noCheckinsMessage.style.display = filtered.length ? 'none' : 'block';
+    const translations = {
+        en: {
+            title: "Check-In History - Cabinet of Selves",
+            header: "📖 Check-In History",
+            description: "See all your past check-ins.",
+            filter: "📅 Filter by Date:",
+            back: "⬅️ Back to Cabinet",
+            noCheckins: "No check-ins found for this date.",
+            mood: "Mood:",
+            parts: "Active Parts:",
+            events: "Significant Events:",
+            thoughts: "Additional Thoughts:",
+            none: "None"
+        },
+        tr: {
+            title: "Günlük Kontrol Geçmişi - İç Benlikler Dolabı",
+            header: "📖 Kontrol Geçmişi",
+            description: "Tüm geçmiş kontrollerinizi görün.",
+            filter: "📅 Tarihe Göre Filtrele:",
+            back: "⬅️ Kabine Geri Dön",
+            noCheckins: "Bu tarihte herhangi bir kontrol bulunamadı.",
+            mood: "Ruh Hali:",
+            parts: "Aktif Parçalar:",
+            events: "Önemli Olaylar:",
+            thoughts: "Ek Düşünceler:",
+            none: "Yok"
+        },
+        de: {
+            title: "Check-In Verlauf - Schrank der Selbst",
+            header: "📖 Check-In Verlauf",
+            description: "Sehen Sie sich alle Ihre vergangenen Check-Ins an.",
+            filter: "📅 Nach Datum filtern:",
+            back: "⬅️ Zurück zum Kabinett",
+            noCheckins: "Keine Check-Ins für dieses Datum gefunden.",
+            mood: "Stimmung:",
+            parts: "Aktive Teile:",
+            events: "Wichtige Ereignisse:",
+            thoughts: "Zusätzliche Gedanken:",
+            none: "Keine"
+        }
+    };
+
+    let currentLanguage = 'en';
+
+    function switchLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+
+        const t = translations[lang];
+        document.title = t.title;
+        document.getElementById('historyHeader').innerText = t.header;
+        document.getElementById('historyDescription').innerText = t.description;
+        document.getElementById('filterLabel').innerText = t.filter;
+        document.getElementById('backToCabinetButton').innerText = t.back;
+        document.getElementById('noCheckinsMessage').innerText = t.noCheckins;
+
+        displayCheckIns(allCheckIns);  // Refresh with translated labels
     }
 </script>
 
