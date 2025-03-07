@@ -112,15 +112,33 @@
                 width: 100%;
             }
         }
+
+        .back-to-cabinet {
+            display: block;
+            width: 90%;
+            max-width: 300px;
+            margin: 20px auto;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #8C5E58;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .back-to-cabinet:hover {
+            background-color: #73463e;
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">⬅️Back to Cabinet</a>
 
-    <div style="text-align: center; margin-top: 15px;">
-        <button class="primary-btn" onclick="viewJournalHistory()">📖 View Journal History</button>
-    </div>
-    
+<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
+
 <header>
     <h1>📄 Journal Prompts</h1>
     <p>Inspiration for your self-reflection journey.</p>
@@ -149,9 +167,10 @@
     <div class="button-row">
         <button class="primary-btn" onclick="saveJournal()">💾 Save Journal</button>
         <button class="primary-btn" onclick="viewJournalHistory()">📖 View Journal History</button>
-        <button class="secondary-btn" onclick="window.location.href='index.html'">🔙 Back to Cabinet</button>
     </div>
 </main>
+
+<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
 
 </body>
 </html>
