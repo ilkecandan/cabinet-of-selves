@@ -49,17 +49,15 @@ function addPart() {
     parts.push({ name: partName, img: 'images/girl.jpg' }); // Default image
     localStorage.setItem('innerParts', JSON.stringify(parts));
 
-    showNotification('✅ Part added successfully!', 'success');
+    showNotification(translations[currentLanguage].partAdded, 'success');
     hideAddPartModal();
 
-    // Refresh parts.html (this is optional if you want it to auto-update the parts page)
     setTimeout(() => {
         window.location.href = 'parts.html';
     }, 1000); // Short delay to show the notification before navigating
 }
 
 function loadParts() {
-    // Example logic for populating parts (optional, in case you want it here)
     const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
     const container = document.querySelector('.parts-table');
 
@@ -90,20 +88,61 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// 🈯️ Language Switching (With Placeholders)
-function switchLanguage(lang) {
-    const translations = {
-        en: { addPartHeading: "Add a New Part", partNameLabel: "Part Name:", confirmAddPart: "Add", cancelButton: "Cancel" },
-        tr: { addPartHeading: "Yeni Bir Parça Ekle", partNameLabel: "Parça Adı:", confirmAddPart: "Ekle", cancelButton: "İptal" },
-        de: { addPartHeading: "Neuen Teil hinzufügen", partNameLabel: "Teilname:", confirmAddPart: "Hinzufügen", cancelButton: "Abbrechen" }
-    };
+// 🈯️ Language Switching with Global Translations
+const translations = {
+    en: {
+        addPartHeading: "Add a New Part",
+        partNameLabel: "Part Name:",
+        confirmAddPart: "Add",
+        cancelButton: "Cancel",
+        partAdded: "✅ Part added successfully!",
+        partNamePlaceholder: "Enter part name"
+    },
+    tr: {
+        addPartHeading: "Yeni Bir Parça Ekle",
+        partNameLabel: "Parça Adı:",
+        confirmAddPart: "Ekle",
+        cancelButton: "İptal",
+        partAdded: "✅ Parça başarıyla eklendi!",
+        partNamePlaceholder: "Parça adını girin"
+    },
+    de: {
+        addPartHeading: "Neuen Teil hinzufügen",
+        partNameLabel: "Teilname:",
+        confirmAddPart: "Hinzufügen",
+        cancelButton: "Abbrechen",
+        partAdded: "✅ Teil erfolgreich hinzugefügt!",
+        partNamePlaceholder: "Teilname eingeben"
+    }
+};
 
+let currentLanguage = 'en'; // Default language
+
+function switchLanguage(lang) {
+    currentLanguage = lang;
     localStorage.setItem('language', lang);
+
     const t = translations[lang];
 
-    document.getElementById('addPartHeading').innerText = t.addPartHeading;
-    document.getElementById('partNameLabel').innerText = t.partNameLabel;
-    document.getElementById('confirmAddPart').innerText = t.confirmAddPart;
-    document.getElementById('cancelButton').innerText = t.cancelButton;
-    document.getElementById('partName').placeholder = t.partNameLabel;
+    if (document.getElementById('addPartHeading')) {
+        document.getElementById('addPartHeading').innerText = t.addPartHeading;
+        document.getElementById('partNameLabel').innerText = t.partNameLabel;
+        document.getElementById('confirmAddPart').innerText = t.confirmAddPart;
+        document.getElementById('cancelButton').innerText = t.cancelButton;
+        document.getElementById('partName').placeholder = t.partNamePlaceholder;
+    }
+
+    // Other elements on index.html
+    if (document.getElementById('title')) document.getElementById('title').innerText = t.title || "Cabinet of Selves";
+    if (document.getElementById('welcomeTitle')) document.getElementById('welcomeTitle').innerText = t.welcomeTitle || "";
+    if (document.getElementById('welcomeSubtitle')) document.getElementById('welcomeSubtitle').innerText = t.welcomeSubtitle || "";
+    if (document.getElementById('welcomeText')) document.getElementById('welcomeText').innerText = t.welcomeText || "";
+    if (document.getElementById('partsHeading')) document.getElementById('partsHeading').innerText = t.partsHeading || "";
+    if (document.getElementById('seeAllPartsButton')) document.getElementById('seeAllPartsButton').innerText = t.seeAllPartsButton || "";
+    if (document.getElementById('addNewPartButton')) document.getElementById('addNewPartButton').innerText = t.addNewPartButton || "";
+    if (document.getElementById('checkInHeading')) document.getElementById('checkInHeading').innerText = t.checkInHeading || "";
+    if (document.getElementById('startCheckInButton')) document.getElementById('startCheckInButton').innerText = t.startCheckInButton || "";
+    if (document.getElementById('viewCheckInHistoryButton')) document.getElementById('viewCheckInHistoryButton').innerText = t.viewCheckInHistoryButton || "";
+    if (document.getElementById('resourcesHeading')) document.getElementById('resourcesHeading').innerText = t.resourcesHeading || "";
+    if (document.getElementById('youAreEnoughText')) document.getElementById('youAreEnoughText').innerText = t.youAreEnoughText || "";
 }
