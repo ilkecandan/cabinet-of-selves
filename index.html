@@ -22,7 +22,7 @@
 <!-- Welcome Animation with GIF - Shown only on first visit -->
 <div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
     <h2 id="welcomeTitle">Welcome to Your Cabinet of Selves</h2>
-    <p>All parts of you are welcomed here.</p>
+    <p id="welcomeSubtitle">All parts of you are welcomed here.</p>
     <img src="images/hi.gif" alt="Welcome GIF" style="max-width: 200px; height: auto; margin-top: 15px;">
 </div>
 
@@ -71,79 +71,105 @@
     <label for="partName" id="partNameLabel">Part Name:</label>
     <input type="text" id="partName" placeholder="Enter part name">
     <button id="addPartButton" onclick="addPart()">Add</button>
-    <button onclick="hideAddPartModal()">Cancel</button>
+    <button id="cancelButton" onclick="hideAddPartModal()">Cancel</button>
 </div>
 
 <script>
     // Language Support
     const translations = {
-        en: { partNamePlaceholder: "Enter part name" },
-        tr: { partNamePlaceholder: "Parça adını girin" },
-        de: { partNamePlaceholder: "Teilname eingeben" }
+        en: {
+            welcomeTitle: "Welcome to Your Cabinet of Selves",
+            welcomeSubtitle: "All parts of you are welcomed here.",
+            welcomeText: "Welcome to your inner world. Which parts want to speak today?",
+            partsHeading: "Your Parts",
+            seeAllPartsButton: "See All Parts",
+            addNewPartButton: "Add New Part",
+            checkInHeading: "Daily Check-In",
+            startCheckInButton: "Start Daily Check-In",
+            viewCheckInHistoryButton: "View Check-In History",
+            resourcesHeading: "Resources & Tips",
+            youAreEnoughText: "You are enough, even on the quiet days.",
+            addPartHeading: "Add a New Part",
+            partNameLabel: "Part Name:",
+            addPartButton: "Add",
+            cancelButton: "Cancel",
+            partNamePlaceholder: "Enter part name"
+        },
+        tr: {
+            welcomeTitle: "Benlikler Kabinine Hoş Geldiniz",
+            welcomeSubtitle: "Tüm parçalarınız burada hoş karşılanır.",
+            welcomeText: "İç dünyanıza hoş geldiniz. Bugün hangi parçalar konuşmak istiyor?",
+            partsHeading: "Parçalarınız",
+            seeAllPartsButton: "Tüm Parçaları Gör",
+            addNewPartButton: "Yeni Parça Ekle",
+            checkInHeading: "Günlük Kontrol",
+            startCheckInButton: "Günlük Kontrole Başla",
+            viewCheckInHistoryButton: "Kontrol Geçmişini Gör",
+            resourcesHeading: "Kaynaklar & İpuçları",
+            youAreEnoughText: "Sessiz günlerde bile, yeterlisiniz.",
+            addPartHeading: "Yeni Bir Parça Ekle",
+            partNameLabel: "Parça Adı:",
+            addPartButton: "Ekle",
+            cancelButton: "İptal",
+            partNamePlaceholder: "Parça adını girin"
+        },
+        de: {
+            welcomeTitle: "Willkommen im Schrank der Selbste",
+            welcomeSubtitle: "Alle Teile von dir sind hier willkommen.",
+            welcomeText: "Willkommen in Ihrer inneren Welt. Welche Teile möchten heute sprechen?",
+            partsHeading: "Ihre Teile",
+            seeAllPartsButton: "Alle Teile anzeigen",
+            addNewPartButton: "Neuen Teil hinzufügen",
+            checkInHeading: "Täglicher Check-In",
+            startCheckInButton: "Check-In starten",
+            viewCheckInHistoryButton: "Verlauf anzeigen",
+            resourcesHeading: "Ressourcen & Tipps",
+            youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
+            addPartHeading: "Neuen Teil hinzufügen",
+            partNameLabel: "Teilname:",
+            addPartButton: "Hinzufügen",
+            cancelButton: "Abbrechen",
+            partNamePlaceholder: "Teilname eingeben"
+        }
     };
 
     function switchLanguage(lang) {
         localStorage.setItem('language', lang);
-        document.getElementById('partName').placeholder = translations[lang].partNamePlaceholder;
+        const t = translations[lang];
+
+        const ids = [
+            "welcomeTitle", "welcomeSubtitle", "welcomeText",
+            "partsHeading", "seeAllPartsButton", "addNewPartButton",
+            "checkInHeading", "startCheckInButton", "viewCheckInHistoryButton",
+            "resourcesHeading", "youAreEnoughText", "addPartHeading",
+            "partNameLabel", "addPartButton", "cancelButton"
+        ];
+
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = t[id];
+        });
+
+        document.getElementById('partName').placeholder = t.partNamePlaceholder;
     }
 
-    // Main Logic
     document.addEventListener('DOMContentLoaded', () => {
         const lang = localStorage.getItem('language') || 'en';
         document.getElementById('language').value = lang;
         switchLanguage(lang);
 
-        const hasVisitedBefore = localStorage.getItem('hasVisitedBefore');
-
-        if (!hasVisitedBefore) {
+        if (!localStorage.getItem('hasVisitedBefore')) {
             showWelcomeAnimation();
-        }
-
-        // iPhone install banner
-        if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !localStorage.getItem('installPromptDismissed')) {
-            document.getElementById('installBanner').style.display = 'block';
         }
     });
 
     function showWelcomeAnimation() {
-        const welcomeAnimation = document.getElementById('welcomeAnimation');
-        welcomeAnimation.style.display = 'flex';
-
+        document.getElementById('welcomeAnimation').style.display = 'flex';
         setTimeout(() => {
-            welcomeAnimation.style.display = 'none';
+            document.getElementById('welcomeAnimation').style.display = 'none';
             localStorage.setItem('hasVisitedBefore', 'true');
-        }, 5000); // 5 seconds
-    }
-
-    function showAddPartModal() {
-        document.getElementById('partModal').style.display = 'block';
-    }
-
-    function hideAddPartModal() {
-        document.getElementById('partModal').style.display = 'none';
-    }
-
-    function addPart() {
-        const partName = document.getElementById('partName').value.trim();
-        if (!partName) {
-            alert('Please enter a name for the part.');
-            return;
-        }
-
-        const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-        parts.push({ name: partName, img: 'images/girl.jpg' });
-
-        localStorage.setItem('innerParts', JSON.stringify(parts));
-        alert('Part added successfully!');
-        hideAddPartModal();
-        window.location.href = 'parts.html';
-    }
-
-    function hideInstallBanner() {
-        document.getElementById('installBanner').style.display = 'none';
-        localStorage.setItem('installPromptDismissed', 'true');
+        }, 5000);
     }
 </script>
-
 </body>
 </html>
