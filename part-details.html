@@ -7,6 +7,7 @@
     <script defer src="part-details.js"></script>
 </head>
 <body>
+
 <header class="main-header">
     <h1 id="partTitle">Meet Your Part</h1>
     <p id="pageDescription">This is a gentle place to explore and understand this part of you.</p>
@@ -22,6 +23,7 @@
     </select>
 </div>
 
+<!-- Main Section -->
 <main class="part-details-box">
     <!-- Image Upload and Preview -->
     <div class="image-container">
@@ -29,26 +31,43 @@
         <input type="file" id="partImageInput" accept="image/*">
     </div>
 
-    <label id="labelKnownSince">🌱 How long have you known this part?</label>
-    <input type="text" id="partSince" placeholder="A long time, since childhood, etc.">
+    <!-- Form Grid Layout -->
+    <div class="form-container">
+        <div class="form-group">
+            <label id="labelKnownSince">🌱 How long have you known this part?</label>
+            <input type="text" id="partSince" placeholder="A long time, since childhood, etc.">
+        </div>
 
-    <label id="labelWants">💬 What does this part want for you?</label>
-    <textarea id="partWants"></textarea>
+        <div class="form-group">
+            <label id="labelWants">💬 What does this part want for you?</label>
+            <textarea id="partWants"></textarea>
+        </div>
 
-    <label id="labelWorksWith">🌟 Which parts does this part work well with?</label>
-    <input type="text" id="partWorksWith">
+        <div class="form-group">
+            <label id="labelWorksWith">🌟 Which parts does this part work well with?</label>
+            <input type="text" id="partWorksWith">
+        </div>
 
-    <label id="labelClashesWith">⚔️ Which parts does this part clash with?</label>
-    <input type="text" id="partClashesWith">
+        <div class="form-group">
+            <label id="labelClashesWith">⚔️ Which parts does this part clash with?</label>
+            <input type="text" id="partClashesWith">
+        </div>
 
-    <label id="labelRole">🎭 What role does this part play?</label>
-    <input type="text" id="partRole">
+        <div class="form-group">
+            <label id="labelRole">🎭 What role does this part play?</label>
+            <input type="text" id="partRole">
+        </div>
+    </div>
 
-    <button onclick="savePartDetails()" id="saveButton">💾 Save Part Details</button>
-    <button onclick="location.href='index.html'" id="backCabinetButton">⬅️ Back to Cabinet</button>
-    <button onclick="location.href='parts.html'" id="backPartsButton">📂 Back to All Parts</button>
+    <!-- Buttons -->
+    <div class="button-container">
+        <button onclick="savePartDetails()" id="saveButton">💾 Save Part Details</button>
+        <button onclick="location.href='index.html'" id="backCabinetButton">⬅️ Back to Cabinet</button>
+        <button onclick="location.href='parts.html'" id="backPartsButton">📂 Back to All Parts</button>
+    </div>
 </main>
 
+<!-- Script Section -->
 <script>
     const params = new URLSearchParams(window.location.search);
     const partName = params.get('part');
@@ -59,7 +78,7 @@
 
     document.getElementById('partTitle').innerText = `Meet ${partName}`;
 
-    // Pre-fill data and set image
+    // Pre-fill fields and set image
     document.getElementById('partSince').value = part.knownSince || '';
     document.getElementById('partWants').value = part.wants || '';
     document.getElementById('partWorksWith').value = part.worksWith || '';
