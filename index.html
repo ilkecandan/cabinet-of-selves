@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
     <script defer src="app.js"></script>
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Center the modal */
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px; /* Adjust width */
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -43,7 +60,7 @@
     <section>
         <h2 id="partsHeading">Your Parts</h2>
         <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
-        <button id="addNewPartButton">Add New Part</button>
+        <button id="addNewPartButton" onclick="showAddPartModal()">Add New Part</button>
     </section>
 
     <section>
@@ -159,6 +176,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('language').value = lang;
     switchLanguage(lang);
 });
+
+// Modal Handling
+function showAddPartModal() {
+    document.getElementById('partModal').style.display = 'block';
+}
+
+function hideAddPartModal() {
+    document.getElementById('partModal').style.display = 'none';
+}
 </script>
 
 </body>
