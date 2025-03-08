@@ -163,3 +163,33 @@ button:hover {
 .notification.error {
     background-color: #f44336;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .table-container {
+        width: 80%; /* Adjusting the size of the part circle container */
+        height: 300px;
+    }
+
+    .part-seat {
+        width: 80px;
+        height: 100px;
+    }
+
+    .add-part-button {
+        font-size: 1.2rem;
+        width: 60px;
+        height: 60px;
+    }
+
+    .back-to-cabinet {
+        font-size: 1rem;
+        padding: 10px 15px;
+        width: 80%;
+        margin: 10px auto;
+    }
+
+    .add-part-text {
+        font-size: 0.8rem;
+    }
+}
