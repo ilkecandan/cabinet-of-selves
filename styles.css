@@ -240,8 +240,8 @@ button:hover {
 /* Language Selector */
 .language-selector {
     position: absolute;
-    top: 0px; /* Adjust this value to fine-tune the position */
-    left: 0%;
+    top: 5px; /* Adjust this value to fine-tune the position */
+    left: 50%;
     transform: translateX(-50%);
     background-color: white;
     padding: 8px 15px;
