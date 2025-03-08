@@ -5,7 +5,7 @@ body {
     margin: 0;
     padding: 0;
     color: #333; /* Darker text for better readability */
-    animation: fadeIn 1s ease-out;
+    animation: fadeIn 3s ease-out;
     text-align: center;
     overflow-x: hidden;
     position: relative;
