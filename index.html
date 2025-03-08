@@ -16,15 +16,6 @@
     Your browser does not support the video tag.
 </video>
 
-<!-- Language Selector -->
-<div class="language-selector">
-    <label for="language">🌐</label>
-    <select id="language" onchange="switchLanguage(this.value)">
-        <option value="en">English</option>
-        <option value="tr">Türkçe</option>
-        <option value="de">Deutsch</option>
-    </select>
-</div>
 
 <!-- Welcome Animation with GIF - Shown only on first visit -->
 <div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
@@ -42,6 +33,15 @@
 <!-- Main Sections -->
 <main>
     <section>
+        <!-- Language Selector -->
+<div class="language-selector">
+    <label for="language">🌐</label>
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
         <h2 id="partsHeading">Your Parts</h2>
         <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
         <button id="addNewPartButton">Add New Part</button>
