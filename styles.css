@@ -78,91 +78,47 @@ main {
     text-align: center;
 }
 
-/* Parts Table */
-.table-container {
-    position: relative;
-    width: 400px;
-    height: 400px;
-    border: 12px solid #74c69d;
-    border-radius: 50%;
-    margin: 30px auto;
-    background-color: #fefefe;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Sections */
+section {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    margin-bottom: 25px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
 }
 
-/* Part Seats */
-.part-seat {
-    position: absolute;
-    width: 100px;
-    height: 120px;
-    text-align: center;
-    cursor: pointer;
+section:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
-.part-seat img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #74c69d;
+/* Section Headings */
+h2 {
+    font-size: 1.5rem;
+    color: #4a90a2;
+    margin-bottom: 20px;
+    font-weight: 600; /* Increased font weight for section headings */
 }
 
-.part-seat span {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #0077b6;
-    margin-top: 5px;
-}
-
-.part-seat button {
+/* Buttons */
+button {
+    padding: 12px 20px;
     background-color: #74c69d;
     color: white;
     border: none;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    margin: 3px 0;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 8px 0;
+    font-size: 1.1rem;
+    width: 100%;
+    max-width: 280px;
 }
 
-.part-seat button.remove {
-    background-color: #ff6b6b;
-}
-
-/* Add New Part Button */
-.add-part-container {
-    position: absolute;
-    text-align: center;
-}
-
-.add-part-button {
+button:hover {
     background-color: #52b788;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 1.2rem;
-    width: 50px;
-    height: 50px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    display: block;
-    margin: 0 auto;
-}
-
-.add-part-button:hover {
-    background-color: #40916c;
-}
-
-.add-part-text {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #0077b6;
-    margin-top: 5px;
+    transform: translateY(-3px);
 }
 
 /* Back to Cabinet Button */
@@ -214,6 +170,7 @@ main {
     to { opacity: 1; }
 }
 
+/* Notification */
 .notification {
     position: fixed;
     bottom: 20px;
@@ -237,30 +194,27 @@ main {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .table-container {
-        width: 80%;
-        height: 300px;
+    .language-selector select {
+        width: 70%;
+        font-size: 0.9rem;
     }
 
-    .part-seat {
-        width: 80px;
-        height: 100px;
+    .main {
+        width: 100%;
+        padding: 20px;
     }
 
-    .add-part-button {
-        font-size: 1.2rem;
-        width: 60px;
-        height: 60px;
+    button {
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .install-banner {
+        font-size: 0.9rem;
+        padding: 12px;
     }
 
     .back-to-cabinet {
-        font-size: 1rem;
-        padding: 10px 15px;
         width: 80%;
-        margin: 10px auto;
-    }
-
-    .add-part-text {
-        font-size: 0.8rem;
     }
 }
