@@ -24,8 +24,10 @@
 
 <main class="part-details-box">
     <!-- Image Upload and Preview -->
-    <img id="partImagePreview" src="images/girl.jpg" class="part-image-small">
-    <input type="file" id="partImageInput" accept="image/*">
+    <div class="image-container">
+        <img id="partImagePreview" src="images/girl.jpg" class="part-image">
+        <input type="file" id="partImageInput" accept="image/*">
+    </div>
 
     <label id="labelKnownSince">🌱 How long have you known this part?</label>
     <input type="text" id="partSince" placeholder="A long time, since childhood, etc.">
@@ -51,13 +53,13 @@
     const params = new URLSearchParams(window.location.search);
     const partName = params.get('part');
 
-    // Load saved part data (including image)
+    // Load part data (including image)
     let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
     let allParts = JSON.parse(localStorage.getItem('innerParts')) || [];
 
     document.getElementById('partTitle').innerText = `Meet ${partName}`;
 
-    // Pre-fill all fields and set image preview (use saved image or default)
+    // Pre-fill data and set image
     document.getElementById('partSince').value = part.knownSince || '';
     document.getElementById('partWants').value = part.wants || '';
     document.getElementById('partWorksWith').value = part.worksWith || '';
@@ -65,7 +67,7 @@
     document.getElementById('partRole').value = part.role || '';
     document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
 
-    // Handle image upload and immediate save with friendly notification
+    // Handle image upload and save
     document.getElementById('partImageInput').addEventListener('change', (event) => {
         const file = event.target.files[0];
 
@@ -75,9 +77,8 @@
                 document.getElementById('partImagePreview').src = reader.result;
                 part.image = reader.result;
 
-                // ✅ FIX: Save Image to both `part-{partName}` and `innerParts`
                 savePart(true);
-                showNotification('✅ Your image has been uploaded and saved!', 'success');
+                showNotification('✅ Image saved successfully!', 'success');
             };
             reader.readAsDataURL(file);
         }
@@ -91,16 +92,16 @@
         part.role = document.getElementById('partRole').value;
 
         savePart();
-        showNotification('✅ All details saved successfully!', 'success');
+        showNotification('✅ Part details saved successfully!', 'success');
     }
 
     function savePart(isImageOnly = false) {
         localStorage.setItem(`part-${partName}`, JSON.stringify(part));
 
-        // ✅ FIX: Update `innerParts` so `parts.html` gets the new image
+        // Ensure the image updates in parts.html
         const index = allParts.findIndex(p => p.name === partName);
         if (index !== -1) {
-            allParts[index].img = part.image; // Update existing part
+            allParts[index].img = part.image;
         } else if (!isImageOnly) {
             allParts.push({ name: partName, img: part.image || 'images/girl.jpg' });
         }
@@ -121,9 +122,7 @@
         notification.style.zIndex = '1000';
         document.body.appendChild(notification);
 
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
+        setTimeout(() => notification.remove(), 3000);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
