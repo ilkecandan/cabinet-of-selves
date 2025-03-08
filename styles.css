@@ -239,7 +239,7 @@ button:hover {
 
 /* Language Selector */
 .language-selector {
-    width: 40%; /* Take up full width */
+    width: 25%; /* Take up full width */
     display: flex;
     justify-content: center; /* Center the selector horizontally */
     position: absolute;
