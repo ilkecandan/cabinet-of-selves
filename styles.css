@@ -89,8 +89,7 @@ button {
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin: 8px 0;
-    font-size: 1.1rem; /* Slightly bigger font for better readability */
-    width: auto;
+    font-size: 1.1rem;
     min-width: 150px;
     max-width: 280px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
@@ -119,6 +118,27 @@ button:hover {
     background-color: #005f8b; /* Darker blue on hover */
 }
 
+/* Part Image Styling */
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.part-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 3px solid #74c69d;
+}
+
+/* Ensures the file input is displayed properly */
+#partImageInput {
+    margin-top: 10px;
+}
+
 /* Table Styling */
 .table-container {
     position: relative;
@@ -137,22 +157,23 @@ button:hover {
 /* Parts in Table */
 .part-seat {
     position: absolute;
-    width: 80px;
-    height: 100px;
+    width: 100px;
+    height: 120px;
     text-align: center;
     cursor: pointer;
-    background-color: transparent;
     transition: transform 0.3s ease;
 }
 
+/* Image inside Table */
 .part-seat img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
+    border-radius: 10px;
     border: 3px solid #74c69d;
 }
 
+/* Part Name */
 .part-seat span {
     display: block;
     font-size: 0.9rem;
@@ -289,47 +310,13 @@ button:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .language-selector select {
-        width: 70%;
-        font-size: 0.9rem;
-    }
-
-    .main {
-        width: 100%;
-        padding: 20px;
-    }
-
-    button {
-        width: 100%;
-        font-size: 1rem;
-    }
-
-    .install-banner {
-        font-size: 0.9rem;
-        padding: 12px;
-    }
-
-    .back-to-cabinet {
-        width: 80%;
-    }
-
     .table-container {
-        width: 80%;
-        height: 300px;
+        width: 90%;
+        height: 320px;
     }
 
-    .part-seat {
-        width: 80px;
-        height: 100px;
-    }
-
-    .add-part-button {
-        font-size: 1.2rem;
+    .part-seat img {
         width: 60px;
         height: 60px;
-    }
-
-    .add-part-text {
-        font-size: 0.8rem;
     }
 }
