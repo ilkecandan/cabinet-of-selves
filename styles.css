@@ -243,7 +243,7 @@ button:hover {
     display: flex;
     justify-content: center; /* Center the selector horizontally */
     position: absolute;
-    top: 200px; /* Adjust top to place it below the welcome text */
+    top: 0px; /* Adjust top to place it below the welcome text */
     z-index: 100;
 }
 
@@ -252,7 +252,7 @@ button:hover {
     background-color: #74c69d;
     color: white;
     border: none;
-    border-radius: 2px;
+    border-radius: 0px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
