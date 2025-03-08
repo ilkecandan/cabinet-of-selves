@@ -239,25 +239,27 @@ button:hover {
 
 /* Language Selector */
 .language-selector {
-    text-align: right;
-    padding: 12px;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 200;
+    top: 125px; /* Adjust this value to fine-tune the position */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 100;
 }
 
 .language-selector select {
-    padding: 12px 15px;
+    padding: 8px 12px;
     background-color: #74c69d;
     color: white;
     border: none;
     border-radius: 8px;
-    font-weight: 600;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-size: 1rem;
-    appearance: none;
     outline: none;
 }
 
