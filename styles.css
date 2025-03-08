@@ -97,7 +97,7 @@ h2 {
     font-size: 1.5rem;
     color: #4a90a2;
     margin-bottom: 20px;
-    font-weight: 600; /* Increased font weight for section headings */
+    font-weight: 600;
 }
 
 /* Buttons */
@@ -137,6 +137,44 @@ button:hover {
 
 .back-to-cabinet:hover {
     background-color: #52b788;
+}
+
+/* Parts Table Fix */
+.parts-table {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.part-card {
+    background: #e0f7fa;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.part-card:hover {
+    transform: translateY(-6px);
+}
+
+.part-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.part-name {
+    display: block;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
 }
 
 /* Install Banner for iPhone */
@@ -199,7 +237,7 @@ button:hover {
         font-size: 0.9rem;
     }
 
-    .main {
+    main {
         width: 100%;
         padding: 20px;
     }
@@ -216,5 +254,9 @@ button:hover {
 
     .back-to-cabinet {
         width: 80%;
+    }
+
+    .parts-table {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 }
