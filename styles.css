@@ -243,7 +243,7 @@ button:hover {
     display: flex;
     justify-content: center; /* Center the selector horizontally */
     position: absolute;
-    top: 130px; /* Adjust top to place it below the welcome text */
+    top: 200px; /* Adjust top to place it below the welcome text */
     z-index: 100;
 }
 
