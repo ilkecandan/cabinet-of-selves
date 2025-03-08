@@ -239,23 +239,20 @@ button:hover {
 
 /* Language Selector */
 .language-selector {
+    width: 50%; /* Take up full width */
+    display: flex;
+    justify-content: center; /* Center the selector horizontally */
     position: absolute;
-    top: 5px; /* Adjust this value to fine-tune the position */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: white;
-    padding: 8px 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    top: 130px; /* Adjust top to place it below the welcome text */
     z-index: 100;
 }
 
 .language-selector select {
-    padding: 8px 12px;
+    padding: 10px 15px;
     background-color: #74c69d;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 2px;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -266,6 +263,7 @@ button:hover {
 .language-selector select:hover {
     background-color: #52b788;
 }
+
 
 /* Install Banner for iPhone */
 .install-banner {
