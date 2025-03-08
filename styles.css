@@ -1,10 +1,10 @@
 /* General Body and Page Styles */
 body {
-    font-family: 'Roboto', Arial, sans-serif; /* Changed to a more elegant font */
-    background: linear-gradient(to bottom, #e0f7fa, #a2d2ff); /* Soft gradient for a modern feel */
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(to bottom, #e0f7fa, #a2d2ff);
     margin: 0;
     padding: 0;
-    color: #333; /* Darker text for better readability */
+    color: #333;
     animation: fadeIn 3s ease-out;
     text-align: center;
     overflow-x: hidden;
@@ -19,7 +19,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -1; /* Place the video behind all other content */
+    z-index: -1;
 }
 
 /* Header Styles */
@@ -29,24 +29,48 @@ header {
 }
 
 header h1 {
-    font-size: 3rem; /* Larger font size for a more prominent header */
+    font-size: 3rem;
     color: #0077b6;
     margin-bottom: 10px;
-    font-weight: 700; /* Bold for emphasis */
+    font-weight: 700;
 }
 
 header p {
     font-size: 1.2rem;
-    color: #666; /* Soft grey for better readability */
+    color: #666;
     margin: 0;
-    font-weight: 400; /* Lighter font weight for description */
+    font-weight: 400;
+}
+
+/* Language Selector */
+.language-selector {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.language-selector select {
+    padding: 10px 15px;
+    background-color: #74c69d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    outline: none;
+}
+
+.language-selector select:hover {
+    background-color: #52b788;
 }
 
 /* Main Container */
 main {
     background: white;
     width: 90%;
-    max-width: 880px; /* Increased max-width for more spacious layout */
+    max-width: 880px;
     margin: 20px auto;
     padding: 30px;
     border-radius: 15px;
@@ -73,7 +97,7 @@ h2 {
     font-size: 1.5rem;
     color: #4a90a2;
     margin-bottom: 20px;
-    font-weight: 600; /* Increased font weight for section headings */
+    font-weight: 600;
 }
 
 /* Links */
@@ -85,23 +109,6 @@ a {
 
 a:hover {
     text-decoration: underline;
-}
-
-/* Form Elements */
-input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin: 10px 0;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-}
-
-input:focus, select:focus, textarea:focus {
-    border-color: #74c69d;
-    outline: none;
 }
 
 /* Buttons */
@@ -125,145 +132,11 @@ button:hover {
     transform: translateY(-3px);
 }
 
-/* Remove Button Special Style */
-.remove-btn {
-    background-color: #ff6b6b;
+/* Fade-In Animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
-
-.remove-btn:hover {
-    background-color: #e63946;
-}
-
-/* Back to Cabinet Button */
-.back-to-cabinet {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 16px 22px;
-    background-color: #74c69d;
-    color: white;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
-}
-
-.back-to-cabinet:hover {
-    background-color: #52b788;
-}
-
-/* Parts Table (for parts.html) */
-.parts-table {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.part-card {
-    background: #e0f7fa;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    text-align: center;
-    width: 220px;
-    transition: transform 0.3s ease;
-    position: relative;
-}
-
-.part-card:hover {
-    transform: translateY(-6px);
-}
-
-.part-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-}
-
-.part-name {
-    display: block;
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-}
-
-/* Modal (for Add New Part) */
-.modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    z-index: 1000;
-    width: 90%;
-    max-width: 500px;
-    text-align: left;
-}
-
-.modal h3 {
-    margin-top: 0;
-    color: #4a90a2;
-    font-size: 1.8rem;
-    font-weight: 700;
-}
-
-/* Welcome Animation Overlay */
-#welcomeAnimation {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    z-index: 999;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    animation: fadeIn 0.8s ease-out;
-}
-
-#welcomeAnimation h2 {
-    margin-bottom: 20px;
-    color: #0077b6;
-    font-size: 2rem;
-}
-
-/* Language Selector */
-.language-selector {
-    width: 25%; /* Take up full width */
-    display: flex;
-    justify-content: center; /* Center the selector horizontally */
-    position: absolute;
-    top: 0px; /* Adjust top to place it below the welcome text */
-    z-index: 80;
-}
-
-.language-selector select {
-    padding: 5px 5px;
-    background-color: #74c69d;
-    color: white;
-    border: none;
-    border-radius: 0px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 1rem;
-    outline: none;
-}
-
-.language-selector select:hover {
-    background-color: #52b788;
-}
-
 
 /* Install Banner for iPhone */
 .install-banner {
@@ -288,31 +161,4 @@ button:hover {
     cursor: pointer;
     margin-left: 20px;
     font-weight: 600;
-}
-
-/* Fade-In Animation */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 15px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    z-index: 1000;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-    color: white;
-    font-family: 'Roboto', Arial, sans-serif;
-}
-
-.notification.success {
-    background-color: #4caf50;
-}
-
-.notification.error {
-    background-color: #f44336;
 }
