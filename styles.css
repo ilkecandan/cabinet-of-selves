@@ -78,38 +78,109 @@ main {
     text-align: center;
 }
 
-/* Sections */
-section {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    margin-bottom: 25px;
-    padding: 20px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+/* Parts Table */
+.table-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    border: 12px solid #74c69d;
+    border-radius: 50%;
+    margin: 30px auto;
+    background-color: #fefefe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-section:hover {
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+/* Part Seats */
+.part-seat {
+    position: absolute;
+    width: 100px;
+    height: 120px;
+    text-align: center;
+    cursor: pointer;
 }
 
-/* Buttons */
-button {
-    padding: 16px 22px;
+.part-seat img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #74c69d;
+}
+
+.part-seat span {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #0077b6;
+    margin-top: 5px;
+}
+
+.part-seat button {
     background-color: #74c69d;
-    border: none;
     color: white;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    margin: 3px 0;
+    cursor: pointer;
+}
+
+.part-seat button.remove {
+    background-color: #ff6b6b;
+}
+
+/* Add New Part Button */
+.add-part-container {
+    position: absolute;
+    text-align: center;
+}
+
+.add-part-button {
+    background-color: #52b788;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: block;
+    margin: 0 auto;
+}
+
+.add-part-button:hover {
+    background-color: #40916c;
+}
+
+.add-part-text {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #0077b6;
+    margin-top: 5px;
+}
+
+/* Back to Cabinet Button */
+.back-to-cabinet {
+    margin-top: 20px;
+    padding: 12px 18px;
+    background-color: #74c69d;
+    color: white;
+    border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 12px 0;
-    font-size: 1.1rem;
-    width: 100%;
-    max-width: 260px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
 }
 
-button:hover {
+.back-to-cabinet:hover {
     background-color: #52b788;
-    transform: translateY(-3px);
 }
 
 /* Install Banner for iPhone */
@@ -167,7 +238,7 @@ button:hover {
 /* Responsive Design */
 @media (max-width: 768px) {
     .table-container {
-        width: 80%; /* Adjusting the size of the part circle container */
+        width: 80%;
         height: 300px;
     }
 
