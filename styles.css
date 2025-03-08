@@ -80,7 +80,7 @@ main {
 
 /* General Buttons */
 button {
-    padding: 12px 20px;
+    padding: 10px 16px;
     background-color: #74c69d;
     color: white;
     border: none;
@@ -88,10 +88,10 @@ button {
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 8px 0;
-    font-size: 1.1rem;
-    min-width: 150px;
-    max-width: 280px;
+    margin: 6px 0;
+    font-size: 1rem;
+    min-width: 120px;
+    max-width: 220px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
 }
 
@@ -127,8 +127,8 @@ button:hover {
 }
 
 .part-image {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
     border-radius: 10px;
     border: 3px solid #74c69d;
@@ -143,8 +143,8 @@ button:hover {
 .table-container {
     position: relative;
     width: 100%;
-    max-width: 600px;
-    height: 500px;
+    max-width: 550px;
+    height: 450px;
     border: 12px solid #74c69d;
     border-radius: 50%;
     margin: 30px auto;
@@ -158,44 +158,52 @@ button:hover {
 /* Parts in Table */
 .part-seat {
     position: absolute;
-    width: 100px;
-    height: 120px;
+    width: 80px;
+    height: 100px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
 
-/* Image inside Table */
+/* Image inside Table (Smaller to Fit More) */
 .part-seat img {
-    width: 80px;
-    height: 80px;
+    width: 55px;
+    height: 55px;
     object-fit: cover;
     border-radius: 10px;
-    border: 3px solid #74c69d;
+    border: 2px solid #74c69d;
 }
 
 /* Part Name */
 .part-seat span {
     display: block;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     font-weight: bold;
     color: #0077b6;
-    margin-top: 5px;
+    margin-top: 3px;
 }
 
-/* Table Buttons */
+/* Table Buttons (Smaller & Icon for Remove) */
 .part-seat button {
     background-color: #74c69d;
-    font-size: 0.9rem;
-    padding: 8px;
-    width: auto;
-    border-radius: 8px;
+    font-size: 0.7rem;
+    padding: 5px;
+    width: 50px;
+    border-radius: 6px;
     box-shadow: none; /* Keep these buttons flat */
 }
 
-/* Remove Button */
+/* Remove Button (X Instead of Text) */
 .part-seat button.remove {
     background-color: #ff6b6b;
+    font-size: 0.7rem;
+    padding: 4px 6px;
+}
+
+.part-seat button.remove::after {
+    content: "✖"; /* Unicode for X */
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .part-seat button.remove:hover {
@@ -213,13 +221,13 @@ button:hover {
     background-color: #52b788;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 8px;
     border-radius: 50%;
     cursor: pointer;
     font-weight: bold;
-    font-size: 1.2rem;
-    width: 50px;
-    height: 50px;
+    font-size: 1rem;
+    width: 40px;
+    height: 40px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     display: block;
     margin: 0 auto;
@@ -230,7 +238,7 @@ button:hover {
 }
 
 .add-part-text {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: bold;
     color: #0077b6;
     margin-top: 5px;
@@ -239,7 +247,7 @@ button:hover {
 /* Back to Cabinet Button */
 .back-to-cabinet {
     margin-top: 20px;
-    padding: 12px 18px;
+    padding: 10px 16px;
     background-color: #74c69d;
     color: white;
     border: none;
@@ -248,8 +256,8 @@ button:hover {
     text-decoration: none;
     font-weight: bold;
     display: inline-block;
-    font-size: 1.2rem;
-    min-width: 200px;
+    font-size: 1rem;
+    min-width: 180px;
 }
 
 .back-to-cabinet:hover {
@@ -262,7 +270,7 @@ button:hover {
     background-color: #74c69d;
     color: white;
     text-align: center;
-    padding: 12px;
+    padding: 10px;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -274,10 +282,10 @@ button:hover {
     background-color: #52b788;
     color: white;
     border: none;
-    padding: 8px 18px;
+    padding: 6px 14px;
     border-radius: 8px;
     cursor: pointer;
-    margin-left: 20px;
+    margin-left: 15px;
     font-weight: 600;
 }
 
@@ -292,7 +300,7 @@ button:hover {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    padding: 15px 20px;
+    padding: 12px 18px;
     border-radius: 8px;
     font-weight: 600;
     z-index: 1000;
@@ -312,12 +320,12 @@ button:hover {
 /* Responsive Design */
 @media (max-width: 768px) {
     .table-container {
-        width: 95%;
-        height: 400px;
+        width: 90%;
+        height: 350px;
     }
 
     .part-seat img {
-        width: 60px;
-        height: 60px;
+        width: 50px;
+        height: 50px;
     }
 }
