@@ -244,7 +244,7 @@ button:hover {
     justify-content: center; /* Center the selector horizontally */
     position: absolute;
     top: 0px; /* Adjust top to place it below the welcome text */
-    z-index: 100;
+    z-index: 80;
 }
 
 .language-selector select {
