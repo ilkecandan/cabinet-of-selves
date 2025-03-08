@@ -192,7 +192,7 @@ button:hover {
     border-radius: 6px;
     box-shadow: none; /* Keep these buttons flat */
 }
-
+https://ilkecandan.github.io/cabinet-of-selves/
 /* Remove Button (X Instead of Text) */
 .part-seat button.remove {
     background-color: #ff6b6b;
@@ -201,7 +201,6 @@ button:hover {
 }
 
 .part-seat button.remove::after {
-    content: "✖"; /* Unicode for X */
     font-size: 0.9rem;
     font-weight: bold;
 }
