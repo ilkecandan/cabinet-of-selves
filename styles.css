@@ -78,7 +78,48 @@ main {
     text-align: center;
 }
 
-/* Parts Table Fix */
+/* General Buttons */
+button {
+    padding: 12px 20px;
+    background-color: #74c69d;
+    color: white;
+    border: none;
+    border-radius: 12px; /* More rounded edges for elegance */
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 8px 0;
+    font-size: 1.1rem; /* Slightly bigger font for better readability */
+    width: auto;
+    min-width: 150px;
+    max-width: 280px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+}
+
+/* Hover Effect */
+button:hover {
+    background-color: #52b788;
+    transform: translateY(-3px); /* Subtle hover effect */
+}
+
+/* Specific Button Styles */
+#addNewPartButton {
+    background-color: #52b788;
+}
+
+#addNewPartButton:hover {
+    background-color: #40916c; /* Darker green on hover */
+}
+
+#seeAllPartsButton {
+    background-color: #0077b6;
+}
+
+#seeAllPartsButton:hover {
+    background-color: #005f8b; /* Darker blue on hover */
+}
+
+/* Table Styling */
 .table-container {
     position: relative;
     width: 100%;
@@ -93,6 +134,7 @@ main {
     overflow: hidden; /* Fix overflow issue */
 }
 
+/* Parts in Table */
 .part-seat {
     position: absolute;
     width: 80px;
@@ -119,21 +161,26 @@ main {
     margin-top: 5px;
 }
 
+/* Table Buttons */
 .part-seat button {
     background-color: #74c69d;
-    color: white;
-    border: none;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    margin: 3px 0;
-    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 8px;
+    width: auto;
+    border-radius: 8px;
+    box-shadow: none; /* Keep these buttons flat */
 }
 
+/* Remove Button */
 .part-seat button.remove {
     background-color: #ff6b6b;
 }
 
+.part-seat button.remove:hover {
+    background-color: #e63946;
+}
+
+/* "Add Part" Floating Button */
 .add-part-container {
     position: absolute;
     text-align: center;
@@ -174,11 +221,13 @@ main {
     background-color: #74c69d;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     text-decoration: none;
     font-weight: bold;
     display: inline-block;
+    font-size: 1.2rem;
+    min-width: 200px;
 }
 
 .back-to-cabinet:hover {
