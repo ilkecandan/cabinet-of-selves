@@ -239,7 +239,7 @@ button:hover {
 
 /* Language Selector */
 .language-selector {
-    width: 50%; /* Take up full width */
+    width: 10%; /* Take up full width */
     display: flex;
     justify-content: center; /* Center the selector horizontally */
     position: absolute;
@@ -248,7 +248,7 @@ button:hover {
 }
 
 .language-selector select {
-    padding: 10px 15px;
+    padding: 5px 5px;
     background-color: #74c69d;
     color: white;
     border: none;
