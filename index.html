@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+    <!-- Language Selector -->
+ <div class="language-selector">
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,14 +40,7 @@
 
 <!-- Main Sections -->
 <main>
-    <!-- Language Selector -->
- <div class="language-selector">
-    <select id="language" onchange="switchLanguage(this.value)">
-        <option value="en">English</option>
-        <option value="tr">Türkçe</option>
-        <option value="de">Deutsch</option>
-    </select>
-</div>
+    
     <section>
         <h2 id="partsHeading">Your Parts</h2>
         <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
