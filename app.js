@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Load the language preference from localStorage
+    const lang = localStorage.getItem('language') || 'en';
+    document.getElementById('language').value = lang;
+    switchLanguage(lang);
+
     loadParts();
 
     // Check if it's the user's first visit
@@ -19,11 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const confirmAddPartButton = document.getElementById('confirmAddPart');
     if (confirmAddPartButton) confirmAddPartButton.addEventListener('click', addPart);
-
-    // Language setup
-    const lang = localStorage.getItem('language') || 'en';
-    document.getElementById('language').value = lang;
-    switchLanguage(lang);
 });
 
 // Show the modal to add a new part
@@ -69,35 +69,75 @@ function loadParts() {
 function switchLanguage(lang) {
     const translations = {
         en: { 
-            addPartHeading: "Add a New Part", 
-            partNameLabel: "Part Name:", 
-            confirmAddPart: "Add", 
-            cancelButton: "Cancel" 
+            title: "Cabinet of Selves", 
+            welcomeText: "Welcome to your inner world. Which parts want to speak today?",
+            partsHeading: "Your Parts",
+            seeAllPartsButton: "See All Parts",
+            addNewPartButton: "Add New Part",
+            checkInHeading: "Daily Check-In",
+            startCheckInButton: "Start Daily Check-In",
+            viewCheckInHistoryButton: "View Check-In History",
+            resourcesHeading: "Resources & Tips",
+            youAreEnoughText: "You are enough, even on the quiet days.",
+            installBannerText: "📲 Install Cabinet of Selves on your phone!",
+            addPartHeading: "Add a New Part",
+            partNameLabel: "Part Name:",
+            cancelButton: "Cancel",
         },
         tr: { 
-            addPartHeading: "Yeni Bir Parça Ekle", 
-            partNameLabel: "Parça Adı:", 
-            confirmAddPart: "Ekle", 
-            cancelButton: "İptal" 
+            title: "Kendi Parçalarınız Kabini", 
+            welcomeText: "İçsel dünyanıza hoş geldiniz. Hangi parçalar konuşmak istiyor?",
+            partsHeading: "Parçalarınız",
+            seeAllPartsButton: "Tüm Parçaları Gör",
+            addNewPartButton: "Yeni Parça Ekle",
+            checkInHeading: "Günlük Kontrol",
+            startCheckInButton: "Günlük Kontrol Başlat",
+            viewCheckInHistoryButton: "Kontrol Geçmişini Gör",
+            resourcesHeading: "Kaynaklar ve İpuçları",
+            youAreEnoughText: "Sessiz günlerde bile yeterlisiniz.",
+            installBannerText: "📲 Kabinetinizi telefonunuza yükleyin!",
+            addPartHeading: "Yeni Bir Parça Ekle",
+            partNameLabel: "Parça Adı:",
+            cancelButton: "İptal",
         },
         de: { 
-            addPartHeading: "Neuen Teil hinzufügen", 
-            partNameLabel: "Teilname:", 
-            confirmAddPart: "Hinzufügen", 
-            cancelButton: "Abbrechen" 
+            title: "Schrank der Selbst", 
+            welcomeText: "Willkommen in deiner inneren Welt. Welche Teile möchten heute sprechen?",
+            partsHeading: "Deine Teile",
+            seeAllPartsButton: "Alle Teile ansehen",
+            addNewPartButton: "Neues Teil hinzufügen",
+            checkInHeading: "Tägliche Check-In",
+            startCheckInButton: "Tägliches Check-In starten",
+            viewCheckInHistoryButton: "Check-In Verlauf ansehen",
+            resourcesHeading: "Ressourcen & Tipps",
+            youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
+            installBannerText: "📲 Installiere Cabinet of Selves auf deinem Handy!",
+            addPartHeading: "Neues Teil hinzufügen",
+            partNameLabel: "Teilname:",
+            cancelButton: "Abbrechen",
         }
     };
 
-    // Save selected language to localStorage
+    // Save the selected language to localStorage
     localStorage.setItem('language', lang);
 
-    // Fetch the translations for the selected language
+    // Get the corresponding translation object for the selected language
     const t = translations[lang];
 
     // Update the page content with the translated text
+    document.title = t.title;
+    document.getElementById('welcomeText').innerText = t.welcomeText;
+    document.getElementById('partsHeading').innerText = t.partsHeading;
+    document.getElementById('seeAllPartsButton').innerText = t.seeAllPartsButton;
+    document.getElementById('addNewPartButton').innerText = t.addNewPartButton;
+    document.getElementById('checkInHeading').innerText = t.checkInHeading;
+    document.getElementById('startCheckInButton').innerText = t.startCheckInButton;
+    document.getElementById('viewCheckInHistoryButton').innerText = t.viewCheckInHistoryButton;
+    document.getElementById('resourcesHeading').innerText = t.resourcesHeading;
+    document.getElementById('youAreEnoughText').innerText = t.youAreEnoughText;
+    document.getElementById('installBanner').innerText = t.installBannerText;
     document.getElementById('addPartHeading').innerText = t.addPartHeading;
     document.getElementById('partNameLabel').innerText = t.partNameLabel;
-    document.getElementById('confirmAddPart').innerText = t.confirmAddPart;
     document.getElementById('cancelButton').innerText = t.cancelButton;
-    document.getElementById('partName').placeholder = t.partNameLabel;  // Placeholder for input
+    document.getElementById('partName').placeholder = t.partNameLabel;  // Update placeholder for input field
 }
