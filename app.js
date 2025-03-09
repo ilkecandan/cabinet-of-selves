@@ -141,3 +141,10 @@ function switchLanguage(lang) {
     document.getElementById('cancelButton').innerText = t.cancelButton;
     document.getElementById('partName').placeholder = t.partNameLabel;  // Update placeholder for input field
 }
+
+// ✅ Register the Service Worker for offline support
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js")
+        .then(() => console.log("✅ Service Worker registered successfully."))
+        .catch((error) => console.log("❌ Service Worker registration failed:", error));
+}
