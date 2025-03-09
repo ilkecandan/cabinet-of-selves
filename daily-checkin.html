@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title id="checkinTitle">Daily Check-In - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
     <style>
         body { 
             font-family: 'Quicksand', Arial, sans-serif; 
@@ -51,34 +52,24 @@
             color: white; 
             border-radius: 8px; 
         }
-        .language-selector {
-            margin: 10px auto;
-            text-align: center;
-        }
-        .language-selector select {
-            padding: 6px 12px;
-            border-radius: 8px;
-            background-color: #74c69d;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .language-selector select:hover {
-            background-color: #52b788;
-        }
     </style>
 </head>
 <body>
-
+    <video id="backgroundVideo" autoplay loop muted>
+        <source src="images/background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 <header>
-    <h1 id="checkinHeader">🌈 Daily Check-In</h1>
-    <p id="checkinDescription">Reflect on your day and connect with your inner world.</p>
+    <h1 id="checkinHeader" data-en="🌈 Daily Check-In" data-tr="🌈 Günlük Kontrol" data-de="🌈 Tägliches Einchecken">🌈 Daily Check-In</h1>
+    <p id="checkinDescription" data-en="Reflect on your day and connect with your inner world."
+        data-tr="Gününüzü yansıtın ve iç dünyanızla bağlantı kurun."
+        data-de="Reflektiere über deinen Tag und verbinde dich mit deiner inneren Welt.">
+        Reflect on your day and connect with your inner world.
+    </p>
 </header>
 
-<!-- Centered Language Selector -->
+<!-- Language Selector -->
 <div class="language-selector">
-    <label for="language">🌐</label>
     <select id="language" onchange="switchLanguage(this.value)">
         <option value="en">English</option>
         <option value="tr">Türkçe</option>
@@ -87,30 +78,66 @@
 </div>
 
 <main>
-    <label>📅 <span id="dateLabel">Date</span>:</label>
+    <label>📅 <span id="dateLabel" data-en="Date" data-tr="Tarih" data-de="Datum">Date</span>:</label>
     <input type="date" id="checkin-date">
 
-    <label>🌦️ <span id="moodLabel">Today's Mood</span>:</label>
+    <label>🌦️ <span id="moodLabel" data-en="Today's Mood" data-tr="Bugünkü Ruh Hali" data-de="Heutige Stimmung">Today's Mood</span>:</label>
     <select id="mood">
-        <option>Calm</option>
-        <option>Reflective</option>
-        <option>Anxious</option>
-        <option>Joyful</option>
-        <option>Sad</option>
+        <option data-en="Calm" data-tr="Sakin" data-de="Ruhig">Calm</option>
+        <option data-en="Reflective" data-tr="Düşünceli" data-de="Nachdenklich">Reflective</option>
+        <option data-en="Anxious" data-tr="Endişeli" data-de="Ängstlich">Anxious</option>
+        <option data-en="Joyful" data-tr="Neşeli" data-de="Freudig">Joyful</option>
+        <option data-en="Sad" data-tr="Üzgün" data-de="Traurig">Sad</option>
+        <option data-en="Relaxed" data-tr="Rahatlamış" data-de="Entspannt">Relaxed</option>
     </select>
 
-    <label>💚 <span id="partsLabel">Active Parts</span>:</label>
+    <label>💚 <span id="partsLabel" data-en="Active Parts" data-tr="Aktif Parçalar" data-de="Aktive Teile">Active Parts</span>:</label>
     <div id="partsCheckboxList"></div>
 
-    <label>✨ <span id="eventsLabel">Significant Events</span>:</label>
+    <label>✨ <span id="eventsLabel" data-en="Significant Events" data-tr="Önemli Olaylar" data-de="Wichtige Ereignisse">Significant Events</span>:</label>
     <textarea id="significantEvents"></textarea>
 
-    <label>📝 <span id="thoughtsLabel">Additional Thoughts</span>:</label>
+    <label>📝 <span id="thoughtsLabel" data-en="Additional Thoughts" data-tr="Ek Düşünceler" data-de="Zusätzliche Gedanken">Additional Thoughts</span>:</label>
     <textarea id="additionalThoughts"></textarea>
 
-    <button onclick="saveCheckIn()" id="saveButton">💾 Save Check-In</button>
-    <a href="checkin-history.html" class="back-to-cabinet" id="viewHistoryButton">📖 View Check-In History</a>
-    <a href="index.html" class="back-to-cabinet" id="backToCabinetButton">🔙 Back to Cabinet</a>
+    <button onclick="saveCheckIn()" id="saveButton"
+        data-en="💾 Save Check-In"
+        data-tr="💾 Günlük Kontrolü Kaydet"
+        data-de="💾 Eintrag speichern">💾 Save Check-In</button>
+
+    <a href="checkin-history.html" class="back-to-cabinet" id="viewHistoryButton"
+        data-en="📖 View Check-In History"
+        data-tr="📖 Günlük Kontrol Geçmişini Gör"
+        data-de="📖 Check-In Verlauf anzeigen">
+        📖 View Check-In History
+    </a>
+
+    <a href="index.html" class="back-to-cabinet" id="backToCabinetButton"
+        data-en="🔙 Back to Cabinet"
+        data-tr="🔙 Kabine Dön"
+        data-de="🔙 Zurück zum Schrank">
+        🔙 Back to Cabinet
+    </a>
+
+    <div class="animation-container">
+        <dotlottie-player
+            src="https://lottie.host/91aa48d4-cf7a-4f07-8f16-c7b7306a97fe/vmM9r59GYJ.lottie"
+            background="transparent"
+            speed="1"
+            style="width: 300px; height: 300px"
+            loop
+            autoplay>
+        </dotlottie-player>
+    </div>
+    
+    <style>
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    
 </main>
 
 <script>
@@ -130,80 +157,31 @@ function loadParts() {
 }
 
 function saveCheckIn() {
-    const checkin = {
-        date: document.getElementById('checkin-date').value,
-        mood: document.getElementById('mood').value,
-        parts: Array.from(document.querySelectorAll('#partsCheckboxList input:checked')).map(cb => cb.value),
-        events: document.getElementById('significantEvents').value,
-        thoughts: document.getElementById('additionalThoughts').value
-    };
+    const date = document.getElementById('checkin-date').value;
+    const mood = document.getElementById('mood').value;
+    const events = document.getElementById('significantEvents').value;
+    const thoughts = document.getElementById('additionalThoughts').value;
 
-    const checkins = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
-    checkins.push(checkin);
-    localStorage.setItem('dailyCheckIns', JSON.stringify(checkins));
+    const selectedParts = Array.from(document.querySelectorAll('#partsCheckboxList input:checked'))
+        .map(checkbox => checkbox.value);
 
-    alert(translations[currentLanguage].saved);
-    window.location.href = 'index.html';
+    if (!date) {
+        alert("Please enter a date for your check-in.");
+        return;
+    }
+
+    const checkIns = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
+    checkIns.push({ date, mood, parts: selectedParts, events, thoughts });
+    localStorage.setItem('dailyCheckIns', JSON.stringify(checkIns));
+
+    alert("✅ Check-In saved successfully!");
 }
 
-const translations = {
-    en: {
-        checkinTitle: "Daily Check-In - Cabinet of Selves",
-        checkinHeader: "🌈 Daily Check-In",
-        checkinDescription: "Reflect on your day and connect with your inner world.",
-        dateLabel: "Date",
-        moodLabel: "Today's Mood",
-        partsLabel: "Active Parts",
-        eventsLabel: "Significant Events",
-        thoughtsLabel: "Additional Thoughts",
-        saveButton: "💾 Save Check-In",
-        viewHistoryButton: "📖 View Check-In History",
-        backToCabinetButton: "🔙 Back to Cabinet",
-        saved: "✅ Check-In saved successfully!"
-    },
-    tr: {
-        checkinTitle: "Günlük Kontrol - İç Benlikler Dolabı",
-        checkinHeader: "🌈 Günlük Kontrol",
-        checkinDescription: "Gününüzü yansıtın ve iç dünyanızla bağlantı kurun.",
-        dateLabel: "Tarih",
-        moodLabel: "Bugünkü Ruh Hali",
-        partsLabel: "Aktif Parçalar",
-        eventsLabel: "Önemli Olaylar",
-        thoughtsLabel: "Ek Düşünceler",
-        saveButton: "💾 Kaydet",
-        viewHistoryButton: "📖 Geçmişi Görüntüle",
-        backToCabinetButton: "🔙 Kabine Dön",
-        saved: "✅ Günlük kontrol başarıyla kaydedildi!"
-    },
-    de: {
-        checkinTitle: "Tägliches Check-In - Schrank der Selbst",
-        checkinHeader: "🌈 Tägliches Check-In",
-        checkinDescription: "Reflektiere deinen Tag und verbinde dich mit deiner inneren Welt.",
-        dateLabel: "Datum",
-        moodLabel: "Heutige Stimmung",
-        partsLabel: "Aktive Teile",
-        eventsLabel: "Wichtige Ereignisse",
-        thoughtsLabel: "Zusätzliche Gedanken",
-        saveButton: "💾 Check-In speichern",
-        viewHistoryButton: "📖 Check-In Verlauf anzeigen",
-        backToCabinetButton: "🔙 Zurück zum Kabinett",
-        saved: "✅ Check-In erfolgreich gespeichert!"
-    }
-};
-
-let currentLanguage = 'en';
-
 function switchLanguage(lang) {
-    currentLanguage = lang;
     localStorage.setItem('language', lang);
-
-    const t = translations[lang];
-    for (const key in t) {
-        if (document.getElementById(key)) {
-            document.getElementById(key).innerText = t[key];
-        }
-    }
-    document.title = t.checkinTitle;
+    document.querySelectorAll("[data-" + lang + "]").forEach(el => {
+        el.innerText = el.getAttribute("data-" + lang);
+    });
 }
 </script>
 
