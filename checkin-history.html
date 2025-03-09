@@ -2,92 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title id="historyTitle">Check-In History - Cabinet of Selves</title>
+    <title id="checkinTitle">Check-In History - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            font-family: 'Quicksand', Arial, sans-serif;
-            background: linear-gradient(to bottom, #bde0fe, #a2d2ff);
-            margin: 0;
-            padding: 20px;
-            color: #4a4a4a;
-            text-align: center;
+        body { 
+            font-family: 'Quicksand', Arial, sans-serif; 
+            background: linear-gradient(to bottom, #bde0fe, #a2d2ff); 
+            margin: 0; 
+            padding: 20px; 
+            color: #4a4a4a; 
+            text-align: center; 
+        }
+        main { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+            margin: 20px auto; 
+            max-width: 750px; 
+            text-align: center; 
+        }
+        label { 
+            font-weight: bold; 
+            display: block; 
+            margin-top: 10px; 
+        }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 8px; 
+            margin-top: 5px; 
+            border-radius: 8px; 
+        }
+        button { 
+            margin-top: 15px; 
+            cursor: pointer; 
+            background: #74c69d; 
+            color: white; 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 8px; 
+        }
+        .back-to-cabinet { 
+            display: block; 
+            margin-top: 15px; 
+            text-decoration: none; 
+            padding: 10px; 
+            background: #74c69d; 
+            color: white; 
+            border-radius: 8px; 
         }
 
-        main {
-            background: white;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background: #f0f9ff;
-            padding: 15px;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            text-align: left;
-        }
-
-        .back-btn {
-            display: inline-block;
-            margin: 15px;
-            padding: 10px 15px;
-            background: #74c69d;
+        /* Delete Button */
+        .delete-btn {
+            background: #ff6b6b;
+            border: none;
+            padding: 6px 10px;
+            margin-top: 5px;
+            border-radius: 6px;
             color: white;
-            text-decoration: none;
-            border-radius: 8px;
+            cursor: pointer;
             font-weight: bold;
         }
-
-        .back-btn:hover {
-            background-color: #52b788;
+        .delete-btn:hover {
+            background: #e63946;
         }
 
-        #noCheckinsMessage {
-            font-weight: bold;
-            color: #f44336;
-            margin-top: 10px;
-        }
-
+        /* Updated Language Selector to match Index.html */
         .language-selector {
             margin: 10px auto;
             text-align: center;
         }
-
         .language-selector select {
             padding: 6px 12px;
-            border-radius: 8px;
+            border-radius: 6px;
             background-color: #74c69d;
             color: white;
             border: none;
             cursor: pointer;
-            font-family: 'Quicksand', Arial, sans-serif;
             font-weight: bold;
+            font-size: 0.9rem;
         }
-
         .language-selector select:hover {
             background-color: #52b788;
+        }
+
+        /* Video Background */
+        #backgroundVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
         }
     </style>
 </head>
 <body>
 
+<!-- Video Background (nature.mp4) -->
+<video id="backgroundVideo" autoplay loop muted>
+    <source src="images/nature.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
 <header>
-    <h1 id="historyHeader">📖 Check-In History</h1>
-    <p id="historyDescription">See all your past check-ins.</p>
+    <h1 id="checkinHeader">📖 Check-In History</h1>
+    <p id="checkinDescription">See all your past check-ins.</p>
 </header>
 
+<!-- Centered Language Selector -->
 <div class="language-selector">
-    <label for="language">🌐</label>
     <select id="language" onchange="switchLanguage(this.value)">
         <option value="en">English</option>
         <option value="tr">Türkçe</option>
@@ -96,125 +121,119 @@
 </div>
 
 <main>
-    <label for="checkinDate" id="filterLabel">📅 Filter by Date:</label>
-    <input type="date" id="checkinDate" onchange="filterCheckIns()">
 
-    <ul id="checkinHistoryList"></ul>
-    <p id="noCheckinsMessage" style="display: none;">No check-ins found for this date.</p>
+    <!-- NEW BUTTON: Go Back to Daily Check-In -->
+    <a href="daily-checkin.html" class="back-to-cabinet" id="backToCheckInButton">🔙 Go Back to Daily Check-In</a>
 
-    <a href="index.html" class="back-btn" id="backToCabinetButton">⬅️ Back to Cabinet</a>
+    <label>📅 <span id="dateFilterLabel">Filter by Date</span>:</label>
+    <input type="date" id="checkin-filter" onchange="filterCheckIns()">
+
+    <div id="checkin-list">
+        <!-- Check-in history entries will be displayed here -->
+    </div>
+
+    <a href="index.html" class="back-to-cabinet" id="backToCabinetButton">🔙 Back to Cabinet</a>
 </main>
 
 <script>
-    let allCheckIns = [];
+document.addEventListener('DOMContentLoaded', () => {
+    loadCheckIns();
+    const lang = localStorage.getItem('language') || 'en';
+    document.getElementById('language').value = lang;
+    switchLanguage(lang);
+});
 
-    document.addEventListener('DOMContentLoaded', () => {
-        loadCheckInHistory();
-        const lang = localStorage.getItem('language') || 'en';
-        document.getElementById('language').value = lang;
-        switchLanguage(lang);
-    });
-
-    function loadCheckInHistory() {
-        allCheckIns = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
-        displayCheckIns(allCheckIns);
+function loadCheckIns() {
+    const checkins = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
+    const container = document.getElementById('checkin-list');
+    
+    if (checkins.length === 0) {
+        container.innerHTML = "<p>No check-ins found.</p>";
+        return;
     }
 
-    function displayCheckIns(checkins) {
-        const list = document.getElementById('checkinHistoryList');
-        list.innerHTML = '';
+    container.innerHTML = checkins.map((checkin, index) => `
+        <div style="background: #f0f8ff; padding: 10px; margin: 10px; border-radius: 8px;">
+            <p><strong>📅 ${checkin.date}</strong></p>
+            <p><strong>Mood:</strong> ${checkin.mood}</p>
+            <p><strong>Active Parts:</strong> ${checkin.parts.join(', ') || '-'}</p>
+            <p><strong>Significant Events:</strong> ${checkin.events || '-'}</p>
+            <p><strong>Additional Thoughts:</strong> ${checkin.thoughts || '-'}</p>
+            <button class="delete-btn" onclick="deleteCheckIn(${index})">🗑️ Delete</button>
+        </div>
+    `).join('');
+}
 
-        if (checkins.length === 0) {
-            document.getElementById('noCheckinsMessage').style.display = 'block';
-            return;
+function deleteCheckIn(index) {
+    if (!confirm("Are you sure you want to delete this check-in?")) return;
+
+    let checkins = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
+    checkins.splice(index, 1);
+    localStorage.setItem('dailyCheckIns', JSON.stringify(checkins));
+
+    loadCheckIns();
+}
+
+function filterCheckIns() {
+    const selectedDate = document.getElementById('checkin-filter').value;
+    const checkins = JSON.parse(localStorage.getItem('dailyCheckIns') || '[]');
+    const container = document.getElementById('checkin-list');
+
+    if (!selectedDate) {
+        loadCheckIns();
+        return;
+    }
+
+    const filtered = checkins.filter(checkin => checkin.date === selectedDate);
+
+    if (filtered.length === 0) {
+        container.innerHTML = "<p>No check-ins found for this date.</p>";
+        return;
+    }
+
+    container.innerHTML = filtered.map((checkin, index) => `
+        <div style="background: #f0f8ff; padding: 10px; margin: 10px; border-radius: 8px;">
+            <p><strong>📅 ${checkin.date}</strong></p>
+            <p><strong>Mood:</strong> ${checkin.mood}</p>
+            <p><strong>Active Parts:</strong> ${checkin.parts.join(', ') || '-'}</p>
+            <p><strong>Significant Events:</strong> ${checkin.events || '-'}</p>
+            <p><strong>Additional Thoughts:</strong> ${checkin.thoughts || '-'}</p>
+            <button class="delete-btn" onclick="deleteCheckIn(${index})">🗑️ Delete</button>
+        </div>
+    `).join('');
+}
+
+const translations = {
+    en: {
+        checkinTitle: "Check-In History - Cabinet of Selves",
+        checkinHeader: "📖 Check-In History",
+        checkinDescription: "See all your past check-ins.",
+        dateFilterLabel: "Filter by Date",
+        backToCabinetButton: "🔙 Back to Cabinet",
+        backToCheckInButton: "🔙 Go Back to Daily Check-In"
+    },
+    tr: {
+        backToCheckInButton: "🔙 Günlük Kontrole Geri Dön"
+    },
+    de: {
+        backToCheckInButton: "🔙 Zurück zum täglichen Check-In"
+    }
+};
+
+let currentLanguage = 'en';
+
+function switchLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('language', lang);
+
+    const t = translations[lang];
+    for (const key in t) {
+        if (document.getElementById(key)) {
+            document.getElementById(key).innerText = t[key];
         }
-
-        document.getElementById('noCheckinsMessage').style.display = 'none';
-
-        checkins.reverse().forEach(checkin => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <h3>📅 ${checkin.date}</h3>
-                <p><strong>${translations[currentLanguage].mood}</strong> ${checkin.mood}</p>
-                <p><strong>${translations[currentLanguage].parts}</strong> ${checkin.parts.join(', ') || translations[currentLanguage].none}</p>
-                <p><strong>${translations[currentLanguage].events}</strong> ${checkin.events || '-'}</p>
-                <p><strong>${translations[currentLanguage].thoughts}</strong> ${checkin.thoughts || '-'}</p>
-            `;
-            list.appendChild(li);
-        });
     }
-
-    function filterCheckIns() {
-        const selectedDate = document.getElementById('checkinDate').value;
-        if (!selectedDate) {
-            displayCheckIns(allCheckIns);
-            return;
-        }
-
-        const filtered = allCheckIns.filter(checkin => checkin.date === selectedDate);
-        displayCheckIns(filtered);
-        document.getElementById('noCheckinsMessage').style.display = filtered.length ? 'none' : 'block';
-    }
-
-    const translations = {
-        en: {
-            title: "Check-In History - Cabinet of Selves",
-            header: "📖 Check-In History",
-            description: "See all your past check-ins.",
-            filter: "📅 Filter by Date:",
-            back: "⬅️ Back to Cabinet",
-            noCheckins: "No check-ins found for this date.",
-            mood: "Mood:",
-            parts: "Active Parts:",
-            events: "Significant Events:",
-            thoughts: "Additional Thoughts:",
-            none: "None"
-        },
-        tr: {
-            title: "Günlük Kontrol Geçmişi - İç Benlikler Dolabı",
-            header: "📖 Kontrol Geçmişi",
-            description: "Tüm geçmiş kontrollerinizi görün.",
-            filter: "📅 Tarihe Göre Filtrele:",
-            back: "⬅️ Kabine Geri Dön",
-            noCheckins: "Bu tarihte herhangi bir kontrol bulunamadı.",
-            mood: "Ruh Hali:",
-            parts: "Aktif Parçalar:",
-            events: "Önemli Olaylar:",
-            thoughts: "Ek Düşünceler:",
-            none: "Yok"
-        },
-        de: {
-            title: "Check-In Verlauf - Schrank der Selbst",
-            header: "📖 Check-In Verlauf",
-            description: "Sehen Sie sich alle Ihre vergangenen Check-Ins an.",
-            filter: "📅 Nach Datum filtern:",
-            back: "⬅️ Zurück zum Kabinett",
-            noCheckins: "Keine Check-Ins für dieses Datum gefunden.",
-            mood: "Stimmung:",
-            parts: "Aktive Teile:",
-            events: "Wichtige Ereignisse:",
-            thoughts: "Zusätzliche Gedanken:",
-            none: "Keine"
-        }
-    };
-
-    let currentLanguage = 'en';
-
-    function switchLanguage(lang) {
-        currentLanguage = lang;
-        localStorage.setItem('language', lang);
-
-        const t = translations[lang];
-
-        document.title = t.title;
-        document.getElementById('historyHeader').innerText = t.header;
-        document.getElementById('historyDescription').innerText = t.description;
-        document.getElementById('filterLabel').innerText = t.filter;
-        document.getElementById('backToCabinetButton').innerText = t.back;
-        document.getElementById('noCheckinsMessage').innerText = t.noCheckins;
-
-        displayCheckIns(allCheckIns);  // Re-render with translated labels
-    }
+    document.title = t.checkinTitle;
+}
 </script>
 
 </body>
