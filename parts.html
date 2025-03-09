@@ -1,78 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Parts - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <style>
+        /* Video Background */
+        #backgroundVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+
+        /* Center Animation */
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* Adjust spacing */
+        }
+    </style>
 </head>
 <body>
+
+
+<!-- Video Background -->
+<video id="backgroundVideo" autoplay loop muted>
+    <source src="images/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
 
 <header>
     <h1>Your Parts</h1>
     <p>Your inner parts collection. Click to explore each part.</p>
 </header>
 
+
 <main>
     <div class="table-container" id="partsTable">
         <!-- The parts table content will be injected by JavaScript -->
     </div>
 
+
     <a href="index.html" class="back-to-cabinet">Back to Cabinet</a>
 
-    <dotlottie-wc src="https://lottie.host/dd3bc15b-e3cc-41ee-86b8-47e37863f8d6/s8l3FcuPpS.lottie" autoplay loop></dotlottie-wc>
+
+    <!-- Centered Animation -->
+    <div class="animation-container">
+        <dotlottie-player
+            src="https://lottie.host/40dbe5a3-99a5-45ee-b573-07d9d9a21170/f8adz5EOav.lottie"
+            background="transparent"
+            speed="1"
+            style="width: 300px; height: 300px"
+            loop
+            autoplay>
+        </dotlottie-player>
+    </div>
 </main>
 
+
 <!-- Add Part Modal -->
-<div id="partModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+<div id="partModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:10px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
     <h3>Add New Part</h3>
     <input type="text" id="partNameInput" placeholder="Part Name">
     <button onclick="addPart()">Add</button>
     <button onclick="hideAddPartModal()">Cancel</button>
 </div>
 
+
 <script>
     function showAddPartModal() {
         document.getElementById('partModal').style.display = 'block';
     }
 
+
     function hideAddPartModal() {
         document.getElementById('partModal').style.display = 'none';
     }
+
 
     function addPart() {
         const name = document.getElementById('partNameInput').value.trim();
         if (!name) return alert("Please enter a part name.");
 
+
         const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
         parts.push({ name, img: 'images/girl.jpg' });
         localStorage.setItem('innerParts', JSON.stringify(parts));
+
 
         hideAddPartModal();
         loadParts();
     }
 
+
     function removePart(index) {
         const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
         const removedPart = parts[index];
         parts.splice(index, 1);
-        
+       
         // Remove associated part data (including uploaded image)
         localStorage.removeItem(`part-${removedPart.name}`);
+
 
         localStorage.setItem('innerParts', JSON.stringify(parts));
         loadParts();
     }
 
+
     function loadParts() {
         const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
         const table = document.getElementById('partsTable');
+
 
         table.innerHTML = `<div class="add-part-container">
             <button class="add-part-button" onclick="showAddPartModal()">+</button>
             <p class="add-part-text">Add New Part</p>
         </div>`;
+
 
         const radius = 160;
         const centerX = 300;
@@ -80,13 +134,16 @@
         const totalParts = parts.length;
         const angleStep = (2 * Math.PI) / Math.max(totalParts, 1);
 
+
         parts.forEach((part, index) => {
             const angle = index * angleStep;
             const x = centerX + radius * Math.cos(angle) - 50;
             const y = centerY + radius * Math.sin(angle) - 50;
 
+
             const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
             const partImage = savedPart.image || part.img || 'images/girl.jpg';
+
 
             const partDiv = document.createElement('div');
             partDiv.className = 'part-seat';
@@ -94,21 +151,26 @@
             partDiv.style.left = `${x}px`;
             partDiv.style.top = `${y}px`;
 
+
             const img = document.createElement('img');
             img.src = partImage;
             img.className = 'part-seat-image';
 
+
             const name = document.createElement('span');
             name.innerText = part.name;
 
+
             const editButton = document.createElement('button');
-            editButton.innerText = 'View / Edit';
+            editButton.innerText = 'Edit';
             editButton.onclick = () => window.location.href = `part-details.html?part=${encodeURIComponent(part.name)}`;
 
+
             const removeButton = document.createElement('button');
-            removeButton.innerText = 'Remove';
+            removeButton.innerText = 'X';
             removeButton.className = 'remove';
             removeButton.onclick = () => removePart(index);
+
 
             partDiv.appendChild(img);
             partDiv.appendChild(name);
@@ -118,8 +180,13 @@
         });
     }
 
+
     document.addEventListener('DOMContentLoaded', loadParts);
 </script>
 
+
 </body>
 </html>
+
+
+
