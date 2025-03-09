@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <title id="pageTitle">Meet Your Part</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="part-details.js"></script>
+    <style>
+        /* Increase input and textarea size */
+        input[type="text"], textarea {
+            width: 90%;
+            padding: 10px;
+            font-size: 1.2em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            height: 100px; /* Increase height for better visibility */
+            resize: vertical;
+        }
+
+        /* Notification Styling */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: none;
+            font-size: 1.2em;
+            z-index: 1000;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
+    <video id="backgroundVideo" autoplay loop muted>
+        <source src="images/nature.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
 <header class="main-header">
     <h1 id="partTitle">Meet Your Part</h1>
@@ -67,6 +102,9 @@
     </div>
 </main>
 
+<!-- Notification -->
+<div id="notification" class="notification"></div>
+
 <!-- Script Section -->
 <script>
     const params = new URLSearchParams(window.location.search);
@@ -97,7 +135,7 @@
                 part.image = reader.result;
 
                 savePart(true);
-                showNotification('✅ Image saved successfully!', 'success');
+                showNotification(translations[currentLanguage].imageSaved);
             };
             reader.readAsDataURL(file);
         }
@@ -111,13 +149,12 @@
         part.role = document.getElementById('partRole').value;
 
         savePart();
-        showNotification('✅ Part details saved successfully!', 'success');
+        showNotification(translations[currentLanguage].partSaved);
     }
 
     function savePart(isImageOnly = false) {
         localStorage.setItem(`part-${partName}`, JSON.stringify(part));
 
-        // Ensure the image updates in parts.html
         const index = allParts.findIndex(p => p.name === partName);
         if (index !== -1) {
             allParts[index].img = part.image;
@@ -128,76 +165,37 @@
         localStorage.setItem('innerParts', JSON.stringify(allParts));
     }
 
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
         notification.innerText = message;
-        notification.style.position = 'fixed';
-        notification.style.bottom = '20px';
-        notification.style.right = '20px';
-        notification.style.padding = '10px 20px';
-        notification.style.borderRadius = '8px';
-        notification.style.backgroundColor = type === 'success' ? '#4caf50' : '#f44336';
-        notification.style.color = 'white';
-        notification.style.zIndex = '1000';
-        document.body.appendChild(notification);
+        notification.style.display = 'block';
 
-        setTimeout(() => notification.remove(), 3000);
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
     }
 
     const translations = {
         en: {
-            pageTitle: `Meet ${partName}`,
-            pageDescription: "This is a gentle place to explore and understand this part of you.",
-            labelKnownSince: "🌱 How long have you known this part?",
-            labelWants: "💬 What does this part want for you?",
-            labelWorksWith: "🌟 Which parts does this part work well with?",
-            labelClashesWith: "⚔️ Which parts does this part clash with?",
-            labelRole: "🎭 What role does this part play?",
-            saveButton: "💾 Save Part Details",
-            backCabinetButton: "⬅️ Back to Cabinet",
-            backPartsButton: "📂 Back to All Parts",
+            imageSaved: "✅ Image saved successfully!",
+            partSaved: "✅ Part details saved successfully!"
         },
         tr: {
-            pageTitle: `${partName} ile Tanış`,
-            pageDescription: "Bu, bu parçanızı keşfetmek ve anlamak için nazik bir alandır.",
-            labelKnownSince: "🌱 Bu parçayı ne zamandır tanıyorsunuz?",
-            labelWants: "💬 Bu parça sizden ne istiyor?",
-            labelWorksWith: "🌟 Bu parça hangi parçalarla iyi çalışıyor?",
-            labelClashesWith: "⚔️ Bu parça hangi parçalarla çatışıyor?",
-            labelRole: "🎭 Bu parça hangi rolü oynuyor?",
-            saveButton: "💾 Parça Detaylarını Kaydet",
-            backCabinetButton: "⬅️ Kabine Geri Dön",
-            backPartsButton: "📂 Tüm Parçalar'a Geri Dön",
+            imageSaved: "✅ Resim başarıyla kaydedildi!",
+            partSaved: "✅ Parça detayları başarıyla kaydedildi!"
         },
         de: {
-            pageTitle: `Lerne ${partName} kennen`,
-            pageDescription: "Dies ist ein sanfter Ort, um diesen Teil von dir zu erkunden und zu verstehen.",
-            labelKnownSince: "🌱 Wie lange kennst du diesen Teil?",
-            labelWants: "💬 Was will dieser Teil von dir?",
-            labelWorksWith: "🌟 Mit welchen Teilen arbeitet dieser Teil gut zusammen?",
-            labelClashesWith: "⚔️ Mit welchen Teilen gerät dieser Teil in Konflikt?",
-            labelRole: "🎭 Welche Rolle spielt dieser Teil?",
-            saveButton: "💾 Teil speichern",
-            backCabinetButton: "⬅️ Zurück zum Kabinett",
-            backPartsButton: "📂 Zurück zu allen Teilen",
+            imageSaved: "✅ Bild erfolgreich gespeichert!",
+            partSaved: "✅ Teilinformationen erfolgreich gespeichert!"
         }
     };
 
-    function switchLanguage(lang) {
-        localStorage.setItem('language', lang);
-        const t = translations[lang];
+    let currentLanguage = 'en';
 
-        document.title = t.pageTitle;
-        document.getElementById('partTitle').innerText = t.pageTitle;
-        document.getElementById('pageDescription').innerText = t.pageDescription;
-        document.getElementById('labelKnownSince').innerText = t.labelKnownSince;
-        document.getElementById('labelWants').innerText = t.labelWants;
-        document.getElementById('labelWorksWith').innerText = t.labelWorksWith;
-        document.getElementById('labelClashesWith').innerText = t.labelClashesWith;
-        document.getElementById('labelRole').innerText = t.labelRole;
-        document.getElementById('saveButton').innerText = t.saveButton;
-        document.getElementById('backCabinetButton').innerText = t.backCabinetButton;
-        document.getElementById('backPartsButton').innerText = t.backPartsButton;
+    function switchLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+        document.title = `Meet ${partName}`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
