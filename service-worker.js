@@ -1,47 +1,56 @@
-const CACHE_NAME = 'cabinet-of-selves-v1';
-
-// Files to cache (this should match your actual file list)
-const urlsToCache = [
-    '/',
-    '/index.html',
-    '/styles.css',
-    '/app.js',
-    '/manifest.json',
-    '/images/main.png',
-    '/images/girl.jpg'
+const CACHE_NAME = "cabinet-of-selves-cache-v1";
+const FILES_TO_CACHE = [
+    "/",
+    "/index.html",
+    "/daily-checkin.html",
+    "/checkin-history.html",
+    "/journal.html",
+    "/journal-prompts.html",
+    "/journal-history.html",
+   "/journal.html",
+     "/resources.html",
+    "/parts.html",
+    "/part-details.html",
+    "/styles.css",
+    "/app.js",
+    "/manifest.json",
+    "/service-worker.js",
+    "/images/background.mp4",
+    "/images/nature.mp4",
+    "/images/girl.jpg"
 ];
 
-// Install event - caches files so app works offline
-self.addEventListener('install', (event) => {
+// Install Service Worker and Cache Files
+self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => cache.addAll(urlsToCache))
-            .then(self.skipWaiting()) // Activate immediately after install
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(FILES_TO_CACHE);
+        })
     );
+    self.skipWaiting();
 });
 
-// Activate event - cleans up old caches when a new service worker is installed
-self.addEventListener('activate', (event) => {
-    const cacheWhitelist = [CACHE_NAME];
+// Activate Service Worker and Remove Old Caches
+self.addEventListener("activate", (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
+        caches.keys().then((keyList) => {
             return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (!cacheWhitelist.includes(cacheName)) {
-                        return caches.delete(cacheName);
+                keyList.map((key) => {
+                    if (key !== CACHE_NAME) {
+                        return caches.delete(key);
                     }
                 })
             );
-        }).then(() => self.clients.claim()) // Start controlling open pages
+        })
     );
+    self.clients.claim();
 });
 
-// Fetch event - serves files from cache if available, falls back to network
-self.addEventListener('fetch', (event) => {
+// Fetch Files from Cache When Offline
+self.addEventListener("fetch", (event) => {
     event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                return response || fetch(event.request);
-            })
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
+        })
     );
 });
