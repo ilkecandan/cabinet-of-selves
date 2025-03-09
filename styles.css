@@ -1,7 +1,7 @@
 /* General Body and Page Styles */
 body {
     font-family: 'Poppins', Arial, sans-serif; /* Elegant Font Family */
-    background: linear-gradient(to bottom, #e0f7fa, #a2d2ff);
+    background: linear-gradient(to bottom, #a4c9ce, #a2d2ff);
     margin: 0;
     padding: 0;
     color: #333;
@@ -10,6 +10,7 @@ body {
     overflow-x: hidden;
     position: relative;
 }
+
 
 /* Video Background */
 #backgroundVideo {
@@ -22,11 +23,13 @@ body {
     z-index: -1;
 }
 
+
 /* Header Styles */
 header {
     margin: 40px 0 25px;
     text-align: center;
 }
+
 
 header h1 {
     font-size: 3rem;
@@ -35,12 +38,14 @@ header h1 {
     font-weight: 700;
 }
 
+
 header p {
     font-size: 1.2rem;
     color: #666;
     margin: 0;
     font-weight: 400;
 }
+
 
 /* Language Selector */
 .language-selector {
@@ -50,8 +55,9 @@ header p {
     z-index: 100;
 }
 
+
 .language-selector select {
-    padding: 10px 15px;
+    padding: 1px 1px;
     background-color: #74c69d;
     color: white;
     border: none;
@@ -62,24 +68,47 @@ header p {
     transition: background-color 0.3s ease;
 }
 
+
 .language-selector select:hover {
     background-color: #52b788;
 }
 
+
+/* Updated Language Selector for Daily Check-In Page */
+.daily-checkin .language-selector {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+
+.daily-checkin .language-selector select {
+    padding: 4px 10px; /* Smaller padding */
+    font-size: 0.8rem; /* Reduced font size */
+    border-radius: 5px; /* Slightly rounded corners */
+    max-width: 50px; /* Restrict width */
+}
+
+
 /* Main Container */
 main {
-    background: white;
-    width: 90%;
-    max-width: 880px;
+    background: #CAEAFC;
+    width: 80%;
+    max-width: 600px;
     margin: 20px auto;
-    padding: 30px;
+    padding: 0px;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
+   
+    /* Adding the frame */
+    border: 10px solid #004F9B; /* Adjust thickness if needed */
 }
+
 
 /* General Buttons */
 button {
+    border: 10px solid #004F9B;
     padding: 10px 16px;
     background-color: #74c69d;
     color: white;
@@ -90,33 +119,40 @@ button {
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin: 6px 0;
     font-size: 1rem;
-    min-width: 120px;
-    max-width: 220px;
+    min-width: 50px;
+    max-width: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
 }
+
 
 /* Hover Effect */
 button:hover {
     background-color: #52b788;
-    transform: translateY(-3px); /* Subtle hover effect */
+    transform: translateY(-4px); /* Subtle hover effect */
 }
+
 
 /* Specific Button Styles */
 #addNewPartButton {
     background-color: #52b788;
 }
 
+
 #addNewPartButton:hover {
     background-color: #40916c; /* Darker green on hover */
+    border: 10px solid #004F9B;
 }
+
 
 #seeAllPartsButton {
     background-color: #0077b6;
 }
 
+
 #seeAllPartsButton:hover {
     background-color: #005f8b; /* Darker blue on hover */
 }
+
 
 /* Part Image Styling */
 .image-container {
@@ -126,6 +162,7 @@ button:hover {
     margin-bottom: 15px;
 }
 
+
 .part-image {
     width: 120px;
     height: 120px;
@@ -134,10 +171,12 @@ button:hover {
     border: 3px solid #74c69d;
 }
 
+
 /* Ensures the file input is displayed properly */
 #partImageInput {
     margin-top: 10px;
 }
+
 
 /* Table Styling */
 .table-container {
@@ -155,24 +194,27 @@ button:hover {
     overflow: hidden; /* Fix overflow issue */
 }
 
+
 /* Parts in Table */
 .part-seat {
     position: absolute;
-    width: 80px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.3s ease;
 }
+
 
 /* Image inside Table (Smaller to Fit More) */
 .part-seat img {
     width: 55px;
     height: 55px;
     object-fit: cover;
-    border-radius: 10px;
+    border-radius: 5px;
     border: 2px solid #74c69d;
 }
+
 
 /* Part Name */
 .part-seat span {
@@ -183,31 +225,36 @@ button:hover {
     margin-top: 3px;
 }
 
+
 /* Table Buttons (Smaller & Icon for Remove) */
 .part-seat button {
     background-color: #74c69d;
     font-size: 0.7rem;
-    padding: 5px;
-    width: 50px;
-    border-radius: 6px;
+    padding: 0px;
+    width: 0px;
+    border-radius: 2px;
     box-shadow: none; /* Keep these buttons flat */
 }
-https://ilkecandan.github.io/cabinet-of-selves/
+
+
 /* Remove Button (X Instead of Text) */
 .part-seat button.remove {
     background-color: #ff6b6b;
     font-size: 0.7rem;
-    padding: 4px 6px;
+    padding: 0px 0px;
 }
+
 
 .part-seat button.remove::after {
     font-size: 0.9rem;
     font-weight: bold;
 }
 
+
 .part-seat button.remove:hover {
     background-color: #e63946;
 }
+
 
 /* "Add Part" Floating Button */
 .add-part-container {
@@ -215,6 +262,7 @@ https://ilkecandan.github.io/cabinet-of-selves/
     text-align: center;
     top: 20px;
 }
+
 
 .add-part-button {
     background-color: #52b788;
@@ -232,9 +280,11 @@ https://ilkecandan.github.io/cabinet-of-selves/
     margin: 0 auto;
 }
 
+
 .add-part-button:hover {
     background-color: #40916c;
 }
+
 
 .add-part-text {
     font-size: 0.8rem;
@@ -242,6 +292,7 @@ https://ilkecandan.github.io/cabinet-of-selves/
     color: #0077b6;
     margin-top: 5px;
 }
+
 
 /* Back to Cabinet Button */
 .back-to-cabinet {
@@ -251,6 +302,7 @@ https://ilkecandan.github.io/cabinet-of-selves/
     color: white;
     border: none;
     border-radius: 12px;
+    border: 10px solid #004F9B;
     cursor: pointer;
     text-decoration: none;
     font-weight: bold;
@@ -259,9 +311,11 @@ https://ilkecandan.github.io/cabinet-of-selves/
     min-width: 180px;
 }
 
+
 .back-to-cabinet:hover {
     background-color: #52b788;
 }
+
 
 /* Install Banner for iPhone */
 .install-banner {
@@ -277,6 +331,7 @@ https://ilkecandan.github.io/cabinet-of-selves/
     z-index: 1000;
 }
 
+
 .install-banner button {
     background-color: #52b788;
     color: white;
@@ -288,43 +343,39 @@ https://ilkecandan.github.io/cabinet-of-selves/
     font-weight: 600;
 }
 
+
+/* Video Background for Daily Check-In */
+.daily-checkin #backgroundVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+
 /* Fade-In Animation */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-/* Notification */
-.notification {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 12px 18px;
-    border-radius: 8px;
-    font-weight: 600;
-    z-index: 1000;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-    color: white;
-    font-family: 'Poppins', Arial, sans-serif;
-}
-
-.notification.success {
-    background-color: #4caf50;
-}
-
-.notification.error {
-    background-color: #f44336;
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .table-container {
-        width: 90%;
+        width: 95%;
         height: 350px;
     }
 
+
     .part-seat img {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
     }
 }
+
+
+
