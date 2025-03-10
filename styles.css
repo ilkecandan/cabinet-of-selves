@@ -11,7 +11,6 @@ body {
     position: relative;
 }
 
-
 /* Video Background */
 #backgroundVideo {
     position: fixed;
@@ -23,13 +22,11 @@ body {
     z-index: -1;
 }
 
-
 /* Header Styles */
 header {
     margin: 40px 0 25px;
     text-align: center;
 }
-
 
 header h1 {
     font-size: 3rem;
@@ -38,7 +35,6 @@ header h1 {
     font-weight: 700;
 }
 
-
 header p {
     font-size: 1.2rem;
     color: #666;
@@ -46,69 +42,21 @@ header p {
     font-weight: 400;
 }
 
-
-/* Language Selector */
-.language-selector {
-    margin-top: 20px;
-    text-align: center;
-    position: relative;
-    z-index: 100;
-}
-
-
-.language-selector select {
-    padding: 1px 1px;
-    background-color: #74c69d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-
-.language-selector select:hover {
-    background-color: #52b788;
-}
-
-
-/* Updated Language Selector for Daily Check-In Page */
-.daily-checkin .language-selector {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-
-.daily-checkin .language-selector select {
-    padding: 4px 10px; /* Smaller padding */
-    font-size: 0.8rem; /* Reduced font size */
-    border-radius: 5px; /* Slightly rounded corners */
-    max-width: 50px; /* Restrict width */
-}
-
-
 /* Main Container */
 main {
     background: #CAEAFC;
     width: 80%;
     max-width: 600px;
     margin: 20px auto;
-    padding: 0px;
+    padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     text-align: center;
-   
-    /* Adding the frame */
-    border: 10px solid #004F9B; /* Adjust thickness if needed */
+    border: 10px solid #004F9B; /* Frame around content */
 }
-
 
 /* General Buttons */
 button {
-    border: 10px solid #004F9B;
     padding: 10px 16px;
     background-color: #74c69d;
     color: white;
@@ -119,11 +67,10 @@ button {
     transition: background-color 0.3s ease, transform 0.2s ease;
     margin: 6px 0;
     font-size: 1rem;
-    min-width: 50px;
+    min-width: 140px;
     max-width: 400px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
 }
-
 
 /* Hover Effect */
 button:hover {
@@ -131,170 +78,48 @@ button:hover {
     transform: translateY(-4px); /* Subtle hover effect */
 }
 
-
 /* Specific Button Styles */
 #addNewPartButton {
     background-color: #52b788;
 }
 
-
 #addNewPartButton:hover {
     background-color: #40916c; /* Darker green on hover */
-    border: 10px solid #004F9B;
 }
-
 
 #seeAllPartsButton {
     background-color: #0077b6;
 }
 
-
 #seeAllPartsButton:hover {
     background-color: #005f8b; /* Darker blue on hover */
 }
 
-
-/* Part Image Styling */
-.image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-
-.part-image {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 3px solid #74c69d;
-}
-
-
-/* Ensures the file input is displayed properly */
-#partImageInput {
-    margin-top: 10px;
-}
-
-
-/* Table Styling */
-.table-container {
+/* Language Selector */
+.language-selector {
+    margin-top: 20px;
+    text-align: center;
     position: relative;
-    width: 100%;
-    max-width: 550px;
-    height: 450px;
-    border: 12px solid #74c69d;
-    border-radius: 50%;
-    margin: 30px auto;
-    background-color: #fefefe;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Fix overflow issue */
+    z-index: 100;
 }
 
-
-/* Parts in Table */
-.part-seat {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-
-/* Image inside Table (Smaller to Fit More) */
-.part-seat img {
-    width: 55px;
-    height: 55px;
-    object-fit: cover;
-    border-radius: 5px;
-    border: 2px solid #74c69d;
-}
-
-
-/* Part Name */
-.part-seat span {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: bold;
-    color: #0077b6;
-    margin-top: 3px;
-}
-
-
-/* Table Buttons (Smaller & Icon for Remove) */
-.part-seat button {
+.language-selector select {
+    padding: 6px;
     background-color: #74c69d;
-    font-size: 0.7rem;
-    padding: 0px;
-    width: 0px;
-    border-radius: 2px;
-    box-shadow: none; /* Keep these buttons flat */
-}
-
-
-/* Remove Button (X Instead of Text) */
-.part-seat button.remove {
-    background-color: #ff6b6b;
-    font-size: 0.7rem;
-    padding: 0px 0px;
-}
-
-
-.part-seat button.remove::after {
-    font-size: 0.9rem;
-    font-weight: bold;
-}
-
-
-.part-seat button.remove:hover {
-    background-color: #e63946;
-}
-
-
-/* "Add Part" Floating Button */
-.add-part-container {
-    position: absolute;
-    text-align: center;
-    top: 20px;
-}
-
-
-.add-part-button {
-    background-color: #52b788;
     color: white;
     border: none;
-    padding: 8px;
-    border-radius: 50%;
+    border-radius: 8px;
+    font-weight: bold;
     cursor: pointer;
-    font-weight: bold;
     font-size: 1rem;
-    width: 40px;
-    height: 40px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    display: block;
-    margin: 0 auto;
+    transition: background-color 0.3s ease;
 }
 
-
-.add-part-button:hover {
-    background-color: #40916c;
+.language-selector select:hover {
+    background-color: #52b788;
 }
 
-
-.add-part-text {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: #0077b6;
-    margin-top: 5px;
-}
-
-
-/* Back to Cabinet Button */
+/* "Back to Cabinet" Button */
 .back-to-cabinet {
     margin-top: 20px;
     padding: 10px 16px;
@@ -302,7 +127,6 @@ button:hover {
     color: white;
     border: none;
     border-radius: 12px;
-    border: 10px solid #004F9B;
     cursor: pointer;
     text-decoration: none;
     font-weight: bold;
@@ -311,57 +135,15 @@ button:hover {
     min-width: 180px;
 }
 
-
 .back-to-cabinet:hover {
     background-color: #52b788;
 }
-
-
-/* Install Banner for iPhone */
-.install-banner {
-    display: none;
-    background-color: #74c69d;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-}
-
-
-.install-banner button {
-    background-color: #52b788;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-left: 15px;
-    font-weight: 600;
-}
-
-
-/* Video Background for Daily Check-In */
-.daily-checkin #backgroundVideo {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-
 
 /* Fade-In Animation */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -370,12 +152,8 @@ button:hover {
         height: 350px;
     }
 
-
     .part-seat img {
         width: 40px;
         height: 40px;
     }
 }
-
-
-
