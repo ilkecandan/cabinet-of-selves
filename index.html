@@ -7,6 +7,7 @@
     <title id="title">Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="app.js"></script>
+
     <style>
         /* Full-Screen Access Code Modal */
         .modal-overlay {
@@ -73,10 +74,70 @@
             background: #388e3c;
         }
 
-        /* Hide content until access is granted */
-        #pageContent {
-            display: none;
+        /* Custom Modal Background and Styling for New Part */
+        .custom-modal-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
         }
+
+        .custom-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            width: 80%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+        }
+
+        .custom-modal input {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1.1rem;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .custom-modal button {
+            background: #4caf50;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .custom-modal button:hover {
+            background: #388e3c;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .custom-modal {
+                width: 90%;
+            }
+            .custom-modal input, .custom-modal button {
+                font-size: 1.1rem;
+            }
+        }
+
     </style>
 </head>
 
@@ -92,19 +153,24 @@
         </div>
     </div>
 
+    <!-- Custom Modal for Adding New Part -->
+    <div class="custom-modal-overlay" id="customModalOverlay"></div>
+    <div class="custom-modal" id="customModal">
+        <h2 id="enterPartNameTitle">Enter a name for the new part:</h2>
+        <input type="text" id="newPartNameInput" placeholder="Enter part name">
+        <button onclick="addNewPart()" id="submitNewPartButton">Add Part</button>
+    </div>
+
     <!-- Page Content (Hidden Until Access is Granted) -->
     <div id="pageContent">
-        <!-- Video Background -->
         <video id="backgroundVideo" autoplay loop muted>
             <source src="images/background.mp4" type="video/mp4">
-            Your browser does not support the video tag.
         </video>
 
         <!-- Header -->
         <header>
             <h1 id="titleText">Cabinet of Selves</h1>
             <p id="welcomeText">Welcome to your inner world. Which parts want to speak today?</p>
-
             <div class="language-selector">
                 <select id="language" onchange="switchLanguage(this.value)">
                     <option value="en">English</option>
@@ -114,36 +180,13 @@
             </div>
         </header>
 
-        <!-- Main Sections -->
         <main>
             <section>
                 <h2 id="partsHeading">Your Parts</h2>
                 <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
-                <button id="addNewPartButton" onclick="addNewPart()">Add New Part</button>
+                <button id="addNewPartButton" onclick="openAddPartModal()">Add New Part</button>
             </section>
-            <script>
-                function addNewPart() {
-                    const partName = prompt("Enter a name for the new part:");
-                    if (!partName) return;
-            
-                    // Get existing parts or create an empty array
-                    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-                    
-                    // Check if part name already exists
-                    if (parts.some(part => part.name === partName)) {
-                        alert("This part already exists!");
-                        return;
-                    }
-            
-                    // Add the new part
-                    const newPart = { name: partName, img: 'images/girl.jpg' };
-                    parts.push(newPart);
-                    localStorage.setItem('innerParts', JSON.stringify(parts));
-            
-                    // Redirect to part-details.html with the part name
-                    window.location.href = `part-details.html?part=${encodeURIComponent(partName)}`;
-                }
-            </script>
+
             <section>
                 <h2 id="checkInHeading">Daily Check-In</h2>
                 <button id="startCheckInButton" onclick="window.location.href='daily-checkin.html'">Start Daily Check-In</button>
@@ -159,12 +202,17 @@
 
             <section>
                 <h2 id="aboutUsHeading">About Us</h2>
-                <p>Part of <a href="https://inktempest.com/" target="_blank">Ink & Tempest</a>, a digital experiences store.</p>
-                <p>Created by <a href="https://www.linkedin.com/in/ilkecandan" target="_blank">İlke Candan</a>.</p>
+                <p id="aboutUsText">
+                    Part of <a href="https://inktempest.com/" target="_blank">Ink & Tempest</a>, a digital experiences store.
+                </p>
+                <p id="createdByText">
+                    Created by <a href="https://www.linkedin.com/in/ilkecandan" target="_blank">İlke Candan</a>.
+                </p>
             </section>
-            <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
-<div style="display: flex; justify-content: center; margin-top: 20px;">
-    <dotlottie-wc src="https://lottie.host/b9d98627-c30c-49d4-be32-2506bef9c090/xVnTacYHMb.lottie" autoplay loop></dotlottie-wc>
+            <div class="animation-container">
+                <dotlottie-wc src="https://lottie.host/b9d98627-c30c-49d4-be32-2506bef9c090/xVnTacYHMb.lottie" autoplay loop></dotlottie-wc>
+            </div>
+
         </main>
     </div>
 
@@ -191,6 +239,39 @@
             }
         });
 
+        function openAddPartModal() {
+            document.getElementById('customModalOverlay').style.display = 'block';
+            document.getElementById('customModal').style.display = 'block';
+        }
+
+        function closeAddPartModal() {
+            document.getElementById('customModalOverlay').style.display = 'none';
+            document.getElementById('customModal').style.display = 'none';
+        }
+
+        function addNewPart() {
+            const partName = document.getElementById("newPartNameInput").value;
+            if (!partName) return;
+
+            // Get existing parts or create an empty array
+            let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+
+            // Check if part name already exists
+            if (parts.some(part => part.name === partName)) {
+                alert("This part already exists!");
+                return;
+            }
+
+            // Add the new part
+            const newPart = { name: partName, img: 'images/girl.jpg' };
+            parts.push(newPart);
+            localStorage.setItem('innerParts', JSON.stringify(parts));
+
+            // Close modal and redirect
+            closeAddPartModal();
+            window.location.href = `part-details.html?part=${encodeURIComponent(partName)}`;
+        }
+
         const translations = {
             en: {
                 enterCodeTitle: "Enter Access Code",
@@ -200,7 +281,18 @@
                 checkInHeading: "Daily Check-In",
                 resourcesHeading: "Resources & Tips",
                 youAreEnoughText: "You are enough, even on the quiet days.",
-                aboutUsHeading: "About Us"
+                aboutUsHeading: "About Us",
+                aboutUsText: "Part of Ink & Tempest, a digital experiences store.",
+                createdByText: "Created by İlke Candan.",
+                seeAllPartsButton: "See All Parts",
+                addNewPartButton: "Add New Part",
+                startCheckInButton: "Start Daily Check-In",
+                viewCheckInHistoryButton: "View Check-In History",
+                resourcesButton: "Resources & Articles",
+                journalPromptsButton: "Journal for My Parts",
+                incorrectCode: "Incorrect Code. Try again.",
+                enterPartName: "Enter a name for the new part:",
+                partAlreadyExists: "This part already exists!"
             },
             tr: {
                 enterCodeTitle: "Erişim Kodunu Girin",
@@ -210,7 +302,18 @@
                 checkInHeading: "Günlük Kontrol",
                 resourcesHeading: "Kaynaklar ve İpuçları",
                 youAreEnoughText: "Sessiz günlerde bile yeterlisiniz.",
-                aboutUsHeading: "Hakkımızda"
+                aboutUsHeading: "Hakkımızda",
+                aboutUsText: "Ink & Tempest'in bir parçası, dijital deneyimler mağazası.",
+                createdByText: "Oluşturan: İlke Candan.",
+                seeAllPartsButton: "Tüm Parçaları Gör",
+                addNewPartButton: "Yeni Parça Ekle",
+                startCheckInButton: "Günlük Kontrol Başlat",
+                viewCheckInHistoryButton: "Kontrol Geçmişini Görüntüle",
+                resourcesButton: "Kaynaklar & Makaleler",
+                journalPromptsButton: "Parçalarım İçin Günlük",
+                incorrectCode: "Yanlış kod. Tekrar deneyin.",
+                enterPartName: "Yeni parça için bir isim girin:",
+                partAlreadyExists: "Bu parça zaten mevcut!"
             },
             de: {
                 enterCodeTitle: "Zugangscode eingeben",
@@ -220,7 +323,18 @@
                 checkInHeading: "Tägliche Check-In",
                 resourcesHeading: "Ressourcen & Tipps",
                 youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
-                aboutUsHeading: "Über uns"
+                aboutUsHeading: "Über uns",
+                aboutUsText: "Teil von Ink & Tempest, einem digitalen Erlebnisgeschäft.",
+                createdByText: "Erstellt von İlke Candan.",
+                seeAllPartsButton: "Alle Teile anzeigen",
+                addNewPartButton: "Neuen Teil hinzufügen",
+                startCheckInButton: "Tägliche Check-In starten",
+                viewCheckInHistoryButton: "Check-In Verlauf anzeigen",
+                resourcesButton: "Ressourcen & Artikel",
+                journalPromptsButton: "Tagebuch für Meine Teile",
+                incorrectCode: "Falscher Code. Versuchen Sie es erneut.",
+                enterPartName: "Geben Sie einen Namen für das neue Teil ein:",
+                partAlreadyExists: "Dieses Teil existiert bereits!"
             }
         };
 
