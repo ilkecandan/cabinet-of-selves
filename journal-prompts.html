@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+    <video id="backgroundVideo" autoplay loop muted>
+        <source src="images/background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 <head>
     <meta charset="UTF-8">
-    <title>Daily Journal Prompts - Cabinet of Selves</title>
+    <link rel="manifest" href="manifest.json">
+    <title id="title">📄 Daily Journal Prompts - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="journal.js"></script>
     <style>
@@ -17,7 +22,7 @@
             text-align: center;
             margin: 20px 0;
             font-size: 1.5rem;
-            color: #5a3e36;
+            color: #0077b6;
         }
 
         main {
@@ -41,7 +46,7 @@
         label {
             font-weight: bold;
             font-size: 1rem;
-            color: #5a3e36;
+            color: #0077b6;
         }
 
         textarea {
@@ -81,21 +86,12 @@
         }
 
         .primary-btn {
-            background-color: #8c5e58;
+            background-color: #0077b6;
             color: white;
         }
 
         .primary-btn:hover {
-            background-color: #73463e;
-        }
-
-        .secondary-btn {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .secondary-btn:hover {
-            background-color: #ccc;
+            background-color: #005f8b;
         }
 
         @media (max-width: 768px) {
@@ -130,47 +126,132 @@
             text-decoration: none;
             transition: background-color 0.3s ease;
         }
+
         .back-to-cabinet:hover {
             background-color: #73463e;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            text-align: center;
+            margin: 10px;
+        }
+
+        .language-selector select {
+            padding: 6px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+
+        /* Notification for Save */
+        #saveNotification {
+            display: none;
+            text-align: center;
+            font-size: 1.1rem;
+            color: green;
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
+<a href="index.html" class="back-to-cabinet">⬅️ <span id="backButton">Back to Cabinet</span></a>
 
 <header>
-    <h1>📄 Journal Prompts</h1>
-    <p>Inspiration for your self-reflection journey.</p>
+    <h1 id="journalTitle">📄 Journal Prompts</h1>
+    <p id="journalSubtitle">Inspiration for your self-reflection journey.</p>
 </header>
 
+<!-- Language Selector -->
+<div class="language-selector">
+    <label for="languageSelect" id="languageLabel">🌍 Select Language: </label>
+    <select id="languageSelect" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
+
 <main>
-    <label>📅 Date:
+    <label id="dateLabel">📅 Date:
         <input type="date" id="journalDate">
     </label>
 
     <div class="journal-section">
-        <label>🔸 What does my inner protector want me to know today?</label>
+        <label id="prompt1">🔸 What does my inner protector want me to know today?</label>
         <textarea id="journalPrompt1"></textarea>
     </div>
 
     <div class="journal-section">
-        <label>🔸 Which part of me needs attention right now?</label>
+        <label id="prompt2">🔸 Which part of me needs attention right now?</label>
         <textarea id="journalPrompt2"></textarea>
     </div>
 
     <div class="journal-section">
-        <label>🔸 What would comfort look like for my inner child?</label>
+        <label id="prompt3">🔸 What would comfort look like for my inner child?</label>
         <textarea id="journalPrompt3"></textarea>
     </div>
 
     <div class="button-row">
-        <button class="primary-btn" onclick="saveJournal()">💾 Save Journal</button>
-        <button class="primary-btn" onclick="viewJournalHistory()">📖 View Journal History</button>
+        <button class="primary-btn" onclick="saveJournal()">💾 <span id="saveButton">Save Journal</span></button>
+        <button class="primary-btn" onclick="viewJournalHistory()">📖 <span id="viewHistoryButton">View Journal History</span></button>
     </div>
+
+    <p id="saveNotification">✅ Your entry is saved - there you go! 🎉</p>
 </main>
 
-<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
+<a href="index.html" class="back-to-cabinet">⬅️ <span id="backButton2">Back to Cabinet</span></a>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'en';
+        document.getElementById('languageSelect').value = savedLang;
+        switchLanguage(savedLang);
+    });
+
+    function switchLanguage(lang) {
+        localStorage.setItem('language', lang);
+        const translations = {
+            en: {
+                title: "📄 Daily Journal Prompts - Cabinet of Selves",
+                journalTitle: "📄 Journal Prompts",
+                journalSubtitle: "Inspiration for your self-reflection journey.",
+                saveNotification: "✅ Your entry is saved - there you go! 🎉",
+                prompt1: "🔸 What does my inner protector want me to know today?",
+                prompt2: "🔸 Which part of me needs attention right now?",
+                prompt3: "🔸 What would comfort look like for my inner child?"
+            },
+            tr: {
+                title: "📄 Günlük Günlük Soruları - Kendi Parçalarınız Kabini",
+                journalTitle: "📄 Günlük Soruları",
+                journalSubtitle: "Kendinizi keşfetmek için ilham.",
+                saveNotification: "✅ Girişiniz kaydedildi - işte bu! 🎉",
+                prompt1: "🔸 İçsel koruyucum bugün bana ne söylemek istiyor?",
+                prompt2: "🔸 Şu anda hangi parçam ilgiye ihtiyaç duyuyor?",
+                prompt3: "🔸 İçimdeki çocuk için rahatlık nasıl görünürdü?"
+            },
+            de: {
+                title: "📄 Tägliche Tagebuchfragen - Schrank der Selbst",
+                journalTitle: "📄 Tagebuchfragen",
+                journalSubtitle: "Inspiration für deine Selbstreflexion.",
+                saveNotification: "✅ Dein Eintrag wurde gespeichert - da hast du es! 🎉",
+                prompt1: "🔸 Was möchte mein innerer Beschützer mir heute sagen?",
+                prompt2: "🔸 Welcher Teil von mir braucht gerade Aufmerksamkeit?",
+                prompt3: "🔸 Wie würde Trost für mein inneres Kind aussehen?"
+            }
+        };
+
+        const t = translations[lang];
+
+        document.title = t.title;
+        Object.keys(t).forEach(id => {
+            if (document.getElementById(id)) document.getElementById(id).innerText = t[id];
+        });
+    }
+</script>
 
 </body>
 </html>
