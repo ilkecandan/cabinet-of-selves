@@ -4,150 +4,240 @@
     <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cabinet of Selves</title>
+    <title id="title">Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="manifest" href="manifest.json">
     <script defer src="app.js"></script>
     <style>
-        /* Modal Styles */
+        /* Full-Screen Access Code Modal */
+        .modal-overlay {
+            display: block; /* Ensure it shows immediately */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+        }
+
         .modal {
-            display: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            z-index: 1001;
+        }
+
+        .modal-content {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            width: 300px;
+            padding: 40px;
+            border-radius: 15px;
             text-align: center;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .modal-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .modal-content button {
+            background: #4caf50;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .modal-content button:hover {
+            background: #388e3c;
+        }
+
+        /* Hide content until access is granted */
+        #pageContent {
+            display: none;
         }
     </style>
 </head>
+
 <body>
 
-<!-- Video Background -->
-<video id="backgroundVideo" autoplay loop muted>
-    <source src="images/background.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
-
-<!-- Welcome Animation with GIF -->
-<div id="welcomeAnimation" class="welcome-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-    <h2 id="welcomeTitle">Welcome to Your Cabinet of Selves</h2>
-    <p id="welcomeSubtitle">All parts of you are welcomed here.</p>
-    <img src="images/hi.gif" alt="Welcome GIF" style="max-width: 200px; height: auto; margin-top: 15px;">
-</div>
-
-<!-- Header -->
-<header>
-    <h1 id="title">Cabinet of Selves</h1>
-    <p id="welcomeText">Welcome to your inner world. Which parts want to speak today?</p>
-
-    <div class="language-selector">
-        <select id="language" onchange="switchLanguage(this.value)">
-            <option value="en">English</option>
-            <option value="tr">Türkçe</option>
-            <option value="de">Deutsch</option>
-        </select>
+    <!-- Full-Screen Access Code Modal -->
+    <div class="modal-overlay"></div>
+    <div class="modal" id="accessCodeModal">
+        <div class="modal-content">
+            <h2 id="enterCodeTitle">Enter Access Code</h2>
+            <input type="password" id="accessCodeInput" placeholder="Enter code">
+            <button onclick="validateAccessCode()" id="submitButton">Submit</button>
+        </div>
     </div>
-</header>
 
-<!-- Main Sections -->
-<main>
-    <section>
-        <h2 id="partsHeading">Your Parts</h2>
-        <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
-        <button id="addNewPartButton" onclick="showAddPartModal()">Add New Part</button>
-    </section>
+    <!-- Page Content (Hidden Until Access is Granted) -->
+    <div id="pageContent">
+        <!-- Video Background -->
+        <video id="backgroundVideo" autoplay loop muted>
+            <source src="images/background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
 
-    <section>
-        <h2 id="checkInHeading">Daily Check-In</h2>
-        <button id="startCheckInButton" onclick="window.location.href='daily-checkin.html'">Start Daily Check-In</button>
-        <button id="viewCheckInHistoryButton" onclick="window.location.href='checkin-history.html'">View Check-In History</button>
-    </section>
+        <!-- Header -->
+        <header>
+            <h1 id="titleText">Cabinet of Selves</h1>
+            <p id="welcomeText">Welcome to your inner world. Which parts want to speak today?</p>
 
-    <section>
-        <h2 id="resourcesHeading">Resources & Tips</h2>
-        <p id="youAreEnoughText">You are enough, even on the quiet days.</p>
-        <a href="resources.html">Resources & Articles</a> | <a href="journal-prompts.html">Journal Prompts</a>
-    </section>
+            <div class="language-selector">
+                <select id="language" onchange="switchLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
+        </header>
 
-    <section>
-        <h2>About Us</h2>
-        <p>Part of <a href="https://inktempest.com/" target="_blank">Ink & Tempest</a>, a digital experiences store.</p>
-        <p>Created by <a href="https://www.linkedin.com/in/ilkecandan" target="_blank">İlke Candan</a>.</p>
-    </section>
-    <!-- Lottie Animation -->
-<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
+        <!-- Main Sections -->
+        <main>
+            <section>
+                <h2 id="partsHeading">Your Parts</h2>
+                <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
+                <button id="addNewPartButton" onclick="addNewPart()">Add New Part</button>
+            </section>
+            <script>
+                function addNewPart() {
+                    const partName = prompt("Enter a name for the new part:");
+                    if (!partName) return;
+            
+                    // Get existing parts or create an empty array
+                    let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+                    
+                    // Check if part name already exists
+                    if (parts.some(part => part.name === partName)) {
+                        alert("This part already exists!");
+                        return;
+                    }
+            
+                    // Add the new part
+                    const newPart = { name: partName, img: 'images/girl.jpg' };
+                    parts.push(newPart);
+                    localStorage.setItem('innerParts', JSON.stringify(parts));
+            
+                    // Redirect to part-details.html with the part name
+                    window.location.href = `part-details.html?part=${encodeURIComponent(partName)}`;
+                }
+            </script>
+            <section>
+                <h2 id="checkInHeading">Daily Check-In</h2>
+                <button id="startCheckInButton" onclick="window.location.href='daily-checkin.html'">Start Daily Check-In</button>
+                <button id="viewCheckInHistoryButton" onclick="window.location.href='checkin-history.html'">View Check-In History</button>
+            </section>
+
+            <section>
+                <h2 id="resourcesHeading">Resources & Tips</h2>
+                <p id="youAreEnoughText">You are enough, even on the quiet days.</p>
+                <button id="resourcesButton" onclick="window.location.href='resources.html'">Resources & Articles</button>
+                <button id="journalPromptsButton" onclick="window.location.href='journal-prompts.html'">Journal for My Parts</button>
+            </section>
+
+            <section>
+                <h2 id="aboutUsHeading">About Us</h2>
+                <p>Part of <a href="https://inktempest.com/" target="_blank">Ink & Tempest</a>, a digital experiences store.</p>
+                <p>Created by <a href="https://www.linkedin.com/in/ilkecandan" target="_blank">İlke Candan</a>.</p>
+            </section>
+            <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
 <div style="display: flex; justify-content: center; margin-top: 20px;">
     <dotlottie-wc src="https://lottie.host/b9d98627-c30c-49d4-be32-2506bef9c090/xVnTacYHMb.lottie" autoplay loop></dotlottie-wc>
-</main>
+        </main>
+    </div>
 
-<!-- iPhone Install Banner -->
-<div id="installBanner" class="install-banner">
-    📲 Install Cabinet of Selves on your phone!
-    <button onclick="hideInstallBanner()">Got it!</button>
-</div>
+    <script>
+        function validateAccessCode() {
+            const enteredCode = document.getElementById("accessCodeInput").value;
+            const correctCode = "1234"; // Change this to your actual code
 
-<!-- Add New Part Modal -->
-<div id="partModal" class="modal">
-    <h3 id="addPartHeading">Add a New Part</h3>
-    <label for="partName" id="partNameLabel">Part Name:</label>
-    <input type="text" id="partName" placeholder="Enter part name">
-    <button id="confirmAddPart">Add</button>
-    <button id="cancelButton" onclick="hideAddPartModal()">Cancel</button>
-</div>
+            if (enteredCode === correctCode) {
+                localStorage.setItem("hasAccess", "true");
+                document.getElementById("accessCodeModal").style.display = "none";
+                document.querySelector(".modal-overlay").style.display = "none";
+                document.getElementById("pageContent").style.display = "block";
+            } else {
+                alert("Incorrect Code. Try again.");
+            }
+        }
 
+        document.addEventListener("DOMContentLoaded", () => {
+            if (localStorage.getItem("hasAccess") === "true") {
+                document.getElementById("pageContent").style.display = "block";
+                document.getElementById("accessCodeModal").style.display = "none";
+                document.querySelector(".modal-overlay").style.display = "none";
+            }
+        });
 
-</div>
+        const translations = {
+            en: {
+                enterCodeTitle: "Enter Access Code",
+                submitButton: "Submit",
+                welcomeText: "Welcome to your inner world. Which parts want to speak today?",
+                partsHeading: "Your Parts",
+                checkInHeading: "Daily Check-In",
+                resourcesHeading: "Resources & Tips",
+                youAreEnoughText: "You are enough, even on the quiet days.",
+                aboutUsHeading: "About Us"
+            },
+            tr: {
+                enterCodeTitle: "Erişim Kodunu Girin",
+                submitButton: "Gönder",
+                welcomeText: "İçsel dünyanıza hoş geldiniz. Hangi parçalar konuşmak istiyor?",
+                partsHeading: "Parçalarınız",
+                checkInHeading: "Günlük Kontrol",
+                resourcesHeading: "Kaynaklar ve İpuçları",
+                youAreEnoughText: "Sessiz günlerde bile yeterlisiniz.",
+                aboutUsHeading: "Hakkımızda"
+            },
+            de: {
+                enterCodeTitle: "Zugangscode eingeben",
+                submitButton: "Absenden",
+                welcomeText: "Willkommen in deiner inneren Welt. Welche Teile möchten heute sprechen?",
+                partsHeading: "Deine Teile",
+                checkInHeading: "Tägliche Check-In",
+                resourcesHeading: "Ressourcen & Tipps",
+                youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
+                aboutUsHeading: "Über uns"
+            }
+        };
 
-<script>
-// Translations (kept exactly the same)
-const translations = {
-    en: { /* English translations */ },
-    tr: { /* Turkish translations */ },
-    de: { /* German translations */ }
-};
+        function switchLanguage(lang) {
+            localStorage.setItem('language', lang);
+            const t = translations[lang];
+            Object.keys(t).forEach(id => {
+                if (document.getElementById(id)) document.getElementById(id).innerText = t[id];
+            });
+        }
 
-// Switch language function
-function switchLanguage(lang) {
-    localStorage.setItem('language', lang);
-    const t = translations[lang];
-    document.title = t.title;
-    document.getElementById('welcomeText').innerText = t.welcomeText;
-    document.getElementById('partsHeading').innerText = t.partsHeading;
-    document.getElementById('seeAllPartsButton').innerText = t.seeAllPartsButton;
-    document.getElementById('addNewPartButton').innerText = t.addNewPartButton;
-    document.getElementById('checkInHeading').innerText = t.checkInHeading;
-    document.getElementById('startCheckInButton').innerText = t.startCheckInButton;
-    document.getElementById('viewCheckInHistoryButton').innerText = t.viewCheckInHistoryButton;
-    document.getElementById('resourcesHeading').innerText = t.resourcesHeading;
-    document.getElementById('youAreEnoughText').innerText = t.youAreEnoughText;
-    document.getElementById('installBanner').innerText = t.installBannerText;
-    document.getElementById('addPartHeading').innerText = t.addPartHeading;
-    document.getElementById('partNameLabel').innerText = t.partNameLabel;
-    document.getElementById('cancelButton').innerText = t.cancelButton;
-}
-
-// Set language on page load
-document.addEventListener('DOMContentLoaded', () => {
-    const lang = localStorage.getItem('language') || 'en';
-    document.getElementById('language').value = lang;
-    switchLanguage(lang);
-});
-
-// Modal Handling
-function showAddPartModal() {
-    document.getElementById('partModal').style.display = 'block';
-}
-
-function hideAddPartModal() {
-    document.getElementById('partModal').style.display = 'none';
-}
-</script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = localStorage.getItem('language') || 'en';
+            document.getElementById('language').value = lang;
+            switchLanguage(lang);
+        });
+    </script>
 
 </body>
 </html>
