@@ -4,7 +4,7 @@
     <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Parts - Cabinet of Selves</title>
+    <title id="pageTitle">Your Parts - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
     <style>
@@ -19,18 +19,131 @@
             z-index: -1;
         }
 
+        /* Page Header */
+        header {
+            text-align: center;
+            color: white;
+            margin: 20px 0;
+        }
 
-        /* Center Animation */
-        .animation-container {
+        /* Language Selector */
+        .language-selector {
+            text-align: center;
+            margin: 10px;
+        }
+
+        .language-selector select {
+            padding: 6px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
+
+        /* Grid Layout for Parts */
+        .parts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 3 per row */
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Individual Part Card */
+        .part-card {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .part-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #0077b6;
+        }
+
+        .part-card span {
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        .part-card button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .edit-button {
+            background: #52b788;
+            color: white;
+        }
+
+        .remove-button {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .edit-button:hover {
+            background: #40916c;
+        }
+
+        .remove-button:hover {
+            background: #e63946;
+        }
+
+        /* Add New Part Button */
+        .add-part-container {
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin-top: 20px; /* Adjust spacing */
+            margin-top: 20px;
+        }
+
+        .add-part-button {
+            background-color: #0077b6;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .add-part-button:hover {
+            background-color: #005f8b;
+        }
+
+        /* Back to Cabinet */
+        .back-to-cabinet {
+            display: block;
+            text-align: center;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #8C5E58;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            max-width: 200px;
+            font-weight: bold;
+        }
+
+        .back-to-cabinet:hover {
+            background-color: #73463e;
         }
     </style>
 </head>
 <body>
-
 
 <!-- Video Background -->
 <video id="backgroundVideo" autoplay loop muted>
@@ -38,23 +151,33 @@
     Your browser does not support the video tag.
 </video>
 
-
 <header>
-    <h1>Your Parts</h1>
-    <p>Your inner parts collection. Click to explore each part.</p>
+    <h1 id="partsTitle">Your Parts</h1>
+    <p id="partsDescription">Your inner parts collection. Click to explore each part.</p>
 </header>
 
+<!-- Language Selector -->
+<div class="language-selector">
+    <label for="language">🌍</label>
+    <select id="language" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
 
 <main>
-    <div class="table-container" id="partsTable">
-        <!-- The parts table content will be injected by JavaScript -->
+    
+    <!-- Grid Container for Parts -->
+    <div class="parts-container" id="partsGrid"></div>
+
+    <!-- Add New Part -->
+    <div class="add-part-container">
+        <button class="add-part-button" id="addPartButton" onclick="addNewPart()">+ Add New Part</button>
     </div>
 
-
-    <a href="index.html" class="back-to-cabinet">Back to Cabinet</a>
-
-
-    <!-- Centered Animation -->
+    <!-- Back to Cabinet -->
+    <a href="index.html" class="back-to-cabinet" id="backToCabinet">Back to Cabinet</a>
     <div class="animation-container">
         <dotlottie-player
             src="https://lottie.host/40dbe5a3-99a5-45ee-b573-07d9d9a21170/f8adz5EOav.lottie"
@@ -67,126 +190,77 @@
     </div>
 </main>
 
-
-<!-- Add Part Modal -->
-<div id="partModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:10px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">
-    <h3>Add New Part</h3>
-    <input type="text" id="partNameInput" placeholder="Part Name">
-    <button onclick="addPart()">Add</button>
-    <button onclick="hideAddPartModal()">Cancel</button>
-</div>
-
-
 <script>
-    function showAddPartModal() {
-        document.getElementById('partModal').style.display = 'block';
+    const translations = {
+        en: {
+            partsTitle: "Your Parts",
+            partsDescription: "Your inner parts collection. Click to explore each part.",
+            addPartButton: "+ Add New Part",
+            backToCabinet: "Back to Cabinet"
+        },
+        tr: {
+            partsTitle: "Parçalarınız",
+            partsDescription: "İçsel parçalarınızın koleksiyonu. Keşfetmek için tıklayın.",
+            addPartButton: "+ Yeni Parça Ekle",
+            backToCabinet: "Kabine Geri Dön"
+        },
+        de: {
+            partsTitle: "Deine Teile",
+            partsDescription: "Deine inneren Teile. Klicke, um jeden Teil zu erkunden.",
+            addPartButton: "+ Neuen Teil hinzufügen",
+            backToCabinet: "Zurück zum Schrank"
+        }
+    };
+
+    function switchLanguage(lang) {
+        localStorage.setItem('language', lang);
+        document.getElementById('partsTitle').innerText = translations[lang].partsTitle;
+        document.getElementById('partsDescription').innerText = translations[lang].partsDescription;
+        document.getElementById('addPartButton').innerText = translations[lang].addPartButton;
+        document.getElementById('backToCabinet').innerText = translations[lang].backToCabinet;
     }
 
-
-    function hideAddPartModal() {
-        document.getElementById('partModal').style.display = 'none';
-    }
-
-
-    function addPart() {
-        const name = document.getElementById('partNameInput').value.trim();
-        if (!name) return alert("Please enter a part name.");
-
-
-        const parts = JSON.parse(localStorage.getItem('innerParts') || '[]');
-        parts.push({ name, img: 'images/girl.jpg' });
-        localStorage.setItem('innerParts', JSON.stringify(parts));
-
-
-        hideAddPartModal();
+    document.addEventListener('DOMContentLoaded', () => {
+        const lang = localStorage.getItem('language') || 'en';
+        document.getElementById('language').value = lang;
+        switchLanguage(lang);
         loadParts();
+    });
+
+    function addNewPart() {
+        const partName = prompt("Enter a name for the new part:");
+        if (partName) {
+            window.location.href = `part-details.html?part=${encodeURIComponent(partName)}`;
+        }
     }
-
-
-    function removePart(index) {
-        const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-        const removedPart = parts[index];
-        parts.splice(index, 1);
-       
-        // Remove associated part data (including uploaded image)
-        localStorage.removeItem(`part-${removedPart.name}`);
-
-
-        localStorage.setItem('innerParts', JSON.stringify(parts));
-        loadParts();
-    }
-
 
     function loadParts() {
         const parts = JSON.parse(localStorage.getItem('innerParts')) || [];
-        const table = document.getElementById('partsTable');
+        const grid = document.getElementById('partsGrid');
+        grid.innerHTML = '';
 
-
-        table.innerHTML = `<div class="add-part-container">
-            <button class="add-part-button" onclick="showAddPartModal()">+</button>
-            <p class="add-part-text">Add New Part</p>
-        </div>`;
-
-
-        const radius = 160;
-        const centerX = 300;
-        const centerY = 250;
-        const totalParts = parts.length;
-        const angleStep = (2 * Math.PI) / Math.max(totalParts, 1);
-
-
-        parts.forEach((part, index) => {
-            const angle = index * angleStep;
-            const x = centerX + radius * Math.cos(angle) - 50;
-            const y = centerY + radius * Math.sin(angle) - 50;
-
-
-            const savedPart = JSON.parse(localStorage.getItem(`part-${part.name}`)) || {};
-            const partImage = savedPart.image || part.img || 'images/girl.jpg';
-
-
+        parts.forEach(part => {
             const partDiv = document.createElement('div');
-            partDiv.className = 'part-seat';
-            partDiv.style.position = 'absolute';
-            partDiv.style.left = `${x}px`;
-            partDiv.style.top = `${y}px`;
+            partDiv.className = 'part-card';
 
+            partDiv.innerHTML = `
+                <img src="${part.img || 'images/girl.jpg'}" alt="${part.name}">
+                <span>${part.name}</span>
+                <button class="edit-button" onclick="window.location.href='part-details.html?part=${encodeURIComponent(part.name)}'">Edit</button>
+                <button class="remove-button" onclick="removePart('${part.name}')">Remove</button>
+            `;
 
-            const img = document.createElement('img');
-            img.src = partImage;
-            img.className = 'part-seat-image';
-
-
-            const name = document.createElement('span');
-            name.innerText = part.name;
-
-
-            const editButton = document.createElement('button');
-            editButton.innerText = 'Edit';
-            editButton.onclick = () => window.location.href = `part-details.html?part=${encodeURIComponent(part.name)}`;
-
-
-            const removeButton = document.createElement('button');
-            removeButton.innerText = 'X';
-            removeButton.className = 'remove';
-            removeButton.onclick = () => removePart(index);
-
-
-            partDiv.appendChild(img);
-            partDiv.appendChild(name);
-            partDiv.appendChild(editButton);
-            partDiv.appendChild(removeButton);
-            table.appendChild(partDiv);
+            grid.appendChild(partDiv);
         });
     }
 
-
-    document.addEventListener('DOMContentLoaded', loadParts);
+    function removePart(name) {
+        let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+        parts = parts.filter(part => part.name !== name);
+        localStorage.setItem('innerParts', JSON.stringify(parts));
+        loadParts();
+    }
 </script>
-
 
 </body>
 </html>
-
-
-
