@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+    <video id="backgroundVideo" autoplay loop muted>
+        <source src="images/nature.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
 <head>
+    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
-    <title>Journal History - Cabinet of Selves</title>
+    <title id="title">📖 Journal History - Cabinet of Selves</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .history-container {
@@ -23,6 +29,22 @@
             border-radius: 5px;
             background: #f9f9f9;
             margin-bottom: 10px;
+            position: relative;
+        }
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .delete-button:hover {
+            background: #e63946;
         }
         .back-to-cabinet {
             display: block;
@@ -44,25 +66,55 @@
         .back-to-cabinet:hover {
             background-color: #73463e;
         }
+        /* Language Selector */
+        .language-selector {
+            margin: 10px auto;
+            text-align: center;
+        }
+        .language-selector select {
+            padding: 6px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
+    
 
-<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
+<a href="index.html" class="back-to-cabinet">⬅️ <span id="backButton">Back to Cabinet</span></a>
 
 <header>
-    <h1>📖 Journal History</h1>
-    <p>See all your past journal entries, organized by date.</p>
+    <h1 id="journalTitle">📖 Journal History</h1>
+    <p id="journalSubtitle">See all your past journal entries, organized by date.</p>
 </header>
+
+<!-- Language Selector -->
+<div class="language-selector">
+    <label for="languageSelect" id="languageLabel">🌍 Select Language: </label>
+    <select id="languageSelect" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
 
 <main class="history-container">
     <ul id="journalHistoryList"></ul>
 </main>
 
-<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
+<a href="index.html" class="back-to-cabinet">⬅️ <span id="backButton2">Back to Cabinet</span></a>
 
 <script>
-    document.addEventListener('DOMContentLoaded', loadJournalHistory);
+    document.addEventListener('DOMContentLoaded', () => {
+        loadJournalHistory();
+
+        // Load the saved language from localStorage
+        const savedLang = localStorage.getItem('language') || 'en';
+        document.getElementById('languageSelect').value = savedLang;
+        switchLanguage(savedLang);
+    });
 
     function loadJournalHistory() {
         const journals = JSON.parse(localStorage.getItem('dailyJournals')) || {};
@@ -71,7 +123,7 @@
 
         const dates = Object.keys(journals);
         if (dates.length === 0) {
-            list.innerHTML = '<li>No journal entries found.</li>';
+            list.innerHTML = `<li id="noEntries">No journal entries found.</li>`;
             return;
         }
 
@@ -82,14 +134,90 @@
             const li = document.createElement('li');
             li.innerHTML = `
                 <h3>${date}</h3>
-                <p><strong>What does my inner protector want me to know today?</strong><br>${entry.prompt1}</p>
-                <p><strong>Which part of me needs attention right now?</strong><br>${entry.prompt2}</p>
-                <p><strong>What would comfort look like for my inner child?</strong><br>${entry.prompt3}</p>
+                <p><strong id="prompt1Title">What does my inner protector want me to know today?</strong><br>${entry.prompt1}</p>
+                <p><strong id="prompt2Title">Which part of me needs attention right now?</strong><br>${entry.prompt2}</p>
+                <p><strong id="prompt3Title">What would comfort look like for my inner child?</strong><br>${entry.prompt3}</p>
+                <button class="delete-button" onclick="deleteJournalEntry('${date}')">🗑️ <span id="deleteButtonText">Delete</span></button>
             `;
             list.appendChild(li);
         });
     }
+
+    function deleteJournalEntry(date) {
+        const journals = JSON.parse(localStorage.getItem('dailyJournals')) || {};
+        if (confirm(`Are you sure you want to delete the journal entry from ${date}?`)) {
+            delete journals[date];
+            localStorage.setItem('dailyJournals', JSON.stringify(journals));
+            loadJournalHistory();
+        }
+    }
+
+    function switchLanguage(lang) {
+        localStorage.setItem('language', lang);
+        const translations = {
+            en: {
+                title: "📖 Journal History - Cabinet of Selves",
+                journalTitle: "📖 Journal History",
+                journalSubtitle: "See all your past journal entries, organized by date.",
+                backButton: "Back to Cabinet",
+                backButton2: "Back to Cabinet",
+                noEntries: "No journal entries found.",
+                prompt1Title: "What does my inner protector want me to know today?",
+                prompt2Title: "Which part of me needs attention right now?",
+                prompt3Title: "What would comfort look like for my inner child?",
+                deleteButtonText: "Delete",
+                languageLabel: "🌍 Select Language: "
+            },
+            tr: {
+                title: "📖 Günlük Geçmişi - Kendi Parçalarınız Kabini",
+                journalTitle: "📖 Günlük Geçmişi",
+                journalSubtitle: "Geçmiş günlük girişlerinizi tarihe göre sıralı olarak görün.",
+                backButton: "Kabine Geri Dön",
+                backButton2: "Kabine Geri Dön",
+                noEntries: "Günlük kaydı bulunamadı.",
+                prompt1Title: "İçsel koruyucum bugün bana ne söylemek istiyor?",
+                prompt2Title: "Şu anda hangi parçam ilgiye ihtiyaç duyuyor?",
+                prompt3Title: "İçimdeki çocuk için rahatlık nasıl görünürdü?",
+                deleteButtonText: "Sil",
+                languageLabel: "🌍 Dil Seçin: "
+
+            },
+            de: {
+                title: "📖 Tagebuchverlauf - Schrank der Selbst",
+                journalTitle: "📖 Tagebuchverlauf",
+                journalSubtitle: "Sehen Sie sich alle Ihre vergangenen Tagebucheinträge nach Datum sortiert an.",
+                backButton: "Zurück zum Schrank",
+                backButton2: "Zurück zum Schrank",
+                noEntries: "Keine Tagebucheinträge gefunden.",
+                prompt1Title: "Was möchte mein innerer Beschützer mir heute sagen?",
+                prompt2Title: "Welcher Teil von mir braucht gerade Aufmerksamkeit?",
+                prompt3Title: "Wie würde Trost für mein inneres Kind aussehen?",
+                deleteButtonText: "Löschen",
+                languageLabel: "🌍 Sprache auswähsslen: "
+            }
+        };
+
+        const t = translations[lang];
+
+        // Update text on the page
+        document.title = t.title;
+        document.getElementById('journalTitle').innerText = t.journalTitle;
+        document.getElementById('journalSubtitle').innerText = t.journalSubtitle;
+        document.getElementById('backButton').innerText = t.backButton;
+        document.getElementById('backButton2').innerText = t.backButton2;
+        document.getElementById('noEntries').innerText = t.noEntries;
+        document.getElementById('languageLabel').innerText = t.languageLabel;
+        document.getElementById('deleteButtonText').innerText = t.deleteButtonText;
+
+        // Update prompts inside journal entries
+        document.querySelectorAll("#prompt1Title").forEach(el => el.innerText = t.prompt1Title);
+        document.querySelectorAll("#prompt2Title").forEach(el => el.innerText = t.prompt2Title);
+        document.querySelectorAll("#prompt3Title").forEach(el => el.innerText = t.prompt3Title);
+    }
 </script>
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.3.0/dist/dotlottie-wc.js" type="module"></script>
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <dotlottie-wc src="https://lottie.host/b9d98627-c30c-49d4-be32-2506bef9c090/xVnTacYHMb.lottie" autoplay loop></dotlottie-wc>
 
 </body>
 </html>
