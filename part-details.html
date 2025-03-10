@@ -7,7 +7,23 @@
     <link rel="stylesheet" href="styles.css">
     <script defer src="part-details.js"></script>
     <style>
-        /* Increase input and textarea size */
+        /* Styling for Image */
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .part-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 3px solid #0077b6;
+        }
+
+        /* Input and Textarea Styling */
         input[type="text"], textarea {
             width: 90%;
             padding: 10px;
@@ -17,7 +33,7 @@
         }
 
         textarea {
-            height: 100px; /* Increase height for better visibility */
+            height: 100px;
             resize: vertical;
         }
 
@@ -107,95 +123,44 @@
 
 <!-- Script Section -->
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const partName = params.get('part');
-
-    // Load part data (including image)
-    let part = JSON.parse(localStorage.getItem(`part-${partName}`)) || {};
-    let allParts = JSON.parse(localStorage.getItem('innerParts')) || [];
-
-    document.getElementById('partTitle').innerText = `Meet ${partName}`;
-
-    // Pre-fill fields and set image
-    document.getElementById('partSince').value = part.knownSince || '';
-    document.getElementById('partWants').value = part.wants || '';
-    document.getElementById('partWorksWith').value = part.worksWith || '';
-    document.getElementById('partClashesWith').value = part.clashesWith || '';
-    document.getElementById('partRole').value = part.role || '';
-    document.getElementById('partImagePreview').src = part.image || 'images/girl.jpg';
-
-    // Handle image upload and save
-    document.getElementById('partImageInput').addEventListener('change', (event) => {
-        const file = event.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                document.getElementById('partImagePreview').src = reader.result;
-                part.image = reader.result;
-
-                savePart(true);
-                showNotification(translations[currentLanguage].imageSaved);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    function savePartDetails() {
-        part.knownSince = document.getElementById('partSince').value;
-        part.wants = document.getElementById('partWants').value;
-        part.worksWith = document.getElementById('partWorksWith').value;
-        part.clashesWith = document.getElementById('partClashesWith').value;
-        part.role = document.getElementById('partRole').value;
-
-        savePart();
-        showNotification(translations[currentLanguage].partSaved);
-    }
-
-    function savePart(isImageOnly = false) {
-        localStorage.setItem(`part-${partName}`, JSON.stringify(part));
-
-        const index = allParts.findIndex(p => p.name === partName);
-        if (index !== -1) {
-            allParts[index].img = part.image;
-        } else if (!isImageOnly) {
-            allParts.push({ name: partName, img: part.image || 'images/girl.jpg' });
-        }
-
-        localStorage.setItem('innerParts', JSON.stringify(allParts));
-    }
-
-    function showNotification(message) {
-        const notification = document.getElementById('notification');
-        notification.innerText = message;
-        notification.style.display = 'block';
-
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 3000);
-    }
-
     const translations = {
         en: {
             imageSaved: "✅ Image saved successfully!",
-            partSaved: "✅ Part details saved successfully!"
+            partSaved: "✅ Save part details",
+            knownSince: "🌱 How long have you known this part?",
+            wants: "💬 What does this part want for you?",
+            worksWith: "🌟 Which parts does this part work well with?",
+            clashesWith: "⚔️ Which parts does this part clash with?",
+            role: "🎭 What role does this part play?"
         },
         tr: {
             imageSaved: "✅ Resim başarıyla kaydedildi!",
-            partSaved: "✅ Parça detayları başarıyla kaydedildi!"
+            partSaved: "✅ Kaydet",
+            knownSince: "🌱 Bu parçayı ne kadar süredir tanıyorsunuz?",
+            wants: "💬 Bu parça sizden ne istiyor?",
+            worksWith: "🌟 Hangi parçalarla iyi çalışıyor?",
+            clashesWith: "⚔️ Hangi parçalarla çatışıyor?",
+            role: "🎭 Bu parçanın rolü nedir?"
         },
         de: {
             imageSaved: "✅ Bild erfolgreich gespeichert!",
-            partSaved: "✅ Teilinformationen erfolgreich gespeichert!"
+            partSaved: "✅ speicher",
+            knownSince: "🌱 Wie lange kennst du diesen Teil?",
+            wants: "💬 Was will dieser Teil für dich?",
+            worksWith: "🌟 Mit welchen Teilen arbeitet dieser Teil gut zusammen?",
+            clashesWith: "⚔️ Mit welchen Teilen gerät dieser Teil in Konflikt?",
+            role: "🎭 Welche Rolle spielt dieser Teil?"
         }
     };
 
-    let currentLanguage = 'en';
-
     function switchLanguage(lang) {
-        currentLanguage = lang;
         localStorage.setItem('language', lang);
-        document.title = `Meet ${partName}`;
+        document.getElementById('saveButton').innerText = translations[lang].partSaved;
+        document.getElementById('labelKnownSince').innerText = translations[lang].knownSince;
+        document.getElementById('labelWants').innerText = translations[lang].wants;
+        document.getElementById('labelWorksWith').innerText = translations[lang].worksWith;
+        document.getElementById('labelClashesWith').innerText = translations[lang].clashesWith;
+        document.getElementById('labelRole').innerText = translations[lang].role;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -203,6 +168,46 @@
         document.getElementById('language').value = lang;
         switchLanguage(lang);
     });
+
+    document.getElementById('partImageInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('partImagePreview').src = e.target.result;
+                localStorage.setItem('partImage', e.target.result);
+                showNotification(translations[localStorage.getItem('language')].imageSaved);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function savePartDetails() {
+        let part = {
+            name: document.getElementById('partTitle').innerText.replace('Meet ', ''),
+            knownSince: document.getElementById('partSince').value,
+            wants: document.getElementById('partWants').value,
+            worksWith: document.getElementById('partWorksWith').value,
+            clashesWith: document.getElementById('partClashesWith').value,
+            role: document.getElementById('partRole').value,
+            image: document.getElementById('partImagePreview').src
+        };
+
+        let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
+        parts.push(part);
+        localStorage.setItem('innerParts', JSON.stringify(parts));
+
+        showNotification(translations[localStorage.getItem('language')].partSaved);
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.innerText = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
 </script>
 
 </body>
