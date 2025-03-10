@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to Your Inner World - Internal Family Systems (IFS)</title>
+    <title id="pageTitle">Welcome to Your Inner World - Internal Family Systems (IFS)</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Special layout override to make this page centered and readable */
         body {
             font-family: 'Quicksand', Arial, sans-serif;
             background-color: #f9f7f3;
@@ -43,60 +42,114 @@
             color: #8C5E58;
             font-weight: bold;
         }
+
+        /* Language Selector */
+        .language-selector {
+            text-align: center;
+            margin: 10px 0 20px;
+        }
+
+        .language-selector select {
+            padding: 6px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
 
 <!-- Back Button -->
-<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
+<a href="index.html" class="back-to-cabinet" id="backButton">⬅️ Back to Cabinet</a>
+
+<!-- Language Selector -->
+<div class="language-selector">
+    <label for="languageSelect" id="languageLabel">🌍 Select Language: </label>
+    <select id="languageSelect" onchange="switchLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="tr">Türkçe</option>
+        <option value="de">Deutsch</option>
+    </select>
+</div>
 
 <div class="content-container">
-    <h1>Welcome to Your Inner World: Exploring Internal Family Systems (IFS)</h1>
+    <h1 id="title">Welcome to Your Inner World: Exploring Internal Family Systems (IFS)</h1>
 
-    <p>If you’ve ever found yourself thinking, <em>“Part of me feels one way, but another part of me feels something completely different,”</em> you’re already touching on what Internal Family Systems (IFS) is all about.</p>
+    <p id="intro1">If you’ve ever found yourself thinking, <em>“Part of me feels one way, but another part of me feels something completely different,”</em> you’re already touching on what Internal Family Systems (IFS) is all about.</p>
 
-    <p>IFS is a beautiful and compassionate therapeutic approach that invites you to get to know the many parts that make up your internal world — like unique voices within you, each with their own stories, feelings, and needs.</p>
+    <p id="intro2">IFS is a beautiful and compassionate therapeutic approach that invites you to get to know the many parts that make up your internal world — like unique voices within you, each with their own stories, feelings, and needs.</p>
 
-    <p>Developed by Dr. Richard Schwartz, IFS works from the understanding that <strong>we are all made up of different inner parts</strong>, and that these parts form a kind of internal family system, each playing their role to help you navigate life.</p>
+    <h2 id="whyParts">Why Do We Have Parts?</h2>
+    <p id="whyPartsText">Life shapes us. Experiences, both big and small, leave marks on how we see ourselves and the world. To survive difficult moments, we naturally develop parts that step in to protect us.</p>
 
-    <h2>Why Do We Have Parts?</h2>
-    <p>Life shapes us. Experiences, both big and small, leave marks on how we see ourselves and the world. To survive difficult moments, we naturally develop parts that step in to protect us.</p>
+    <h2 id="whatIsSelf">What Is Self?</h2>
+    <p id="whatIsSelfText">In IFS, <strong>Self</strong> is the core of who you are — the calm, confident, compassionate essence underneath all the noise of your parts.</p>
 
-    <h2>What Is Self?</h2>
-    <p>In IFS, <strong>Self</strong> is the core of who you are — the calm, confident, compassionate essence underneath all the noise of your parts.</p>
+    <h2 id="howToBegin">How to Begin Your Own IFS Journey</h2>
+    <h3 id="step1">1. Notice Your Parts</h3>
+    <p id="step1Text">Start paying attention to your inner dialogue. When you feel anxious, sad, or conflicted, ask:</p>
+    <blockquote id="quote1">“Is there a part of me feeling this way?”</blockquote>
 
-    <h2>How to Begin Your Own IFS Journey</h2>
-    <h3>1. Notice Your Parts</h3>
-    <p>Start paying attention to your inner dialogue. When you feel anxious, sad, or conflicted, ask:</p>
-    <blockquote>“Is there a part of me feeling this way?”</blockquote>
+    <h3 id="step2">2. Get Curious, Not Critical</h3>
+    <p id="step2Text">Be curious about your parts instead of judging them. Ask:</p>
+    <blockquote id="quote2">“What are you trying to protect me from?”</blockquote>
 
-    <h3>2. Get Curious, Not Critical</h3>
-    <p>Be curious about your parts instead of judging them. Ask:</p>
-    <blockquote>“What are you trying to protect me from?”</blockquote>
+    <h3 id="step3">3. Befriend Your Parts</h3>
+    <p id="step3Text">Parts need to feel seen and heard. Let them know you care.</p>
 
-    <h3>3. Befriend Your Parts</h3>
-    <p>Parts need to feel seen and heard. Let them know you care.</p>
-
-    <h3>4. Identify Protectors and Exiles</h3>
-    <ul>
-        <li><strong>Protectors:</strong> Parts that defend you (like the inner critic).</li>
-        <li><strong>Exiles:</strong> Parts that carry pain from past experiences.</li>
-    </ul>
-
-    <h3>5. Invite Self to Lead</h3>
-    <p>When you relate to your parts with curiosity and compassion, your Self becomes the loving leader they need.</p>
-
-    <h2>Helpful Resources</h2>
+    <h2 id="resources">Helpful Resources</h2>
     <ul>
         <li><a href="https://www.internalfamilysystems.org/" target="_blank">Official IFS Website</a></li>
         <li><a href="https://self-compassion.org/" target="_blank">Self-Compassion Techniques</a></li>
         <li><a href="https://www.psychologytoday.com/us/therapy-types/internal-family-systems-therapy" target="_blank">IFS on Psychology Today</a></li>
     </ul>
-
 </div>
 
 <!-- Back Button at Bottom -->
-<a href="index.html" class="back-to-cabinet">⬅️ Back to Cabinet</a>
+<a href="index.html" class="back-to-cabinet" id="backButton2">⬅️ Back to Cabinet</a>
+
+<script>
+    const translations = {
+        en: {
+            title: "Welcome to Your Inner World: Exploring Internal Family Systems (IFS)",
+            intro1: "If you’ve ever found yourself thinking, “Part of me feels one way, but another part of me feels something completely different,” you’re already touching on what Internal Family Systems (IFS) is all about.",
+            backButton: "Back to Cabinet",
+            languageLabel: "🌍 Select Language:"
+        },
+        tr: {
+            title: "İç Dünyanıza Hoş Geldiniz: İçsel Aile Sistemleri (IFS) Keşfi",
+            intro1: "Eğer hiç “Bir yanım böyle hissediyor ama diğer yanım tamamen farklı hissediyor” diye düşündüyseniz, İçsel Aile Sistemleri'nin (IFS) neyle ilgili olduğunu zaten hissediyorsunuz demektir.",
+            backButton: "Kabine Geri Dön",
+            languageLabel: "🌍 Dil Seçin:"
+        },
+        de: {
+            title: "Willkommen in Deiner Inneren Welt: Erforsche das Innere Familiensystem (IFS)",
+            intro1: "Falls du jemals gedacht hast, „Ein Teil von mir fühlt sich so, aber ein anderer Teil fühlt sich ganz anders“, dann hast du bereits einen Einblick in das Innere Familiensystem (IFS) erhalten.",
+            backButton: "Zurück zum Schrank",
+            languageLabel: "🌍 Sprache auswählen:"
+        }
+    };
+
+    function switchLanguage(lang) {
+        localStorage.setItem('language', lang);
+        const t = translations[lang];
+
+        document.title = t.title;
+        document.getElementById('pageTitle').innerText = t.title;
+        document.getElementById('title').innerText = t.title;
+        document.getElementById('intro1').innerText = t.intro1;
+        document.getElementById('backButton').innerText = t.backButton;
+        document.getElementById('backButton2').innerText = t.backButton;
+        document.getElementById('languageLabel').innerText = t.languageLabel;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const lang = localStorage.getItem('language') || 'en';
+        document.getElementById('languageSelect').value = lang;
+        switchLanguage(lang);
+    });
+</script>
 
 </body>
 </html>
