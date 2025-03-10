@@ -138,6 +138,13 @@
             }
         }
 
+        /* Animation */
+        .animation-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 
@@ -183,34 +190,72 @@
         <main>
             <section>
                 <h2 id="partsHeading">Your Parts</h2>
+                <style>
+                    #introduction {
+                        font-size: 1.2rem;
+                        line-height: 1.6;
+                        color: #333;
+                        font-family: "Georgia", serif;
+                        text-align: center;
+                        max-width: 600px;
+                        margin: 20px auto;
+                        padding: 15px;
+                        background-color: #D7DDFF;
+                        border-radius: 10px;
+                        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+                    }
+                </style>
+                
+                <p id="introduction">
+                    We all have different parts within us—unique voices, desires, and emotions that shape who we are. 
+                    Parts therapy helps you understand, heal, and harmonize them, creating a deeper sense of 
+                    self-awareness and inner balance.
+                </p>
+                
                 <button id="seeAllPartsButton" onclick="window.location.href='parts.html'">See All Parts</button>
                 <button id="addNewPartButton" onclick="openAddPartModal()">Add New Part</button>
             </section>
 
             <section>
                 <h2 id="checkInHeading">Daily Check-In</h2>
+                <style>
+                    #daily {
+                        font-size: 1.2rem;
+                        line-height: 1.6;
+                        color: #333;
+                        font-family: "Georgia", serif;
+                        text-align: center;
+                        max-width: 600px;
+                        margin: 20px auto;
+                        padding: 15px;
+                        background-color: #D7DDFF;
+                        border-radius: 10px;
+                        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+                    }
+                </style>
+                
+                <p id="daily">
+                    Checking in with your parts daily fosters self-awareness, balance, and a deeper connection with your inner world.
+                </p>
                 <button id="startCheckInButton" onclick="window.location.href='daily-checkin.html'">Start Daily Check-In</button>
                 <button id="viewCheckInHistoryButton" onclick="window.location.href='checkin-history.html'">View Check-In History</button>
             </section>
-
             <section>
                 <h2 id="resourcesHeading">Resources & Tips</h2>
                 <p id="youAreEnoughText">You are enough, even on the quiet days.</p>
                 <button id="resourcesButton" onclick="window.location.href='resources.html'">Resources & Articles</button>
                 <button id="journalPromptsButton" onclick="window.location.href='journal-prompts.html'">Journal for My Parts</button>
             </section>
-
             <section>
                 <h2 id="aboutUsHeading">About Us</h2>
-                <p id="aboutUsText">
-                    Part of <a href="https://inktempest.com/" target="_blank">Ink & Tempest</a>, a digital experiences store.
-                </p>
-                <p id="createdByText">
-                    Created by <a href="https://www.linkedin.com/in/ilkecandan" target="_blank">İlke Candan</a>.
-                </p>
+                <p id="aboutUsText">Ink & Tempest is a digital experiences store blending innovation with art to create immersive and unforgettable digital products.                </p>
+                <button class="link-button" onclick="window.open('https://inktempest.com/', '_blank')">Visit Ink & Tempest</button>
+                <button class="link-button" id="meet" onclick="window.open('https://www.linkedin.com/in/ilkecandan', '_blank')">Meet Creator :) </button>
             </section>
-          <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
-<dotlottie-player src="https://lottie.host/fcadcc09-5da6-4f5b-b79a-ce7451767689/n6T60ZVGq0.lottie" background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay></dotlottie-player>
+
+            <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+            <dotlottie-player src="https://lottie.host/fcadcc09-5da6-4f5b-b79a-ce7451767689/n6T60ZVGq0.lottie" background="transparent" speed="1" style="width: 300px; height: 300px" loop autoplay></dotlottie-player>
+            
 
         </main>
     </div>
@@ -241,34 +286,36 @@
         function openAddPartModal() {
             document.getElementById('customModalOverlay').style.display = 'block';
             document.getElementById('customModal').style.display = 'block';
-        }
 
-        function closeAddPartModal() {
-            document.getElementById('customModalOverlay').style.display = 'none';
-            document.getElementById('customModal').style.display = 'none';
+            // Translate Modal Title and Button
+            const lang = localStorage.getItem("language") || "en";
+            document.getElementById("enterPartNameTitle").innerText = translations[lang].enterPartName;
+            document.getElementById("submitNewPartButton").innerText = translations[lang].addNewPartButton;
         }
 
         function addNewPart() {
             const partName = document.getElementById("newPartNameInput").value;
             if (!partName) return;
 
-            // Get existing parts or create an empty array
             let parts = JSON.parse(localStorage.getItem('innerParts')) || [];
 
-            // Check if part name already exists
             if (parts.some(part => part.name === partName)) {
-                alert("This part already exists!");
+                alert(translations[localStorage.getItem("language") || "en"].partAlreadyExists);
                 return;
             }
 
-            // Add the new part
-            const newPart = { name: partName, img: 'images/girl.jpg' };
-            parts.push(newPart);
+            parts.push({ name: partName, img: 'images/girl.jpg' });
             localStorage.setItem('innerParts', JSON.stringify(parts));
 
-            // Close modal and redirect
-            closeAddPartModal();
             window.location.href = `part-details.html?part=${encodeURIComponent(partName)}`;
+        }
+
+        function switchLanguage(lang) {
+            localStorage.setItem('language', lang);
+            const t = translations[lang];
+            Object.keys(t).forEach(id => {
+                if (document.getElementById(id)) document.getElementById(id).innerText = t[id];
+            });
         }
 
         const translations = {
@@ -281,7 +328,7 @@
                 resourcesHeading: "Resources & Tips",
                 youAreEnoughText: "You are enough, even on the quiet days.",
                 aboutUsHeading: "About Us",
-                aboutUsText: "Part of Ink & Tempest, a digital experiences store.",
+                aboutUsText: "Ink & Tempest is a digital experiences store blending innovation with art to create immersive and unforgettable digital products.",
                 createdByText: "Created by İlke Candan.",
                 seeAllPartsButton: "See All Parts",
                 addNewPartButton: "Add New Part",
@@ -291,7 +338,10 @@
                 journalPromptsButton: "Journal for My Parts",
                 incorrectCode: "Incorrect Code. Try again.",
                 enterPartName: "Enter a name for the new part:",
-                partAlreadyExists: "This part already exists!"
+                partAlreadyExists: "This part already exists!",
+                meet: "Meet creator :) ",
+                daily: "Checking in with your parts daily fosters self-awareness, balance, and a deeper connection with your inner world.",
+                introduction:"We all have different parts within us—unique voices, desires, and emotions that shape who we are. Parts therapy helps you understand, heal, and harmonize them, creating a deeper sense of self-awareness and inner balance"
             },
             tr: {
                 enterCodeTitle: "Erişim Kodunu Girin",
@@ -302,7 +352,7 @@
                 resourcesHeading: "Kaynaklar ve İpuçları",
                 youAreEnoughText: "Sessiz günlerde bile yeterlisiniz.",
                 aboutUsHeading: "Hakkımızda",
-                aboutUsText: "Ink & Tempest'in bir parçası, dijital deneyimler mağazası.",
+                aboutUsText: "Ink & Tempest, yenilikçiliği sanatla harmanlayarak sürükleyici ve unutulmaz dijital ürünler yaratan bir dijital deneyim mağazasıdır.",
                 createdByText: "Oluşturan: İlke Candan.",
                 seeAllPartsButton: "Tüm Parçaları Gör",
                 addNewPartButton: "Yeni Parça Ekle",
@@ -312,7 +362,10 @@
                 journalPromptsButton: "Parçalarım İçin Günlük",
                 incorrectCode: "Yanlış kod. Tekrar deneyin.",
                 enterPartName: "Yeni parça için bir isim girin:",
-                partAlreadyExists: "Bu parça zaten mevcut!"
+                partAlreadyExists: "Bu parça zaten mevcut!",
+                meet: "Geliştiriciyle tanışın. :)",
+                daily: "Parçalarınızla günlük olarak bağlantı kurmanız öz farkındalığınızı, dengenizi ve iç dünyanızla daha derin bir bağlantı kurmanızı sağlar.",
+                introduction: "Hepimizin içimizde farklı parçalar var - kim olduğumuzu şekillendiren benzersiz sesler, arzular ve duygular. Parça terapisi, bunları anlamanıza, iyileştirmenize ve uyumlu hale getirmenize yardımcı olur, daha derin bir öz farkındalık ve içsel denge duygusu yaratır"
             },
             de: {
                 enterCodeTitle: "Zugangscode eingeben",
@@ -323,7 +376,7 @@
                 resourcesHeading: "Ressourcen & Tipps",
                 youAreEnoughText: "Du bist genug, auch an ruhigen Tagen.",
                 aboutUsHeading: "Über uns",
-                aboutUsText: "Teil von Ink & Tempest, einem digitalen Erlebnisgeschäft.",
+                aboutUsText: "Ink & Tempest ist ein Shop für digitale Erlebnisse, der Innovation und Kunst verbindet, um umfassende und unvergessliche digitale Produkte zu schaffen.",
                 createdByText: "Erstellt von İlke Candan.",
                 seeAllPartsButton: "Alle Teile anzeigen",
                 addNewPartButton: "Neuen Teil hinzufügen",
@@ -333,17 +386,13 @@
                 journalPromptsButton: "Tagebuch für Meine Teile",
                 incorrectCode: "Falscher Code. Versuchen Sie es erneut.",
                 enterPartName: "Geben Sie einen Namen für das neue Teil ein:",
-                partAlreadyExists: "Dieses Teil existiert bereits!"
+                partAlreadyExists: "Dieses Teil existiert bereits!",
+                meet: "Treffen Sie den Entwickler :)",
+                daily: "Die tägliche Überprüfung Ihrer Teile fördert das Selbstbewusstsein, das Gleichgewicht und eine tiefere Verbindung mit Ihrer inneren Welt.",
+                introduction: "Wir alle haben unterschiedliche Teile in uns – einzigartige Stimmen, Wünsche und Emotionen, die uns zu dem machen, was wir sind. Die Teiletherapie hilft Ihnen, diese zu verstehen, zu heilen und zu harmonisieren und ein tieferes Gefühl von Selbstbewusstsein und innerer Ausgeglichenheit zu schaffen."
+
             }
         };
-
-        function switchLanguage(lang) {
-            localStorage.setItem('language', lang);
-            const t = translations[lang];
-            Object.keys(t).forEach(id => {
-                if (document.getElementById(id)) document.getElementById(id).innerText = t[id];
-            });
-        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const lang = localStorage.getItem('language') || 'en';
